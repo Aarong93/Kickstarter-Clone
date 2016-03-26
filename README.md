@@ -105,6 +105,13 @@ for restaurants by location and cuisines
 - [ ] Add Friendly Transition/Guide Pages that real KickStarter site has
 - [ ] Multiple sessions
 
+## Phase Docs
+* [phase-one][views]
+* [phase-two][components]
+* [phase-three][stores]
+* [phase-four][api-endpoints]
+* [phase-five][schema]
+
 [phase-one]: ./docs/phases/phase1.md
 [phase-two]: ./docs/phases/phase2.md
 [phase-three]: ./docs/phases/phase3.md
