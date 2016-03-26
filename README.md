@@ -106,11 +106,11 @@ for restaurants by location and cuisines
 - [ ] Multiple sessions
 
 ## Phase Docs
-* [phase-one][views]
-* [phase-two][components]
-* [phase-three][stores]
-* [phase-four][api-endpoints]
-* [phase-five][schema]
+* [phase-one][phase-one]
+* [phase-two][phase-two]
+* [phase-three][phase-three]
+* [phase-four][phase-four]
+* [phase-five][phase-five]
 
 [phase-one]: ./docs/phases/phase1.md
 [phase-two]: ./docs/phases/phase2.md
