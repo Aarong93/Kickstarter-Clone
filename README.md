@@ -43,7 +43,7 @@ and React.js. KitchenStarter allows users to:
 - [ ] users can add fake credit cards to later use for project contributions
 - [ ] redirects to single page app root after login
 
-### Phase 2: Notes Model, API, and basic APIUtil (1.5 days)
+### Phase 2: Restaurants Model, API, and basic APIUtil (1.5 days)
 
 **Objective:** Restaurants can be created, read, edited and destroyed through
 the API.
