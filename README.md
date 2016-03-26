@@ -12,7 +12,7 @@ and React.js. KitchenStarter allows users to:
 - [ ] Create an account
 - [ ] Log in / Log out
 - [ ] Create, read, edit, and delete restaurant proposals
-- [ ] Users can donate to restaurants they think will be successful!
+- [ ] Users can contribute to restaurants they think will be successful
 - [ ] Sort restaurants by cuisines (and location?), search functionality
 - [ ] Allows project starter to offer rewards to larger contributors
       and users to qualify for these rewards
