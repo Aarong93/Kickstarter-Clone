@@ -63,7 +63,7 @@ user interface.
 
 - [ ] setup the flux loop with skeleton files
 - [ ] setup React Router
-- implement each restaurant component component, building out the flux loop as needed.
+- [ ] implement each restaurant component component, building out the flux loop as needed.
   - [ ] Restaurant Index (nested by cusines)
   - [ ] Restaurant Show Page
   - [ ] Restaurant Creation/Edit component
@@ -84,13 +84,13 @@ user interface.
 **Objective:** Build out app root page and allow users to search
 for restaurants by location and cuisines
 
-- build out Flux loop, and components for:
+- [ ] build out Flux loop, and components for:
   - [ ] dynamic Search Display
   - [ ] show featured projects on front page
-- Use CSS to style new views
+- [ ] Use CSS to style new views
 
 
-### Phase 8: Styling Cleanup and Seeding (1.5 day)
+### Phase 6: Styling Cleanup and Seeding (1.5 day)
 
 **objective:** Make the site feel more cohesive and smooth
 
