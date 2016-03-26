@@ -1,4 +1,4 @@
-# FresherNote
+# KitchenStarter
 
 [Heroku link][heroku] **NB:** This should be a link to your production site
 
@@ -6,18 +6,16 @@
 
 ## Minimum Viable Product
 
-FresherNote is a web application inspired by Evernote built using Ruby on Rails
-and React.js. FresherNote allows users to:
-
-<!-- This is a Markdown checklist. Use it to keep track of your
-progress. Put an x between the brackets for a checkmark: [x] -->
+KitchenStarter is a web application inspired by KickStarter built using Ruby on Rails
+and React.js. KitchenStarter allows users to:
 
 - [ ] Create an account
 - [ ] Log in / Log out
-- [ ] Create, read, edit, and delete notes
-- [ ] Organize notes within Notebooks
-- [ ] Tag notes with multiple tags
-- [ ] Apply complex styling to notes while editing
+- [ ] Create, read, edit, and delete restaurant proposals
+- [ ] Users can donate to restaurants they think will be successful!
+- [ ] Sort restaurants by cuisines (and location?), search functionality
+- [ ] Allows project starter to offer rewards to larger contributors
+      and users to qualify for these rewards
 
 ## Design Docs
 * [View Wireframes][views]
@@ -41,37 +39,39 @@ progress. Put an x between the brackets for a checkmark: [x] -->
 - [ ] create new project
 - [ ] create `User` model
 - [ ] authentication
-- [ ] user signup/signin pages
-- [ ] blank landing page after signin
+- [ ] static (non react) user signup/signin pages
+- [ ] users can add fake credit cards to later use for project contributions
+- [ ] redirects to single page app root after login
 
 ### Phase 2: Notes Model, API, and basic APIUtil (1.5 days)
 
-**Objective:** Notes can be created, read, edited and destroyed through
+**Objective:** Restaurants can be created, read, edited and destroyed through
 the API.
 
-- [ ] create `Note` model
+- [ ] create `Restaurant Project` model
 - [ ] seed the database with a small amount of test data
-- [ ] CRUD API for notes (`NotesController`)
-- [ ] jBuilder views for notes
+- [ ] CRUD API for Restaurants
+- [ ] jBuilder views for Restaurants
 - [ ] setup Webpack & Flux scaffold
 - [ ] setup `APIUtil` to interact with the API
 - [ ] test out API interaction in the console.
 
-### Phase 3: Flux Architecture and Router (1.5 days)
+### Phase 3: Flux Architecture and Router (3 days)
 
-**Objective:** Notes can be created, read, edited and destroyed with the
+**Objective:** Restaurants Projects can be created, read, edited and destroyed with the
 user interface.
 
 - [ ] setup the flux loop with skeleton files
 - [ ] setup React Router
-- implement each note component, building out the flux loop as needed.
-  - [ ] `NotesIndex`
-  - [ ] `NoteIndexItem`
-  - [ ] `NoteForm`
-- [ ] save Notes to the DB when the form loses focus or is left idle
-  after editing.
+- implement each restaurant component component, building out the flux loop as needed.
+  - [ ] Restaurant Index (nested by cusines)
+  - [ ] Restaurant Show Page
+  - [ ] Restaurant Creation/Edit component
+  - [ ] Logged In User dropdown (lists own projects and has other links)
+- [ ] save to DB everytime a user clicks a different tab in the create project page
+- [ ] users can contribute to projects
 
-### Phase 4: Start Styling (0.5 days)
+### Phase 4: Start Styling (1 days)
 
 **Objective:** Existing pages (including singup/signin) will look good.
 
@@ -79,54 +79,30 @@ user interface.
 - [ ] position elements on the page
 - [ ] add basic colors & styles
 
-### Phase 5: Notebooks (1 day)
+### Phase 5: Landing Page and Search Components (1.5 day)
 
-**Objective:** Notes belong to Notebooks, and can be viewed by notebook.
+**Objective:** Build out app root page and allow users to search
+for restaurants by location and cuisines
 
-- [ ] create `Notebook` model
-- build out API, Flux loop, and components for:
-  - [ ] Notebook CRUD
-  - [ ] adding notes requires a notebook
-  - [ ] moving notes to a different notebook
-  - [ ] viewing notes by notebook
+- build out Flux loop, and components for:
+  - [ ] dynamic Search Display
+  - [ ] show featured projects on front page
 - Use CSS to style new views
 
-Phase 3 adds organization to the Notes. Notes belong to a Notebook,
-which has its own `Index` view.
 
-### Phase 6: Tags (1.5 days)
+### Phase 8: Styling Cleanup and Seeding (1.5 day)
 
-**Objective:** Notes can be tagged with multiple tags, and tags are searchable.
-
-- [ ] create `Tag` model and join table
-- build out API, Flux loop, and components for:
-  - [ ] fetching tags for notebook
-  - [ ] adding tags to notebook
-  - [ ] creating tags while adding to notebooks
-  - [ ] searching notebooks by tag
-- [ ] Style new elements
-
-### Phase 7: Allow Complex Styling in Notes (0.5 days)
-
-**objective:** Enable complex styling of notes.
-
-- [ ] Integrate `react-quill` (based on Quill.js).
-- [ ] Use Rails helpers to sanitize HTML before rendering.
-- [ ] Style the new Quill elements.
-
-### Phase 8: Styling Cleanup and Seeding (1 day)
-
-**objective:** Make the site feel more cohesive and awesome.
+**objective:** Make the site feel more cohesive and smooth
 
 - [ ] Get feedback on my UI from others
 - [ ] Refactor HTML classes & CSS rules
 - [ ] Add modals, transitions, and other styling flourishes.
 
 ### Bonus Features (TBD)
-- [ ] Search through notes for blocks of text
-- [ ] Pagination / infinite scroll for Notes Index
-- [ ] Set reminders on notes
-- [ ] Changelogs for Notes
+- [ ] Allow users to add images and fancy styling in project description
+- [ ] Recommended for you supported by backend and actual past cuisine searches
+- [ ] Pagination / infinite scroll for Restaurant Index
+- [ ] Add Friendly Transition/Guide Pages that real KickStarter site has
 - [ ] Multiple sessions
 
 [phase-one]: ./docs/phases/phase1.md
