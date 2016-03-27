@@ -1,66 +1,40 @@
 # Flux Stores
 
-### NoteStore
+### RestaurantsStore
 
-Holds all persisted note data.
-
-##### Actions:
-- `receiveAllNotes`
-- `receiveSingleNote`
-- `removeNote`
-
-##### Listeners:
-- `NotesIndex` (passes to `NoteIndexItem` via props)
-- `NoteDetail`
-
-### NoteFormStore
-
-Holds un-persisted note data to send to the API.
+Holds all persisted restaurant project data.
 
 ##### Actions:
-- `receiveNoteFormParams`
+- `receiveAllRestaurants`
+- `receiveSingleRestaurant` (will include rewards data + detailed description)
+- `removeRestaurant`
 
 ##### Listeners:
-- `NoteForm`
+- `RestaurantIndex` (passes to `NoteIndexItem` via props)
+- `RestaurantDetail`
+- `search bar index`
+- `FeaturedIndex`
+- `own RestaurantsIndex`
+- `create restaurant form` (should be able to persist unpublished projects)
 
-### NotebookStore
 
-Holds all persisted notebook data.
+### RewardStore
+
+Holds persisted reward data to send to the API.
 
 ##### Actions:
-- `receiveAllNotebooks`
-- `receiveSingleNotebook`
-- `removeNotebook`
+- `receiveRewards`
+
 
 ##### Listeners:
-- `NotebookIndex`
+- `Rewards Index`
+- `User Rewards Index`
 
-### NotebookFormStore
 
-Holds un-persisted notebook data to send to the API.
+### ContributionStore
 
 ##### Actions:
-- `receiveNotebookFormParams`
+- `receiveContributions`
 
 ##### Listeners:
-- `NotebookForm`
-
-### SearchStore
-
-Holds search parameters to send to the API.
-
-##### Actions:
-- `receiveSearchParams`
-
-##### Listeners:
-- `SearchIndex`
-
-### SearchSuggestionStore
-
-Holds typeahead suggestions for search.
-
-##### Actions:
-- `receiveSearchSuggestions`
-
-##### Listeners:
-- `SearchSuggestions`
+- `ownRestaurantsIndex`

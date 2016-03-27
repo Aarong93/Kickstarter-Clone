@@ -1,6 +1,7 @@
 ## Component Hierarchy
 
 * `App`
+  * `header` (every page)
   * `homepage`
     * `SearchBar`
       * `SearchResults IndexItems`

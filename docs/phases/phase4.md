@@ -1,4 +1,4 @@
-### Phase 4: Start Styling (CSS!!!!!!)(1 days)
+### Phase 4: Start Styling (CSS!)(1 days)
 
 ## Rails
 ### Models
