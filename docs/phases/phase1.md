@@ -1,4 +1,4 @@
-# Phase 1: User Authentication, Note Model and JSON API (1.5 days)
+# Phase 1: Backend setup and User Authentication (0.5 days)
 
 ## Rails
 ### Models
