@@ -1,40 +1,34 @@
-# Phase 5: Reminders and Garbage Collection
+# Phase 5: Landing Page and Search Components (2 days)
 
 ## Rails
 ### Models
-* Reminder
+* Contribution (foreign keys: {user_id, project_id}, amount)
 
-### Controllers
-* Api::RemindersController (create, destroy, index, show, update)
+### Controller
+  ContributionsController (create, show, index)
 
 ### Views
-* reminders/index.json.jbuilder
-
+  Jbuilder views for contribution model (create, show, index (edit, destroy are mbys))
 ## Flux
 ### Views (React Components)
-* RemindersIndex
-  - ReminderIndexItem
-* ReminderShow
-* ReminderForm
+* ContributionsIndex (for each restaurant project, creator should be able
+  to see email of those who have donated and the amount they have given)
+  - ContributionsIndexItem
+* CreateContributionForm
+* ContributionsIndex of own investments (should show a restaurant like index here also)
+  - IndexItem
 
 ### Stores
-* Reminder
+* ContributionsStore
 
 ### Actions
-* ApiActions.receiveAllReminders -> triggered by ApiUtil
-* ApiActions.receiveSingleReminder
-* ApiActions.deleteReminder
-* ReminderActions.fetchAllReminders -> triggers ApiUtil
-* ReminderActions.fetchSingleReminder
-* ReminderActions.createReminder
-* ReminderActions.updateReminder
-* ReminderActions.destroyReminder
+* RestaurantActions.receiveContributions
+
 
 ### ApiUtil
-* ApiUtil.fetchAllReminders
-* ApiUtil.fetchSingleReminder
-* ApiUtil.createReminder
-* ApiUtil.updateReminder
-* ApiUtil.destroyReminder
+* ApiUtil.CreateContribution
+* ApiUtil.FetchContributions(project)
+* ApiUtil.FetchContributions(user)
+
 
 ## Gems/Libraries

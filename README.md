@@ -1,6 +1,6 @@
 # KitchenStarter
 
-[Heroku link][heroku] **NB:** This should be a link to your production site
+[Heroku link][heroku] **NB:** This will be a link to my production site
 
 [heroku]: http://www.herokuapp.com
 
@@ -12,7 +12,7 @@ and React.js. KitchenStarter allows users to:
 - [ ] Create an account
 - [ ] Log in / Log out
 - [ ] Create, read, edit, and delete restaurant proposals
-- [ ] Users can contribute to restaurants they think will be successful
+- [ ] Users can contribute to restaurants they want to help start
 - [ ] Sort restaurants by cuisines (and location?), search functionality
 - [ ] Allows project starter to offer rewards to larger contributors
       and users to qualify for these rewards
@@ -40,7 +40,6 @@ and React.js. KitchenStarter allows users to:
 - [ ] create `User` model
 - [ ] authentication
 - [ ] static (non react) user signup/signin pages
-- [ ] users can add fake credit cards to later use for project contributions
 - [ ] redirects to single page app root after login
 
 ### Phase 2: Restaurants Model, API, and basic APIUtil (1.5 days)
@@ -51,7 +50,8 @@ the API.
 - [ ] create `Restaurant Project` model
 - [ ] seed the database with a small amount of test data
 - [ ] CRUD API for Restaurants
-- [ ] jBuilder views for Restaurants
+- [ ] CRUD API for rewards for large contributors
+- [ ] jBuilder views for Restaurants and rewards
 - [ ] setup Webpack & Flux scaffold
 - [ ] setup `APIUtil` to interact with the API
 - [ ] test out API interaction in the console.
@@ -69,7 +69,6 @@ user interface.
   - [ ] Restaurant Creation/Edit component
   - [ ] Logged In User dropdown (lists own projects and has other links)
 - [ ] save to DB everytime a user clicks a different tab in the create project page
-- [ ] users can contribute to projects
 
 ### Phase 4: Start Styling (1 days)
 
@@ -79,18 +78,20 @@ user interface.
 - [ ] position elements on the page
 - [ ] add basic colors & styles
 
-### Phase 5: Landing Page and Search Components (1.5 day)
+### Phase 5: Landing Page and Search Components (2 days)
 
-**Objective:** Build out app root page and allow users to search
+**Objective:** Build out app home page and allow users to search
 for restaurants by location and cuisines
 
+- [ ] users can contribute to projects
 - [ ] build out Flux loop, and components for:
   - [ ] dynamic Search Display
   - [ ] show featured projects on front page
+  - [ ] profile page that will have tabs to show own created projects as well as invested in projects
 - [ ] Use CSS to style new views
 
 
-### Phase 6: Styling Cleanup and Seeding (1.5 day)
+### Phase 6: Styling Cleanup and Seeding (1 day)
 
 **objective:** Make the site feel more cohesive and smooth
 
@@ -99,11 +100,13 @@ for restaurants by location and cuisines
 - [ ] Add modals, transitions, and other styling flourishes.
 
 ### Bonus Features (TBD)
-- [ ] Allow users to add images and fancy styling in project description
-- [ ] Recommended for you supported by backend and actual past cuisine searches
+- [ ] Allow users to comment on projects in comment tab
+- [ ] Allow project creators to add images and fancy styling in project description
+- [ ] Brief User Pages
 - [ ] Pagination / infinite scroll for Restaurant Index
 - [ ] Add Friendly Transition/Guide Pages that real KickStarter site has
 - [ ] Multiple sessions
+- [ ] Email notifications on completion or failure of project.
 
 ## Phase Docs
 * [phase-one][phase-one]

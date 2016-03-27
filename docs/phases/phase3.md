@@ -1,44 +1,33 @@
-# Phase 3: Notebooks and Tags (2 days)
-
-## Rails
-### Models
-* Notebook
-* Tag
-* Tagging
-
-### Controllers
-* Api::NotebooksController (create, destroy, index, show, update)
-
-### Views
-* notebooks/index.json.jbuilder
-* notebooks/show.json.jbuilder
-* tags/show.json.jbuilder
+### Phase 3: Flux Architecture and Router (3 days)
 
 ## Flux
 ### Views (React Components)
-* NotebooksIndex
-  - NotebookIndexItem
-* NotebookForm
-* SearchIndex
+* RestaurantIndex
+  - RestaurantIndexItem
+* Show Restaurant
+* Contribute Form
+* Restaurant creation form
 
 ### Stores
-* Notebook
+* RestaurantStore
+* RewardsStore
 
 ### Actions
-* ApiActions.receiveAllNotebooks -> triggered by ApiUtil
-* ApiActions.receiveSingleNotebook
-* ApiActions.deleteNotebook
-* NotebookActions.fetchAllNotebooks -> triggers ApiUtil
-* NotebookActions.fetchSingleNotebook
-* NotebookActions.createNotebook
-* NotebookActions.editNotebook
-* NotebookActions.destroyNotebook
+* RestaurantActions.receiveAllRestaurants
+* RestaurantActions.receiveSingleRestaurant
+* RestaurantActions.deleteRestaurant
+* InvestmentActions.receivedContributions
+* (same for rewards)
 
 ### ApiUtil
-* ApiUtil.fetchAllNotebooks
-* ApiUtil.fetchSingleNotebook
-* ApiUtil.createNotebook
-* ApiUtil.editNotebook
-* ApiUtil.destroyNotebook
+* ApiUtil.fetchAllRestaurants
+* ApiUtil.fetchSingleRestaurant
+* ApiUtil.createRestaurant
+* ApiUtil.editRestaurant
+* ApiUtil.destroyRestaurant
+* (same for rewards)
 
 ## Gems/Libraries
+* Flux Dispatcher (npm)
+* React/ReactRouter (npm)
+* (googleMaps API for location?)

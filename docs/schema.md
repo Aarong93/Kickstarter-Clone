@@ -1,6 +1,6 @@
 # Schema Information
 
-## notes
+## Users
 column name | data type | details
 ------------|-----------|-----------------------
 id          | integer   | not null, primary key
@@ -10,15 +10,15 @@ author_id   | integer   | not null, foreign key (references users), indexed
 notebook_id | integer   | not null, foreign key (references notebooks), indexed
 archived    | boolean   | not null, default: false
 
-## notebooks
+## Restaurants
 column name | data type | details
 ------------|-----------|-----------------------
 id          | integer   | not null, primary key
 author_id   | integer   | not null, foreign key (references users), indexed
 title       | string    | not null
-description | string    | 
+description | string    |
 
-## reminders
+## Contributions
 column name | data type | details
 ------------|-----------|-----------------------
 id          | integer   | not null, primary key
@@ -28,11 +28,6 @@ date        | datetime  | not null
 type        | string    | not null
 prev_id     | integer   | foreign key (references reminders), indexed
 
-## tags
-column name | data type | details
-------------|-----------|-----------------------
-id          | integer   | not null, primary key
-name        | string    | not null
 
 ## taggings
 column name | data type | details
