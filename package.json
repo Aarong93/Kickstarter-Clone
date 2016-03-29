@@ -24,8 +24,6 @@
 		"postinstall": "./node_modules/.bin/webpack"
   },
 	"engines": {
- // Your versions of node and npm should go here
-  // Check this by running the `node -v` and `npm -v` commands in the root of your project
   "node": "5.1.0",
   "npm": "3.3.12"
 },
