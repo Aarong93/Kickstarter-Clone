@@ -15,14 +15,16 @@ column name | data type | details
 id          | integer   | not null, primary key
 creator     | integer   | not null, foreign key (references users), indexed
 title       | string    |
-cuisine     | string    |
+cuisine     | integer   | foreign key
 blurb       | string    |
 description | string    |
 target      | integer   | (goal $ to raise)
 current     | integer   | (current $ raised)
 expiration  | date      | (date money must be raised by)
 location    | string    | (city)
-published   | boolean   | (boolean that will indicate whether it shows publicly)
+published   | boolean   | (boolean that will indicate
+ whether it shows publicly)
+image_url   | string    | use a gem/api to let users upload need to add!!!!!!!!!!
 
 
 ## Contributions
