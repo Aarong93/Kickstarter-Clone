@@ -1,8 +1,8 @@
 # KitchenStarter
 
-[Heroku link][heroku] **NB:** This will be a link to my production site
+[Heroku link][heroku]
 
-[heroku]: http://www.herokuapp.com
+[heroku]: http://kitchenstarter.herokuapp.com/
 
 ## Minimum Viable Product
 
