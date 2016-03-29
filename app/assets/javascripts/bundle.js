@@ -51,8 +51,8 @@
 	var Route = ReactRouter.Route;
 	var IndexRoute = ReactRouter.IndexRoute;
 	var hashHistory = ReactRouter.hashHistory;
-	var NavBar = __webpack_require__(219);
-	var Footer = __webpack_require__(220);
+	var NavBar = __webpack_require__(216);
+	var Footer = __webpack_require__(217);
 	
 	var App = React.createClass({
 	  displayName: 'App',
@@ -24745,10 +24745,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 216 */,
-/* 217 */,
-/* 218 */,
-/* 219 */
+/* 216 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -24835,7 +24832,7 @@
 	module.exports = NavBar;
 
 /***/ },
-/* 220 */
+/* 217 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
