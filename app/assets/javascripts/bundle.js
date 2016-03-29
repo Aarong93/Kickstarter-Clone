@@ -52,6 +52,7 @@
 	var IndexRoute = ReactRouter.IndexRoute;
 	var hashHistory = ReactRouter.hashHistory;
 	var NavBar = __webpack_require__(219);
+	var Footer = __webpack_require__(220);
 	
 	var App = React.createClass({
 	  displayName: 'App',
@@ -61,7 +62,10 @@
 	      'div',
 	      { id: 'kitchen-starter-app' },
 	      React.createElement(NavBar, null),
-	      this.props.children
+	      this.props.children,
+	      React.createElement('div', { className: 'filler' }),
+	      React.createElement('div', { className: 'push' }),
+	      React.createElement(Footer, null)
 	    );
 	  }
 	});
@@ -24829,6 +24833,138 @@
 	});
 	
 	module.exports = NavBar;
+
+/***/ },
+/* 220 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	var FooterBar = React.createClass({
+		displayName: "FooterBar",
+	
+	
+		render: function () {
+			return React.createElement(
+				"footer",
+				{ className: "group" },
+				React.createElement(
+					"div",
+					{ className: "footer-content group" },
+					React.createElement(
+						"h3",
+						{ className: "footer-about-us group" },
+						"About us"
+					),
+					React.createElement(
+						"h3",
+						{ className: "footer-discover" },
+						"Discover"
+					),
+					React.createElement(
+						"h3",
+						{ className: "footer-contact" },
+						"Contact me"
+					),
+					React.createElement(
+						"ul",
+						{ className: "footer-about-us-list" },
+						React.createElement(
+							"li",
+							null,
+							React.createElement(
+								"a",
+								{ href: "#" },
+								"What is KitchenStarter?"
+							)
+						)
+					),
+					React.createElement(
+						"ul",
+						{ className: "footer-discover-list" },
+						React.createElement(
+							"li",
+							null,
+							React.createElement(
+								"a",
+								{ href: "#" },
+								"Italian"
+							)
+						),
+						React.createElement(
+							"li",
+							null,
+							React.createElement(
+								"a",
+								{ href: "#" },
+								"French"
+							)
+						),
+						React.createElement(
+							"li",
+							null,
+							React.createElement(
+								"a",
+								{ href: "#" },
+								"Indian"
+							)
+						),
+						React.createElement(
+							"li",
+							null,
+							React.createElement(
+								"a",
+								{ href: "#" },
+								"Tapas"
+							)
+						),
+						React.createElement(
+							"li",
+							null,
+							React.createElement(
+								"a",
+								{ href: "#" },
+								"Mexican"
+							)
+						)
+					),
+					React.createElement(
+						"ul",
+						{ className: "footer-my-info" },
+						React.createElement(
+							"li",
+							null,
+							React.createElement(
+								"a",
+								{ href: "#" },
+								"Email"
+							)
+						),
+						React.createElement(
+							"li",
+							null,
+							React.createElement(
+								"a",
+								{ href: "#" },
+								"LinkedIn"
+							)
+						),
+						React.createElement(
+							"li",
+							null,
+							React.createElement(
+								"a",
+								{ href: "#" },
+								"Github"
+							)
+						)
+					)
+				)
+			);
+		}
+	});
+	
+	module.exports = FooterBar;
 
 /***/ }
 /******/ ]);

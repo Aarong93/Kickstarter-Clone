@@ -77,6 +77,8 @@ body {
 	font-family: sans-serif;
 }
 
+
+
 /*--------------------Header------------------*/
 
 
@@ -87,7 +89,7 @@ body {
 header {
 	background-color: #fff;
 	min-width: 1000px;
-	border-bottom: 1px solid black;
+	border-bottom: 1px solid #D9D9DE;
 	padding: 0 20px;
 }
 
@@ -146,12 +148,105 @@ header {
 	background-color: #F7FAFA;
 }
 
+/*--------------------Footer-----------------*/
 
+	/*footer anchor*/
+/*body, html {
+	min-height: 100%;
+}
 
+#kitchen-starter-app, #root {
+	min-height: 100%;
+	height: 100%;
+}
 
+#main-content  {
+	min-height: 100%;
+	margin: 0 auto -4em;
+}
 
+.footer, .push {
+	height: 400px;
+}*/
 
+.filler {
+	height: 600px;
+}
+	/*end anchor*/
 
+footer {
+	background-color: #0F2105;
+	border-top: dashed 1px #2BDE73;
+	color: #828587;
+	font-size: 14px;
+	padding-bottom: 160px;
+}
+
+.footer-content {
+	width: 800px;
+	margin: auto;
+	padding-bottom: 40px;
+	border-bottom: 1px solid #fff;
+}
+
+.footer-about-us, .footer-discover, .footer-contact {
+	float: left;
+	color: #fff;
+	font-weight: bold;
+	padding-top: 40px;
+	padding-bottom: 5px;
+}
+
+.footer-about-us {
+	padding-left: 90px;
+}
+
+.footer-discover, .footer-contact {
+	padding-left: 200px;
+}
+.footer-discover-list {
+	display: block;
+	padding: 5px;
+}
+
+.footer-about-us-list > li {
+	display: block;
+	float: left;
+	padding-left: 90px;
+	margin-top: 10px;
+}
+
+.footer-about-us-list > li > a {
+	display: block;
+}
+
+.footer-discover-list {
+	display: block;
+	float: left;
+	padding-left: 114px;
+}
+
+.footer-discover-list > li {
+	margin-top: 5px;
+}
+
+.footer-about-us-list > li > a {
+}
+
+.footer-my-info {
+	display: block;
+	float: left;
+	padding-left: 202px;
+	margin-top: 8px;
+}
+
+.footer-my-info > li {
+	margin-top: 5px;
+}
+
+.footer-my-info > li:first-child {
+	margin-top: 0px;
+}
 
 
 

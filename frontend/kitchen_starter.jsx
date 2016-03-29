@@ -6,6 +6,7 @@ var Route = ReactRouter.Route;
 var IndexRoute = ReactRouter.IndexRoute;
 var hashHistory = ReactRouter.hashHistory;
 var NavBar = require('./components/nav/nav_bar');
+var Footer = require('./components/nav/footer_bar');
 
 var App = React.createClass({
   render: function () {
@@ -13,6 +14,9 @@ var App = React.createClass({
       <div id="kitchen-starter-app">
         <NavBar />
         {this.props.children}
+				<div className="filler" />
+				<div className="push" />
+				<Footer />
       </div>
     );
   }
