@@ -36,11 +36,11 @@ and React.js. KitchenStarter allows users to:
 
 **Objective:** Functioning rails project with Authentication
 
-- [ ] create new project
-- [ ] create `User` model
-- [ ] authentication
-- [ ] static (non react) user signup/signin pages
-- [ ] redirects to single page app root after login
+- [x] create new project
+- [x] create `User` model
+- [x] authentication
+- [x] static (non react) user signup/signin pages
+- [x] redirects to single page app root after login
 
 ### Phase 2: Restaurants Model, API, and basic APIUtil (1.5 days)
 
