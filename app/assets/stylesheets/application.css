@@ -10,6 +10,149 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
- *= require_tree .
  *= require_self
+ *= require_tree .
  */
+
+/*--------------Resets-------------*/
+
+ html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+	text-decoration: inherit;
+	color: inherit;
+	background-color: transparent;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/*--------------------Clearfix----------------*/
+
+.group::after {
+	content: "";
+	display: block;
+	clear: both;
+}
+
+/*--------------------Body--------------------*/
+
+body {
+	font-family: sans-serif;
+}
+
+/*--------------------Header------------------*/
+
+
+.green {
+	color: #27D417;
+}
+
+header {
+	background-color: #fff;
+	min-width: 1000px;
+	border-bottom: 1px solid black;
+	padding: 0 20px;
+}
+
+.site-logo {
+	float: left;
+	font-size: 24px;
+	font-weight: bold;
+	margin-right: 20px;
+}
+
+.site-logo > a {
+	display: block;
+	padding: 20px;
+}
+
+.global-nav {
+	float: left;
+	font-size: 14px;
+  font-weight: bold;
+	color: #828587;
+	border-right: 1px solid #D9D9DE;
+}
+
+.global-nav > li {
+	float: left;
+}
+
+.global-nav > li > a {
+	padding: 25px 15px;
+	display: inline-block;
+}
+
+.global-nav > li > a:hover {
+	background-color: #F7FAFA;
+}
+
+
+.login-nav {
+	float: right;
+	font-size: 14px;
+	font-weight: bold;
+	color: #00A0FF
+}
+
+.login-nav > li {
+	float: left;
+}
+
+.login-nav > li > a{
+	display: inline-block;
+	padding: 25px 20px;
+}
+
+.login-nav > li > a:hover {
+	color: #828587;
+	background-color: #F7FAFA;
+}
+
+
+
+
+
+
+
+
+
+
+/**/
