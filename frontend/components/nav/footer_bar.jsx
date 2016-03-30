@@ -24,7 +24,7 @@ var FooterBar = React.createClass({
 						<li><a href="#">Mexican</a></li>
 					</ul>
 					<ul className="footer-my-info">
-						<li><a href="#">Email</a></li>
+						<li><a href="#">Aaron.r.grau@gmail.com</a></li>
 						<li><a href="#">LinkedIn</a></li>
 						<li><a href="#">Github</a></li>
 					</ul>

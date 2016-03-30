@@ -50,9 +50,9 @@
 	var Router = ReactRouter.Router;
 	var Route = ReactRouter.Route;
 	var IndexRoute = ReactRouter.IndexRoute;
-	var hashHistory = ReactRouter.hashHistory;
+	var browserHistory = ReactRouter.browserHistory;
 	var NavBar = __webpack_require__(216);
-	var Footer = __webpack_require__(217);
+	var Footer = __webpack_require__(220);
 	
 	var App = React.createClass({
 	  displayName: 'App',
@@ -72,7 +72,7 @@
 	
 	var router = React.createElement(
 	  Router,
-	  { history: hashHistory },
+	  { history: browserHistory },
 	  React.createElement(Route, { path: '/', component: App })
 	);
 	
@@ -24749,82 +24749,136 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var YouPopout = __webpack_require__(217);
 	
 	var NavBar = React.createClass({
-		displayName: "NavBar",
+		displayName: 'NavBar',
 	
 	
-		render: function () {
+		getInitialState: function () {
+			return { expandYou: false };
+		},
+	
+		_logo: function () {
 			return React.createElement(
-				"header",
-				{ className: "group" },
+				'h2',
+				{ className: 'site-logo group' },
 				React.createElement(
-					"h2",
-					{ className: "site-logo group" },
+					'a',
+					{ href: '/' },
+					'KITCHEN',
 					React.createElement(
-						"a",
-						{ href: "/" },
-						"KITCHEN",
-						React.createElement(
-							"span",
-							{ className: "green" },
-							"STARTER"
-						)
-					)
-				),
-				React.createElement(
-					"ul",
-					{ className: "global-nav" },
-					React.createElement(
-						"li",
-						null,
-						React.createElement(
-							"a",
-							{ href: "#" },
-							"Discover"
-						)
-					),
-					React.createElement(
-						"li",
-						null,
-						React.createElement(
-							"a",
-							{ href: "#" },
-							"Start a Project"
-						)
-					),
-					React.createElement(
-						"li",
-						null,
-						React.createElement(
-							"a",
-							{ href: "#" },
-							"About Us"
-						)
-					)
-				),
-				React.createElement(
-					"ul",
-					{ className: "login-nav" },
-					React.createElement(
-						"li",
-						null,
-						React.createElement(
-							"a",
-							{ href: "/users/new" },
-							"Sign up"
-						)
-					),
-					React.createElement(
-						"li",
-						null,
-						React.createElement(
-							"a",
-							{ href: "/session/new" },
-							"Login"
-						)
+						'span',
+						{ className: 'green' },
+						'STARTER'
 					)
 				)
+			);
+		},
+	
+		_nav: function () {
+			return React.createElement(
+				'ul',
+				{ className: 'global-nav' },
+				React.createElement(
+					'li',
+					null,
+					React.createElement(
+						'a',
+						{ href: '#' },
+						'Discover'
+					)
+				),
+				React.createElement(
+					'li',
+					null,
+					React.createElement(
+						'a',
+						{ href: '#' },
+						'Start a Project'
+					)
+				),
+				React.createElement(
+					'li',
+					null,
+					React.createElement(
+						'a',
+						{ href: '#' },
+						'About Us'
+					)
+				)
+			);
+		},
+	
+		_handleYouPopoutExitClick: function () {
+			this.setState({ expandYou: false });
+		},
+	
+		_youModal: function () {
+			if (this.state.expandYou) {
+				return React.createElement(YouPopout, {
+					handleExitClick: this._handleYouPopoutExitClick,
+					disableOnClickOutside: true
+				});
+			} else {
+				return "";
+			}
+		},
+	
+		_youClick: function (e) {
+			this.setState({ expandYou: !this.state.expandYou });
+		},
+	
+		render: function () {
+			var accountTab;
+			var loggedIn = true;
+			if (!loggedIn) {
+				//placeholder for logged in
+				accountTab = React.createElement(
+					'ul',
+					{ className: 'login-nav' },
+					React.createElement(
+						'li',
+						null,
+						React.createElement(
+							'a',
+							{ href: '/users/new' },
+							'Sign up'
+						)
+					),
+					React.createElement(
+						'li',
+						null,
+						React.createElement(
+							'a',
+							{ href: '/session/new' },
+							'Login'
+						)
+					)
+				);
+			} else {
+				accountTab = React.createElement(
+					'ul',
+					{ className: 'login-nav-me' },
+					React.createElement(
+						'li',
+						null,
+						React.createElement(
+							'div',
+							{ onClick: this._youClick },
+							'You ',
+							React.createElement('span', { className: 'my-arrow fa fa-sort-desc' })
+						),
+						this._youModal()
+					)
+				);
+			}
+			return React.createElement(
+				'header',
+				{ className: 'group' },
+				this._logo(),
+				this._nav(),
+				accountTab
 			);
 		}
 	});
@@ -24833,6 +24887,238 @@
 
 /***/ },
 /* 217 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var enhanceWithClickOutside = __webpack_require__(218);
+	
+	var YouPopout = React.createClass({
+		displayName: 'YouPopout',
+	
+		mixins: [__webpack_require__(219)],
+	
+		_signOut: function (e) {
+			e.preventDefault();
+		},
+	
+		handleClickOutside: function () {
+			this.props.handleExitClick();
+		},
+	
+		render: function () {
+			return React.createElement(
+				'div',
+				{ id: 'you-popout' },
+				React.createElement(
+					'div',
+					{ className: 'you-popout-col group' },
+					React.createElement(
+						'h3',
+						null,
+						'Your Links'
+					),
+					React.createElement(
+						'ul',
+						null,
+						React.createElement(
+							'li',
+							null,
+							'Backed Projects'
+						)
+					),
+					React.createElement(
+						'a',
+						{ href: '#', onClick: this._signOut },
+						'Sign Out'
+					)
+				)
+			);
+		}
+	
+	});
+	
+	module.exports = enhanceWithClickOutside(YouPopout);
+
+/***/ },
+/* 218 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(158);
+	
+	module.exports = function enhanceWithClickOutside(WrappedComponent) {
+	  var componentName = WrappedComponent.displayName || WrappedComponent.name;
+	
+	  return React.createClass({
+	    displayName: 'Wrapped' + componentName,
+	
+	    componentDidMount: function componentDidMount() {
+	      this.__wrappedComponent = this.refs.wrappedComponent;
+	      document.addEventListener('click', this.handleClickOutside, true);
+	    },
+	
+	    componentWillUnmount: function componentWillUnmount() {
+	      document.removeEventListener('click', this.handleClickOutside, true);
+	    },
+	
+	    handleClickOutside: function handleClickOutside(e) {
+	      var domNode = ReactDOM.findDOMNode(this);
+	      if ((!domNode || !domNode.contains(e.target)) && typeof this.refs.wrappedComponent.handleClickOutside === 'function') {
+	        this.refs.wrappedComponent.handleClickOutside(e);
+	      }
+	    },
+	
+	    render: function render() {
+	      return React.createElement(WrappedComponent, _extends({}, this.props, { ref: 'wrappedComponent' }));
+	    }
+	  });
+	};
+
+/***/ },
+/* 219 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
+	 * A mixin for handling (effectively) onClickOutside for React components.
+	 * Note that we're not intercepting any events in this approach, and we're
+	 * not using double events for capturing and discarding in layers or wrappers.
+	 *
+	 * The idea is that components define function
+	 *
+	 *   handleClickOutside: function() { ... }
+	 *
+	 * If no such function is defined, an error will be thrown, as this means
+	 * either it still needs to be written, or the component should not be using
+	 * this mixing since it will not exhibit onClickOutside behaviour.
+	 *
+	 */
+	(function (root, factory) {
+	  if (true) {
+	    // AMD. Register as an anonymous module.
+	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(158)], __WEBPACK_AMD_DEFINE_RESULT__ = function(reactDom) {
+	      return factory(root, reactDom);
+	    }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	  } else if (typeof exports === 'object') {
+	    // Node. Note that this does not work with strict
+	    // CommonJS, but only CommonJS-like environments
+	    // that support module.exports
+	    module.exports = factory(root, require('react-dom'));
+	  } else {
+	    // Browser globals (root is window)
+	    root.OnClickOutside = factory(root, ReactDOM);
+	  }
+	}(this, function (root, ReactDOM) {
+	  "use strict";
+	
+	  // Use a parallel array because we can't use
+	  // objects as keys, they get toString-coerced
+	  var registeredComponents = [];
+	  var handlers = [];
+	
+	  var IGNORE_CLASS = 'ignore-react-onclickoutside';
+	
+	  var isSourceFound = function(source, localNode, ignoreClass) {
+	    if (source === localNode) {
+	      return true;
+	    }
+	    // SVG <use/> elements do not technically reside in the rendered DOM, so
+	    // they do not have classList directly, but they offer a link to their
+	    // corresponding element, which can have classList. This extra check is for
+	    // that case.
+	    // See: http://www.w3.org/TR/SVG11/struct.html#InterfaceSVGUseElement
+	    // Discussion: https://github.com/Pomax/react-onclickoutside/pull/17
+	    if (source.correspondingElement) {
+	      return source.correspondingElement.classList.contains(ignoreClass);
+	    }
+	    return source.classList.contains(ignoreClass);
+	  };
+	
+	  return {
+	    componentDidMount: function() {
+	      if(typeof this.handleClickOutside !== "function")
+	        throw new Error("Component lacks a handleClickOutside(event) function for processing outside click events.");
+	
+	      var fn = this.__outsideClickHandler = (function(localNode, eventHandler) {
+	        return function(evt) {
+	          evt.stopPropagation();
+	          var source = evt.target;
+	          var found = false;
+	          var ignoreClass = this.props.outsideClickIgnoreClass || IGNORE_CLASS;
+	          // If source=local then this event came from "somewhere"
+	          // inside and should be ignored. We could handle this with
+	          // a layered approach, too, but that requires going back to
+	          // thinking in terms of Dom node nesting, running counter
+	          // to React's "you shouldn't care about the DOM" philosophy.
+	          while(source.parentNode) {
+	            found = isSourceFound(source, localNode, ignoreClass);
+	            if(found) return;
+	            source = source.parentNode;
+	          }
+	          // If element is in detached DOM, consider it not clicked
+	          // outside as it can't be known whether it was outside.
+	          if(source !== document) return;
+	          eventHandler(evt);
+	        }
+	      }(ReactDOM.findDOMNode(this), this.handleClickOutside));
+	
+	      var pos = registeredComponents.length;
+	      registeredComponents.push(this);
+	      handlers[pos] = fn;
+	
+	      // If there is a truthy disableOnClickOutside property for this
+	      // component, don't immediately start listening for outside events.
+	      if (!this.props.disableOnClickOutside) {
+	        this.enableOnClickOutside();
+	      }
+	    },
+	
+	    componentWillUnmount: function() {
+	      this.disableOnClickOutside();
+	      this.__outsideClickHandler = false;
+	      var pos = registeredComponents.indexOf(this);
+	      if( pos>-1) {
+	        if (handlers[pos]) {
+	          // clean up so we don't leak memory
+	          handlers.splice(pos, 1);
+	          registeredComponents.splice(pos, 1);
+	        }
+	      }
+	    },
+	
+	    /**
+	     * Can be called to explicitly enable event listening
+	     * for clicks and touches outside of this element.
+	     */
+	    enableOnClickOutside: function() {
+	      var fn = this.__outsideClickHandler;
+	      if (document != null) {
+	        document.addEventListener("mousedown", fn);
+	        document.addEventListener("touchstart", fn);
+	      }
+	    },
+	
+	    /**
+	     * Can be called to explicitly disable event listening
+	     * for clicks and touches outside of this element.
+	     */
+	    disableOnClickOutside: function() {
+	      var fn = this.__outsideClickHandler;
+	      if (document != null) {
+	        document.removeEventListener("mousedown", fn);
+	        document.removeEventListener("touchstart", fn);
+	      }
+	    }
+	  };
+	
+	}));
+
+
+/***/ },
+/* 220 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -24934,7 +25220,7 @@
 							React.createElement(
 								"a",
 								{ href: "#" },
-								"Email"
+								"Aaron.r.grau@gmail.com"
 							)
 						),
 						React.createElement(

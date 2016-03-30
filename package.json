@@ -14,20 +14,22 @@
     "flux": "^2.1.1",
     "react": "^0.14.7",
     "react-addons-linked-state-mixin": "^0.14.7",
+    "react-click-outside": "^2.1.0",
     "react-dom": "^0.14.7",
+    "react-onclickoutside": "^4.7.0",
     "react-router": "^2.0.1",
     "react-util": "^2.2.0",
-		"webpack": "^1.12.14"
+    "webpack": "^1.12.14"
   },
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-		"postinstall": "./node_modules/.bin/webpack"
+    "postinstall": "./node_modules/.bin/webpack"
   },
-	"engines": {
-  "node": "5.1.0",
-  "npm": "3.3.12"
-},
+  "engines": {
+    "node": "5.1.0",
+    "npm": "3.3.12"
+  },
   "author": "",
   "license": "ISC"
 }
