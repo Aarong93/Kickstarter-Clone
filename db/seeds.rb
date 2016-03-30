@@ -42,5 +42,5 @@ cuisines = Cuisine.create([
 Restaurant.delete_all
 
 restaurants = Restaurant.create([
-	{user_id: user.id, cuisine_id: cuisines.first.id, title: "Aaron's Pizza", city_id: cities[1].id, blurb: "Pizza!!!", target: 10000, current: 50, expiration: Date.parse("2016/09/16"), published: true, featured: true }
+	{user_id: user.id, cuisine_id: cuisines.first.id, title: "Aaron's Pizza", city_id: cities[1].id, blurb: "Pizza!!!", target: 10000, current: 50, expiration: Date.parse("2016/09/16"), published: true, featured: true, image_urL: "http://www.thickslicepizza.com/img/photo3.jpg" }
 ])

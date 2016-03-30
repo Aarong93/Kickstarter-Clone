@@ -1,12 +1,37 @@
 .restaurant-show-page {
 	background-color: #f7fafa;
 	min-height: 600px;
-	min-width: 900px;
 }
 
-.restaurant-show-page > h1 {
-	font-size: 24px;
+.restaurant-show-page-content {
+	width: 900px;
+	margin: auto;
+}
+
+.restaurant-show-page-content > h1 {
+	font-size: 28px;
 	display: block;
 	margin: auto;
-	padding-top: 50px;
+	padding-top: 35px;
+	text-align: center;
+}
+
+.restaurant-show-page-content > h4 {
+	font-size: 14px;
+	display: block;
+	margin: auto;
+	padding-top: 20px;
+	text-align: center;
+}
+
+.user-name {
+	font-weight: bold;
+}
+
+.restaurant-show-main-image {
+	width: 470px;
+	float: left;
+	margin-top: 40px;
+	display: block;
+	margin-left: 70px;
 }

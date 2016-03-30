@@ -1,6 +1,7 @@
 var RestaurantActions = require('../actions/restaurant_actions');
 
 
+
 var ApiUtil = {
 
 	fetchRestaurant: function(id) {

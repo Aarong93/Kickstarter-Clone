@@ -25263,6 +25263,7 @@
 	var React = __webpack_require__(1);
 	var RestaurantStore = __webpack_require__(222);
 	var ApiUtil = __webpack_require__(244);
+	var ImageSideBar = __webpack_require__(247);
 	
 	var RestaurantShow = React.createClass({
 		displayName: 'RestaurantShow',
@@ -25271,7 +25272,10 @@
 		contextTypes: { router: React.PropTypes.object.isRequired },
 	
 		getInitialState: function () {
-			return { restaurant: RestaurantStore.find(this.props.params.id) };
+			return {
+				restaurant: RestaurantStore.find(this.props.params.id),
+				imageClass: "hide-image"
+			};
 		},
 	
 		componentDidMount: function () {
@@ -25287,6 +25291,10 @@
 			this.listenerToken.remove();
 		},
 	
+		_imageReady: function () {
+			this.setState({ imageClass: "show-image" });
+		},
+	
 		render: function () {
 			if (!this.state.restaurant) {
 				return React.createElement('div', { className: 'restaurant-show-page' });
@@ -25295,9 +25303,33 @@
 				'div',
 				{ className: 'restaurant-show-page' },
 				React.createElement(
-					'h1',
-					null,
-					this.state.restaurant.title
+					'div',
+					{ className: 'restaurant-show-page-content group' },
+					React.createElement(
+						'h1',
+						null,
+						this.state.restaurant.title
+					),
+					React.createElement(
+						'h4',
+						null,
+						'by ',
+						React.createElement(
+							'span',
+							{ className: 'user-name' },
+							this.state.restaurant.user.name
+						)
+					),
+					React.createElement(
+						'div',
+						{ className: 'restaurant-show-main-image image_wrapper' },
+						React.createElement('img', {
+							src: this.state.restaurant.image_url,
+							onLoad: this._imageReady,
+							className: this.state.imageClass
+						})
+					),
+					React.createElement(ImageSideBar, null)
 				)
 			);
 		}
@@ -32154,6 +32186,24 @@
 	};
 	
 	module.exports = RestaurantConstants;
+
+/***/ },
+/* 247 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	var ImageSideBar = React.createClass({
+		displayName: "ImageSideBar",
+	
+	
+		render: function () {
+			return React.createElement("div", { className: "image-side-bar" });
+		}
+	
+	});
+	
+	module.exports = ImageSideBar;
 
 /***/ }
 /******/ ]);
