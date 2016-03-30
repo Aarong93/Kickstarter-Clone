@@ -1,6 +1,6 @@
 var React = require('react');
 var YouPopout = require('./you_popout');
-
+var SearchBar = require('./search_bar');
 var NavBar = React.createClass({
 
 	getInitialState: function () {
@@ -10,8 +10,8 @@ var NavBar = React.createClass({
 	_logo: function () {
 		return (
 			<h2 className="site-logo group">
-				<a href="/">
-					KITCHEN<span className="green">STARTER</span>
+				<a href="/" >
+					<span className="dark-green">KITCHEN</span><span className="green">STARTER</span>
 				</a>
 			</h2>
 		);
@@ -74,6 +74,7 @@ var NavBar = React.createClass({
 			<header className="group">
 				{this._logo()}
 				{this._nav()}
+				<SearchBar />
 				{accountTab}
 			</header>
 		);

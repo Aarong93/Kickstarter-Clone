@@ -7,6 +7,13 @@ var RestaurantActions = {
 			actionType: RestaurantConstants.RESTAURANT_RECEIVED,
 			restaurant: restaurant
 		});
+	},
+
+	receiveRestaurants: function (restaurants) {
+		AppDispatcher.dispatch({
+			actionType: RestaurantConstants.RESTAURANTS_RECEIVED,
+			restaurants: restaurants
+		});
 	}
 };
 

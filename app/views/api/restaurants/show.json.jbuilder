@@ -1,1 +1,1 @@
-json.extract! @restaurant, :id, :user, :title, :city, :blurb, :description, :target, :current, :expiration, :published, :featured, :image_url
+json.extract! @restaurant, :id, :user, :title, :city, :blurb, :description, :total, :target, :expiration, :published, :featured, :image_url, :number_contributions

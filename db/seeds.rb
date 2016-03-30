@@ -42,5 +42,22 @@ cuisines = Cuisine.create([
 Restaurant.delete_all
 
 restaurants = Restaurant.create([
-	{user_id: user.id, cuisine_id: cuisines.first.id, title: "Aaron's Pizza", city_id: cities[1].id, blurb: "Pizza!!!", target: 10000, current: 50, expiration: Date.parse("2016/09/16"), published: true, featured: true, image_urL: "http://www.thickslicepizza.com/img/photo3.jpg" }
-])
+	{user_id: user.id, cuisine_id: cuisines.first.id, title: "Aaron's Pizza", city_id: cities[1].id, blurb: "Pizza!!!", target: 10000, current: 50, expiration: Date.parse("2016/09/16"), published: true, featured: true, image_url: "http://www.thickslicepizza.com/img/photo3.jpg" },
+
+	{user_id: user.id, cuisine_id: cuisines.first.id, title: "Aaron's Burger", city_id: cities[1].id, blurb: "Pizza!!!", target: 10000, current: 50, expiration: Date.parse("2016/09/16"), published: true, featured: true, image_url: "http://www.thickslicepizza.com/img/photo3.jpg" },
+
+	{user_id: user.id, cuisine_id: cuisines.first.id, title: "Aaron's Other", city_id: cities[1].id, blurb: "Pizza!!!", target: 10000, current: 50, expiration: Date.parse("2016/09/16"), published: true, featured: true, image_url: "http://www.thickslicepizza.com/img/photo3.jpg" },
+
+	{user_id: user.id, cuisine_id: cuisines.first.id, title: "Aaron's Test", city_id: cities[1].id, blurb: "Pizza!!!", target: 10000, current: 50, expiration: Date.parse("2016/09/16"), published: true, featured: true, image_url: "http://www.thickslicepizza.com/img/photo3.jpg" },
+	])
+
+Contribution.delete_all
+
+contribution = Contribution.create([
+	{user_id: user.id, restaurant_id: restaurants.first.id, value: 10 },
+	{user_id: user.id, restaurant_id: restaurants.first.id, value: 24 },
+	{user_id: user.id, restaurant_id: restaurants.first.id, value: 35 },
+	{user_id: user.id, restaurant_id: restaurants.first.id, value: 25 },
+	{user_id: user.id, restaurant_id: restaurants.first.id, value: 30 },
+	{user_id: user.id, restaurant_id: restaurants.first.id, value: 25 },
+	])

@@ -31,6 +31,21 @@ var RestaurantShow = React.createClass({
 		this.setState({imageClass: "show-image"});
 	},
 
+	_mainShow: function () {
+		return (
+				<div className="restaurant-show-main-content group">
+					<div className="restaurant-show-main-image image_wrapper">
+						<img
+							src={this.state.restaurant.image_url}
+							onLoad={this._imageReady}
+							className={this.state.imageClass}
+						/>
+					</div>
+					<ImageSideBar restaurant={this.state.restaurant}/>
+				</div>
+		);
+	},
+
 	render: function () {
 		if (!this.state.restaurant) {
 			return <div className="restaurant-show-page"></div>;
@@ -41,17 +56,10 @@ var RestaurantShow = React.createClass({
 					<h1>{this.state.restaurant.title}</h1>
 					<h4>
 						by <span className="user-name">
-							{this.state.restaurant.user.name}
+						{this.state.restaurant.user.name}
 						</span>
 					</h4>
-					<div className="restaurant-show-main-image image_wrapper">
-						<img
-							src={this.state.restaurant.image_url}
-							onLoad={this._imageReady}
-							className={this.state.imageClass}
-						/>
-					</div>
-					<ImageSideBar />
+					{this._mainShow()}
 				</div>
 			</div>
 		);

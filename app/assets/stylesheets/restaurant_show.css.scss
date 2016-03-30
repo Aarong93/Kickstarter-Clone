@@ -28,10 +28,52 @@
 	font-weight: bold;
 }
 
-.restaurant-show-main-image {
-	width: 470px;
-	float: left;
+.restaurant-show-main-content {
+	min-height: 300px;
 	margin-top: 40px;
+	border-bottom: 1px solid #D9D9DE;
+	padding-bottom: 25px;
+}
+
+.restaurant-show-main-image {
+	width: 570px;
+	float: left;
 	display: block;
-	margin-left: 70px;
+	margin-left: 40px;
+}
+
+.show-image-side-bar {
+	float: right;
+	display: block;
+	margin-right: 30px;
+	margin-top: 10px;
+}
+
+.show-image-side-bar > ul > li > h5 {
+	font-weight: bold;
+	font-size: 48px;
+	padding-bottom: 5px;
+	color: #0F2105;
+}
+
+.show-image-side-bar > ul > li > p {
+	font-size: 14px;
+	font-weight: 500;
+	color: #828587;
+	padding-bottom: 20px;
+}
+
+.show-back-this-button {
+	background-color: #2BDE73;
+	color: #fff;
+	font-weight: bold;
+	font-size:16px;
+	padding: 18px 30px;
+	margin-top: 20px;
+	border-radius: 5px;
+}
+
+.show-back-this-button:hover {
+	cursor: pointer;
+	background-color: #1db95c;
 }

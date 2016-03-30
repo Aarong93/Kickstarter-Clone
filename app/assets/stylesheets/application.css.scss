@@ -117,7 +117,7 @@ img {
 
 header {
 	background-color: #fff;
-	min-width: 900px;
+	min-width: 920px;
 	border-bottom: 1px solid #D9D9DE;
 }
 
@@ -128,11 +128,16 @@ header {
 	margin-right: 20px;
 	margin-left: 20px;
 	padding-top: 2px;
+
 }
 
 .site-logo > a {
 	display: block;
 	padding: 20px;
+}
+
+.dark-green {
+	color: #0F2105;
 }
 
 .global-nav {
@@ -261,6 +266,34 @@ header {
 	cursor: pointer;
 	color: #000;
 }
+
+.searchBar {
+	display: block;
+	float: left;
+	padding-top: 15px;
+	padding-bottom: 10px;
+	margin-left: 30px;
+	color: #000;
+}
+
+#searchIcon {
+	color: #828587;
+	margin-right: 15px;
+}
+
+.searchBar > input {
+	width: 145px;
+	border: none;
+	font-size: 14px;
+	font-weight: bold;
+	padding: 10px;
+}
+
+.searchBar > input:focus {
+	border: none;
+	outline: none;
+}
+
 
 /*--------------------Footer-----------------*/
 
