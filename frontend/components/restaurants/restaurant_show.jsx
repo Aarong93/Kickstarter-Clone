@@ -19,6 +19,10 @@ var RestaurantShow = React.createClass({
 		ApiUtil.fetchRestaurant(parseInt(this.props.params.id));
 	},
 
+	componentWillReceiveProps: function (newProps) {
+		ApiUtil.fetchRestaurant(parseInt(newProps.params.id));
+	},
+
 	_onChange: function () {
 		this.setState({restaurant: RestaurantStore.find(this.props.params.id)});
 	},
@@ -57,6 +61,7 @@ var RestaurantShow = React.createClass({
 					<h4>
 						by <span className="user-name">
 						{this.state.restaurant.user.name}
+
 						</span>
 					</h4>
 					{this._mainShow()}

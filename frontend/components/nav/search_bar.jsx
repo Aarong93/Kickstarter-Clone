@@ -24,9 +24,7 @@ var SearchBar = React.createClass({
 				this.searchCallback, 500
 			);
 		} else {
-			this.searchToken = setTimeout(
-				RestaurantActions.clearSearchRestaurants, 500
-			);
+			this.searchToken = RestaurantActions.clearSearchRestaurants();
 		}
 	},
 

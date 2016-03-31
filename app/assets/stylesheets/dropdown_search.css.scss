@@ -1,0 +1,26 @@
+.no-search-results {
+	height: 175px;
+	background-color: #f7fafa;
+	color: #828587;
+	text-align: center;
+	border-bottom: 1px solid #aaa;
+}
+
+.no-search-results > p {
+	padding-top: 75px;
+}
+
+
+.search-dropdown {
+	background-color: #f7fafa;
+	border-bottom: 1px solid #aaa;
+	text-align: center;
+}
+
+.search-results {
+	max-width: 800px;
+	display: inline-block;
+	background-color: #f7fafa;
+	padding-top: 30px;
+	padding-bottom: 40px;
+}

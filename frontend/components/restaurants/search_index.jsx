@@ -1,6 +1,8 @@
 var React = require('react');
 var PropTypes = React.PropTypes;
 var RestaurantSearchStore = require('../../stores/restaurant_search_index');
+var IndexItem = require('./index_item');
+var RestaurantActions = require('../../actions/restaurant_actions');
 
 var SearchIndex = React.createClass({
 
@@ -23,16 +25,34 @@ var SearchIndex = React.createClass({
   },
 
   render: function() {
-    if (!this.state.restaurants) {
-      return <div></div>
+    if (!this.state.restaurants || !this.state.restaurants[0]) {
+      return <div></div>;
     }
 
     if (this.state.restaurants[0] === "none") {
-      return <div>No Results Matching Your Search Were Found</div>
+      return (
+				<div className="no-search-results">
+					<p>No Restaurants Matching Your Search Were Found</p>
+				</div>
+			);
     }
     // this should render index items
+		var restaurants = this.state.restaurants.map(function (restaurant) {
+			return (
+				<div key={restaurant.id} className="index-item-wrapper-small">
+					<IndexItem
+						restaurant={restaurant} callback={RestaurantActions.clearSearchRestaurants}
+					/>
+				</div>
+			);
+		});
+
     return (
-      <div></div>
+			<div className="search-dropdown">
+	      <div className="search-results group">
+					{restaurants}
+	      </div>
+			</div>
     );
   }
 

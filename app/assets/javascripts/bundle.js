@@ -54,7 +54,7 @@
 	var NavBar = __webpack_require__(216);
 	var Footer = __webpack_require__(232);
 	var RestaurantShow = __webpack_require__(233);
-	var SearchIndex = __webpack_require__(256);
+	var SearchIndex = __webpack_require__(253);
 	
 	var App = React.createClass({
 	  displayName: 'App',
@@ -25159,7 +25159,7 @@
 			if (e.target.value !== "") {
 				this.searchToken = setTimeout(this.searchCallback, 500);
 			} else {
-				this.searchToken = setTimeout(RestaurantActions.clearSearchRestaurants, 500);
+				this.searchToken = RestaurantActions.clearSearchRestaurants();
 			}
 		},
 	
@@ -25960,6 +25960,10 @@
 		componentDidMount: function () {
 			this.listenerToken = RestaurantStore.addListener(this._onChange);
 			ApiUtil.fetchRestaurant(parseInt(this.props.params.id));
+		},
+	
+		componentWillReceiveProps: function (newProps) {
+			ApiUtil.fetchRestaurant(parseInt(newProps.params.id));
 		},
 	
 		_onChange: function () {
@@ -32600,9 +32604,80 @@
 	module.exports = ImageSideBar;
 
 /***/ },
-/* 253 */,
-/* 254 */,
-/* 255 */
+/* 253 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var PropTypes = React.PropTypes;
+	var RestaurantSearchStore = __webpack_require__(254);
+	var IndexItem = __webpack_require__(256);
+	var RestaurantActions = __webpack_require__(226);
+	
+	var SearchIndex = React.createClass({
+	  displayName: 'SearchIndex',
+	
+	
+	  //change to restaurants and create index item
+	  getInitialState: function () {
+	    return { restaurant: {} };
+	  },
+	
+	  onRestaurantSearchStoreChange: function () {
+	    this.setState({ restaurants: RestaurantSearchStore.all() });
+	  },
+	
+	  componentDidMount: function () {
+	    this.listenToken = RestaurantSearchStore.addListener(this.onRestaurantSearchStoreChange);
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.listenToken.remove();
+	  },
+	
+	  render: function () {
+	    if (!this.state.restaurants || !this.state.restaurants[0]) {
+	      return React.createElement('div', null);
+	    }
+	
+	    if (this.state.restaurants[0] === "none") {
+	      return React.createElement(
+	        'div',
+	        { className: 'no-search-results' },
+	        React.createElement(
+	          'p',
+	          null,
+	          'No Restaurants Matching Your Search Were Found'
+	        )
+	      );
+	    }
+	    // this should render index items
+	    var restaurants = this.state.restaurants.map(function (restaurant) {
+	      return React.createElement(
+	        'div',
+	        { key: restaurant.id, className: 'index-item-wrapper-small' },
+	        React.createElement(IndexItem, {
+	          restaurant: restaurant, callback: RestaurantActions.clearSearchRestaurants
+	        })
+	      );
+	    });
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'search-dropdown' },
+	      React.createElement(
+	        'div',
+	        { className: 'search-results group' },
+	        restaurants
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = SearchIndex;
+
+/***/ },
+/* 254 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Store = __webpack_require__(235).Store;
@@ -32645,53 +32720,60 @@
 	module.exports = RestaurantIndexStore;
 
 /***/ },
+/* 255 */,
 /* 256 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var PropTypes = React.PropTypes;
-	var RestaurantSearchStore = __webpack_require__(255);
 	
-	var SearchIndex = React.createClass({
-	  displayName: 'SearchIndex',
+	var IndexItem = React.createClass({
+		displayName: "IndexItem",
 	
+		contextTypes: {
+			router: React.PropTypes.object.isRequired
+		},
 	
-	  //change to restaurants and create index item
-	  getInitialState: function () {
-	    return { restaurant: {} };
-	  },
+		getInitialState: function () {
+			return { imageClass: "hide-image" };
+		},
 	
-	  onRestaurantSearchStoreChange: function () {
-	    this.setState({ restaurants: RestaurantSearchStore.all() });
-	  },
+		_imageReady: function () {
+			this.setState({ imageClass: "show-image" });
+		},
 	
-	  componentDidMount: function () {
-	    this.listenToken = RestaurantSearchStore.addListener(this.onRestaurantSearchStoreChange);
-	  },
+		handleClick: function () {
+			this.props.callback && this.props.callback();
+			this.context.router.push("/restaurants/" + this.props.restaurant.id);
+		},
 	
-	  componentWillUnmount: function () {
-	    this.listenToken.remove();
-	  },
+		render: function () {
 	
-	  render: function () {
-	    if (!this.state.restaurants) {
-	      return React.createElement('div', null);
-	    }
-	
-	    if (this.state.restaurants[0] === "none") {
-	      return React.createElement(
-	        'div',
-	        null,
-	        'No Results Matching Your Search Were Found'
-	      );
-	    }
-	    // this should render index items
-	    return React.createElement('div', null);
-	  }
+			return React.createElement(
+				"div",
+				{ className: "index-item", onClick: this.handleClick },
+				React.createElement("img", {
+					id: "index-item-img",
+					src: this.props.restaurant.image_url,
+					onLoad: this._imageReady,
+					className: this.state.imageClass
+				}),
+				React.createElement(
+					"h3",
+					null,
+					this.props.restaurant.title
+				),
+				React.createElement(
+					"h4",
+					null,
+					"by ",
+					this.props.restaurant.user.name
+				)
+			);
+		}
 	
 	});
 	
-	module.exports = SearchIndex;
+	module.exports = IndexItem;
 
 /***/ }
 /******/ ]);

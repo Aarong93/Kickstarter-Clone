@@ -8,7 +8,8 @@ class Api::RestaurantsController < ApplicationController
 		if params[:str]
 			str = params[:str]
 			str = str.split.map(&:capitalize).join(' ')
-			@restaurants = Restaurant.with_total.where('title LIKE ?', "%#{str}%")
+
+			@restaurants = Restaurant.includes(:city, :user).with_total.where("title LIKE ?", "%#{str}%")
 		end
 	end
 
