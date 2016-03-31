@@ -32674,7 +32674,7 @@
 	  },
 	
 	  render: function () {
-	    if (!this.state.restaurant) {
+	    if (!this.state.restaurants) {
 	      return React.createElement('div', null);
 	    }
 	

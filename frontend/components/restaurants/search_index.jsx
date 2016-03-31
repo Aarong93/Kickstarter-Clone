@@ -23,7 +23,7 @@ var SearchIndex = React.createClass({
   },
 
   render: function() {
-    if (!this.state.restaurant) {
+    if (!this.state.restaurants) {
       return <div></div>
     }
 
