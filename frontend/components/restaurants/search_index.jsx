@@ -32,7 +32,7 @@ var SearchIndex = React.createClass({
     }
     // this should render index items
     return (
-
+      <div></div>
     );
   }
 
