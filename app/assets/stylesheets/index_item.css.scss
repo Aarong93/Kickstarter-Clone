@@ -23,10 +23,67 @@
 	cursor: pointer;
 }
 
-.index-item > h3 {
-	font-weight: bold;
+.index-item {
+	text-align: left;
 }
 
-.index-item > h4 {
+.index-item-info {
 	color: #828587;
+	margin: 10px;
+	font-size: 14px;
+	height: 40%;
+}
+
+.index-item-info > h3 {
+	color: #0F2105;
+	font-weight: bold;
+	margin-bottom: 10px;
+}
+
+.index-item-info > h4 {
+	margin-bottom: 20px;
+}
+
+.index-item-info > p {
+	font-size: 12px;
+}
+
+.index-item-location {
+	font-size: 12px;
+	color: #828587;
+	margin: 10px;
+	margin-top: 5px;
+}
+
+.progress-bar-wrapper {
+	background-color: #D9D9DE;
+	height: 6px;
+	border-radius: 3px;
+	margin: 10px;
+	margin-top: 5px;
+	overflow: hidden;
+}
+.progress-bar {
+	background-color: #2BDE73;
+	height: 100%;
+	border-radius: inherit;
+}
+.index-item-stats  {
+	margin-left: 10px;
+}
+
+.index-item-stats > li {
+	color: #000;
+	font-size: 12px;
+	font-weight: bold;
+	float: left;
+	margin-right: 20px;
+	line-height: 150%;
+}
+
+.index-item-stats-label {
+	float: left;
+	color: #828587;
+	font-size: 12px;
+	font-weight: normal;
 }

@@ -32747,7 +32747,15 @@
 		},
 	
 		render: function () {
+			var expires = new Date(this.props.restaurant.expiration);
+			var today = new Date();
+			var daysLeft = Math.round((expires - today) / (1000 * 60 * 60 * 24));
 	
+			var percentDone = this.props.restaurant.total / this.props.restaurant.target * 100;
+			var progressWidth = { width: percentDone + "%" };
+			if (percentDone > 100) {
+				progressWidth = { width: "100%" };
+			}
 			return React.createElement(
 				"div",
 				{ className: "index-item", onClick: this.handleClick },
@@ -32758,15 +32766,74 @@
 					className: this.state.imageClass
 				}),
 				React.createElement(
-					"h3",
-					null,
-					this.props.restaurant.title
+					"div",
+					{ className: "index-item-info" },
+					React.createElement(
+						"h3",
+						null,
+						this.props.restaurant.title
+					),
+					React.createElement(
+						"h4",
+						null,
+						this.props.restaurant.user.name
+					),
+					React.createElement(
+						"p",
+						null,
+						this.props.restaurant.blurb
+					)
 				),
 				React.createElement(
-					"h4",
-					null,
-					"by ",
-					this.props.restaurant.user.name
+					"div",
+					{ className: "index-item-location" },
+					React.createElement(
+						"p",
+						null,
+						this.props.restaurant.city.name
+					)
+				),
+				React.createElement(
+					"div",
+					{ className: "progress-bar-wrapper" },
+					React.createElement("div", { style: progressWidth, className: "progress-bar" })
+				),
+				React.createElement(
+					"ul",
+					{ className: "index-item-stats group" },
+					React.createElement(
+						"li",
+						null,
+						percentDone + "%",
+						React.createElement("br", null),
+						React.createElement(
+							"span",
+							{ className: "index-item-stats-label" },
+							"funded"
+						)
+					),
+					React.createElement(
+						"li",
+						null,
+						"$" + this.props.restaurant.total,
+						React.createElement("br", null),
+						React.createElement(
+							"span",
+							{ className: "index-item-stats-label" },
+							"pledged"
+						)
+					),
+					React.createElement(
+						"li",
+						null,
+						daysLeft,
+						React.createElement("br", null),
+						React.createElement(
+							"span",
+							{ className: "index-item-stats-label" },
+							"left"
+						)
+					)
 				)
 			);
 		}
