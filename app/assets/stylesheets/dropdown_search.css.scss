@@ -24,3 +24,15 @@
 	padding-top: 30px;
 	padding-bottom: 40px;
 }
+
+.search-exit-button {
+	float: right;
+	margin-right: 10px;
+	font-size: 22px;
+	color: #aaa;
+}
+
+.search-exit-button:hover {
+	cursor: pointer;
+	color: #000;
+}

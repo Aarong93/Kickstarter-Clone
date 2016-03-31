@@ -10,6 +10,9 @@ class Api::RestaurantsController < ApplicationController
 			str = str.split.map(&:capitalize).join(' ')
 
 			@restaurants = Restaurant.includes(:city, :user).with_total.where("title LIKE ?", "%#{str}%")
+		elsif params[:cuisine_id]
+			cuisine_id = params[:cuisine_id].to_i
+			@restaurants = Restaurant.includes(:city, :user).with_total.where(cuisine_id: cuisine_id)
 		end
 	end
 

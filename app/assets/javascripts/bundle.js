@@ -52,9 +52,10 @@
 	var IndexRoute = ReactRouter.IndexRoute;
 	var browserHistory = ReactRouter.browserHistory;
 	var NavBar = __webpack_require__(216);
-	var Footer = __webpack_require__(232);
-	var RestaurantShow = __webpack_require__(233);
-	var SearchIndex = __webpack_require__(253);
+	var Footer = __webpack_require__(251);
+	var RestaurantShow = __webpack_require__(252);
+	var SearchIndex = __webpack_require__(255);
+	var RestaurantIndex = __webpack_require__(257);
 	
 	var App = React.createClass({
 	  displayName: 'App',
@@ -77,6 +78,7 @@
 	  React.createElement(
 	    Route,
 	    { path: '/', component: App },
+	    React.createElement(Route, { path: '/restaurants', component: RestaurantIndex }),
 	    React.createElement(Route, { path: '/restaurants/:id', component: RestaurantShow })
 	  )
 	);
@@ -24798,7 +24800,7 @@
 					null,
 					React.createElement(
 						'a',
-						{ href: '#' },
+						{ href: '/restaurants' },
 						'Discover'
 					)
 				),
@@ -25139,6 +25141,7 @@
 	var LinkedStateMixin = __webpack_require__(221);
 	var ApiUtil = __webpack_require__(225);
 	var RestaurantActions = __webpack_require__(226);
+	var RestaurantIndexStore = __webpack_require__(233);
 	
 	var SearchBar = React.createClass({
 		displayName: 'SearchBar',
@@ -25147,6 +25150,20 @@
 	
 		getInitialState: function () {
 			return { searchVal: "" };
+		},
+	
+		clearIfSearchEmpty: function () {
+			if (RestaurantIndexStore.all().length < 1) {
+				this.setState({ searchVal: "" });
+			}
+		},
+	
+		componentDidMount: function () {
+			this.listener = RestaurantIndexStore.addListener(this.clearIfSearchEmpty);
+		},
+	
+		componentWillUnmount: function () {
+			this.listener.remove();
 		},
 	
 		searchCallback: function () {
@@ -25415,6 +25432,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var RestaurantActions = __webpack_require__(226);
+	var CuisineActions = __webpack_require__(232);
 	
 	var ApiUtil = {
 	
@@ -25437,6 +25455,29 @@
 				data: { str: str },
 				success: function (restaurants) {
 					RestaurantActions.receiveRestaurants(restaurants);
+				}
+			});
+		},
+	
+		fetchRestaurantsByCuisine: function (cuisine_id) {
+			$.ajax({
+				type: "GET",
+				url: "/api/restaurants",
+				dataType: "json",
+				data: { cuisine_id: cuisine_id },
+				success: function (restaurants) {
+					RestaurantActions.receiveIndexRestaurants(restaurants);
+				}
+			});
+		},
+	
+		fetchCuisines: function () {
+			$.ajax({
+				type: "GET",
+				url: "/api/cuisines",
+				dataType: "json",
+				success: function (cuisines) {
+					CuisineActions.receiveCuisines(cuisines);
 				}
 			});
 		}
@@ -25471,6 +25512,13 @@
 			AppDispatcher.dispatch({
 				actionType: RestaurantConstants.CLEAR_SEARCH_RESTAURANTS
 			});
+		},
+	
+		receiveIndexRestaurants: function (restaurants) {
+			AppDispatcher.dispatch({
+				actionType: RestaurantConstants.RESTAURANT_INDEX_RECEIVED,
+				restaurants: restaurants
+			});
 		}
 	};
 	
@@ -25483,7 +25531,8 @@
 	var RestaurantConstants = {
 		RESTAURANT_RECEIVED: "RESTAURANT_RECEIVED",
 		RESTAURANTS_RECEIVED: "RESTAURANTS_RECEIVED",
-		CLEAR_SEARCH_RESTAURANTS: "CLEAR_SEARCH_RESTAURANTS"
+		CLEAR_SEARCH_RESTAURANTS: "CLEAR_SEARCH_RESTAURANTS",
+		RESTAURANT_INDEX_RECEIVED: "RESTAURANT_INDEX_RECEIVED"
 	};
 	
 	module.exports = RestaurantConstants;
@@ -25807,267 +25856,65 @@
 /* 232 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var React = __webpack_require__(1);
+	var CuisinesConstants = __webpack_require__(227);
+	var AppDispatcher = __webpack_require__(228);
 	
-	var FooterBar = React.createClass({
-		displayName: "FooterBar",
-	
-	
-		render: function () {
-			return React.createElement(
-				"footer",
-				{ className: "group" },
-				React.createElement(
-					"div",
-					{ className: "footer-content group" },
-					React.createElement(
-						"h3",
-						{ className: "footer-about-us group" },
-						"About us"
-					),
-					React.createElement(
-						"h3",
-						{ className: "footer-discover" },
-						"Discover"
-					),
-					React.createElement(
-						"h3",
-						{ className: "footer-contact" },
-						"Contact me"
-					),
-					React.createElement(
-						"ul",
-						{ className: "footer-about-us-list" },
-						React.createElement(
-							"li",
-							null,
-							React.createElement(
-								"a",
-								{ href: "#" },
-								"What is KitchenStarter?"
-							)
-						)
-					),
-					React.createElement(
-						"ul",
-						{ className: "footer-discover-list" },
-						React.createElement(
-							"li",
-							null,
-							React.createElement(
-								"a",
-								{ href: "#" },
-								"Italian"
-							)
-						),
-						React.createElement(
-							"li",
-							null,
-							React.createElement(
-								"a",
-								{ href: "#" },
-								"French"
-							)
-						),
-						React.createElement(
-							"li",
-							null,
-							React.createElement(
-								"a",
-								{ href: "#" },
-								"Indian"
-							)
-						),
-						React.createElement(
-							"li",
-							null,
-							React.createElement(
-								"a",
-								{ href: "#" },
-								"Tapas"
-							)
-						),
-						React.createElement(
-							"li",
-							null,
-							React.createElement(
-								"a",
-								{ href: "#" },
-								"Mexican"
-							)
-						)
-					),
-					React.createElement(
-						"ul",
-						{ className: "footer-my-info" },
-						React.createElement(
-							"li",
-							null,
-							React.createElement(
-								"a",
-								{ href: "#" },
-								"Aaron.r.grau@gmail.com"
-							)
-						),
-						React.createElement(
-							"li",
-							null,
-							React.createElement(
-								"a",
-								{ href: "#" },
-								"LinkedIn"
-							)
-						),
-						React.createElement(
-							"li",
-							null,
-							React.createElement(
-								"a",
-								{ href: "#" },
-								"Github"
-							)
-						)
-					)
-				)
-			);
+	var CuisineActions = {
+		receiveCuisines: function (cuisines) {
+			AppDispatcher.dispatch({
+				actionType: CuisinesConstants.CUISINES_RECEIVED,
+				cuisines: cuisines
+			});
 		}
-	});
+	};
 	
-	module.exports = FooterBar;
+	module.exports = CuisineActions;
 
 /***/ },
 /* 233 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var React = __webpack_require__(1);
-	var RestaurantStore = __webpack_require__(234);
-	var ApiUtil = __webpack_require__(225);
-	var ImageSideBar = __webpack_require__(252);
-	
-	var RestaurantShow = React.createClass({
-		displayName: 'RestaurantShow',
-	
-	
-		contextTypes: { router: React.PropTypes.object.isRequired },
-	
-		getInitialState: function () {
-			return {
-				restaurant: RestaurantStore.find(this.props.params.id),
-				imageClass: "hide-image"
-			};
-		},
-	
-		componentDidMount: function () {
-			this.listenerToken = RestaurantStore.addListener(this._onChange);
-			ApiUtil.fetchRestaurant(parseInt(this.props.params.id));
-		},
-	
-		componentWillReceiveProps: function (newProps) {
-			ApiUtil.fetchRestaurant(parseInt(newProps.params.id));
-		},
-	
-		_onChange: function () {
-			this.setState({ restaurant: RestaurantStore.find(this.props.params.id) });
-		},
-	
-		componentWillUnmount: function () {
-			this.listenerToken.remove();
-		},
-	
-		_imageReady: function () {
-			this.setState({ imageClass: "show-image" });
-		},
-	
-		_mainShow: function () {
-			return React.createElement(
-				'div',
-				{ className: 'restaurant-show-main-content group' },
-				React.createElement(
-					'div',
-					{ className: 'restaurant-show-main-image image_wrapper' },
-					React.createElement('img', {
-						src: this.state.restaurant.image_url,
-						onLoad: this._imageReady,
-						className: this.state.imageClass
-					})
-				),
-				React.createElement(ImageSideBar, { restaurant: this.state.restaurant })
-			);
-		},
-	
-		render: function () {
-			if (!this.state.restaurant) {
-				return React.createElement('div', { className: 'restaurant-show-page' });
-			}
-			return React.createElement(
-				'div',
-				{ className: 'restaurant-show-page' },
-				React.createElement(
-					'div',
-					{ className: 'restaurant-show-page-content group' },
-					React.createElement(
-						'h1',
-						null,
-						this.state.restaurant.title
-					),
-					React.createElement(
-						'h4',
-						null,
-						'by ',
-						React.createElement(
-							'span',
-							{ className: 'user-name' },
-							this.state.restaurant.user.name
-						)
-					),
-					this._mainShow()
-				)
-			);
-		}
-	
-	});
-	
-	module.exports = RestaurantShow;
-
-/***/ },
-/* 234 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Store = __webpack_require__(235).Store;
+	var Store = __webpack_require__(234).Store;
 	var AppDispatcher = __webpack_require__(228);
 	var RestaurantConstants = __webpack_require__(227);
 	
-	var _restaurants = {};
+	var _restaurants = [];
 	
-	var RestaurantStore = new Store(AppDispatcher);
+	var RestaurantIndexStore = new Store(AppDispatcher);
 	
-	var _addRestaurant = function (restaurant) {
-		_restaurants[restaurant.id] = restaurant;
+	var _newRestaurants = function (restaurants) {
+	  if (restaurants.length === 0) {
+	    _restaurants = ["none"];
+	  } else {
+	    _restaurants = restaurants;
+	  }
 	};
 	
-	RestaurantStore.all = function () {
-		var return_copy = {};
-		Object.assign(return_copy, _restaurants);
-		return return_copy;
+	RestaurantIndexStore.all = function () {
+	  return _restaurants.slice(0);
 	};
 	
-	RestaurantStore.find = function (id) {
-		return _restaurants[id];
+	RestaurantIndexStore.find = function (id) {
+	  return _restaurants[id];
 	};
 	
-	RestaurantStore.__onDispatch = function (payload) {
-		switch (payload.actionType) {
-			case RestaurantConstants.RESTAURANT_RECEIVED:
-				_addRestaurant(payload.restaurant);
-				RestaurantStore.__emitChange();
-				break;
-		}
+	RestaurantIndexStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case RestaurantConstants.RESTAURANTS_RECEIVED:
+	      _newRestaurants(payload.restaurants);
+	      RestaurantIndexStore.__emitChange();
+	      break;
+	    case RestaurantConstants.CLEAR_SEARCH_RESTAURANTS:
+	      _restaurants = [];
+	      RestaurantIndexStore.__emitChange();
+	      break;
+	  }
 	};
 	
-	module.exports = RestaurantStore;
+	module.exports = RestaurantIndexStore;
 
 /***/ },
-/* 235 */
+/* 234 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -26079,15 +25926,15 @@
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 */
 	
-	module.exports.Container = __webpack_require__(236);
-	module.exports.MapStore = __webpack_require__(239);
-	module.exports.Mixin = __webpack_require__(251);
-	module.exports.ReduceStore = __webpack_require__(240);
-	module.exports.Store = __webpack_require__(241);
+	module.exports.Container = __webpack_require__(235);
+	module.exports.MapStore = __webpack_require__(238);
+	module.exports.Mixin = __webpack_require__(250);
+	module.exports.ReduceStore = __webpack_require__(239);
+	module.exports.Store = __webpack_require__(240);
 
 
 /***/ },
-/* 236 */
+/* 235 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26109,10 +25956,10 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxStoreGroup = __webpack_require__(237);
+	var FluxStoreGroup = __webpack_require__(236);
 	
 	var invariant = __webpack_require__(231);
-	var shallowEqual = __webpack_require__(238);
+	var shallowEqual = __webpack_require__(237);
 	
 	var DEFAULT_OPTIONS = {
 	  pure: true,
@@ -26270,7 +26117,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 237 */
+/* 236 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26351,7 +26198,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 238 */
+/* 237 */
 /***/ function(module, exports) {
 
 	/**
@@ -26406,7 +26253,7 @@
 	module.exports = shallowEqual;
 
 /***/ },
-/* 239 */
+/* 238 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26427,8 +26274,8 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxReduceStore = __webpack_require__(240);
-	var Immutable = __webpack_require__(250);
+	var FluxReduceStore = __webpack_require__(239);
+	var Immutable = __webpack_require__(249);
 	
 	var invariant = __webpack_require__(231);
 	
@@ -26556,7 +26403,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 240 */
+/* 239 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26577,9 +26424,9 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxStore = __webpack_require__(241);
+	var FluxStore = __webpack_require__(240);
 	
-	var abstractMethod = __webpack_require__(249);
+	var abstractMethod = __webpack_require__(248);
 	var invariant = __webpack_require__(231);
 	
 	var FluxReduceStore = (function (_FluxStore) {
@@ -26663,7 +26510,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 241 */
+/* 240 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26682,7 +26529,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var _require = __webpack_require__(242);
+	var _require = __webpack_require__(241);
 	
 	var EventEmitter = _require.EventEmitter;
 	
@@ -26846,7 +26693,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 242 */
+/* 241 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -26859,14 +26706,14 @@
 	 */
 	
 	var fbemitter = {
-	  EventEmitter: __webpack_require__(243)
+	  EventEmitter: __webpack_require__(242)
 	};
 	
 	module.exports = fbemitter;
 
 
 /***/ },
-/* 243 */
+/* 242 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26885,11 +26732,11 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var EmitterSubscription = __webpack_require__(244);
-	var EventSubscriptionVendor = __webpack_require__(246);
+	var EmitterSubscription = __webpack_require__(243);
+	var EventSubscriptionVendor = __webpack_require__(245);
 	
-	var emptyFunction = __webpack_require__(248);
-	var invariant = __webpack_require__(247);
+	var emptyFunction = __webpack_require__(247);
+	var invariant = __webpack_require__(246);
 	
 	/**
 	 * @class BaseEventEmitter
@@ -27063,7 +26910,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 244 */
+/* 243 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -27084,7 +26931,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var EventSubscription = __webpack_require__(245);
+	var EventSubscription = __webpack_require__(244);
 	
 	/**
 	 * EmitterSubscription represents a subscription with listener and context data.
@@ -27116,7 +26963,7 @@
 	module.exports = EmitterSubscription;
 
 /***/ },
-/* 245 */
+/* 244 */
 /***/ function(module, exports) {
 
 	/**
@@ -27170,7 +27017,7 @@
 	module.exports = EventSubscription;
 
 /***/ },
-/* 246 */
+/* 245 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -27189,7 +27036,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(247);
+	var invariant = __webpack_require__(246);
 	
 	/**
 	 * EventSubscriptionVendor stores a set of EventSubscriptions that are
@@ -27279,7 +27126,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 247 */
+/* 246 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -27334,7 +27181,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 248 */
+/* 247 */
 /***/ function(module, exports) {
 
 	/**
@@ -27376,7 +27223,7 @@
 	module.exports = emptyFunction;
 
 /***/ },
-/* 249 */
+/* 248 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -27403,7 +27250,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 250 */
+/* 249 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -32390,7 +32237,7 @@
 	}));
 
 /***/ },
-/* 251 */
+/* 250 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -32407,7 +32254,7 @@
 	
 	'use strict';
 	
-	var FluxStoreGroup = __webpack_require__(237);
+	var FluxStoreGroup = __webpack_require__(236);
 	
 	var invariant = __webpack_require__(231);
 	
@@ -32513,7 +32360,270 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
+/* 251 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	var FooterBar = React.createClass({
+		displayName: "FooterBar",
+	
+	
+		render: function () {
+			return React.createElement(
+				"footer",
+				{ className: "group" },
+				React.createElement(
+					"div",
+					{ className: "footer-content group" },
+					React.createElement(
+						"h3",
+						{ className: "footer-about-us group" },
+						"About us"
+					),
+					React.createElement(
+						"h3",
+						{ className: "footer-discover" },
+						"Discover"
+					),
+					React.createElement(
+						"h3",
+						{ className: "footer-contact" },
+						"Contact me"
+					),
+					React.createElement(
+						"ul",
+						{ className: "footer-about-us-list" },
+						React.createElement(
+							"li",
+							null,
+							React.createElement(
+								"a",
+								{ href: "#" },
+								"What is KitchenStarter?"
+							)
+						)
+					),
+					React.createElement(
+						"ul",
+						{ className: "footer-discover-list" },
+						React.createElement(
+							"li",
+							null,
+							React.createElement(
+								"a",
+								{ href: "#" },
+								"Italian"
+							)
+						),
+						React.createElement(
+							"li",
+							null,
+							React.createElement(
+								"a",
+								{ href: "#" },
+								"French"
+							)
+						),
+						React.createElement(
+							"li",
+							null,
+							React.createElement(
+								"a",
+								{ href: "#" },
+								"Indian"
+							)
+						),
+						React.createElement(
+							"li",
+							null,
+							React.createElement(
+								"a",
+								{ href: "#" },
+								"Tapas"
+							)
+						),
+						React.createElement(
+							"li",
+							null,
+							React.createElement(
+								"a",
+								{ href: "#" },
+								"Mexican"
+							)
+						)
+					),
+					React.createElement(
+						"ul",
+						{ className: "footer-my-info" },
+						React.createElement(
+							"li",
+							null,
+							React.createElement(
+								"a",
+								{ href: "#" },
+								"Aaron.r.grau@gmail.com"
+							)
+						),
+						React.createElement(
+							"li",
+							null,
+							React.createElement(
+								"a",
+								{ href: "#" },
+								"LinkedIn"
+							)
+						),
+						React.createElement(
+							"li",
+							null,
+							React.createElement(
+								"a",
+								{ href: "#" },
+								"Github"
+							)
+						)
+					)
+				)
+			);
+		}
+	});
+	
+	module.exports = FooterBar;
+
+/***/ },
 /* 252 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var RestaurantStore = __webpack_require__(253);
+	var ApiUtil = __webpack_require__(225);
+	var ImageSideBar = __webpack_require__(254);
+	
+	var RestaurantShow = React.createClass({
+		displayName: 'RestaurantShow',
+	
+	
+		contextTypes: { router: React.PropTypes.object.isRequired },
+	
+		getInitialState: function () {
+			return {
+				restaurant: RestaurantStore.find(this.props.params.id),
+				imageClass: "hide-image"
+			};
+		},
+	
+		componentDidMount: function () {
+			this.listenerToken = RestaurantStore.addListener(this._onChange);
+			ApiUtil.fetchRestaurant(parseInt(this.props.params.id));
+		},
+	
+		componentWillReceiveProps: function (newProps) {
+			ApiUtil.fetchRestaurant(parseInt(newProps.params.id));
+		},
+	
+		_onChange: function () {
+			this.setState({ restaurant: RestaurantStore.find(this.props.params.id) });
+		},
+	
+		componentWillUnmount: function () {
+			this.listenerToken.remove();
+		},
+	
+		_imageReady: function () {
+			this.setState({ imageClass: "show-image" });
+		},
+	
+		_mainShow: function () {
+			return React.createElement(
+				'div',
+				{ className: 'restaurant-show-main-content group' },
+				React.createElement(
+					'div',
+					{ className: 'restaurant-show-main-image image_wrapper' },
+					React.createElement('img', {
+						src: this.state.restaurant.image_url,
+						onLoad: this._imageReady,
+						className: this.state.imageClass
+					})
+				),
+				React.createElement(ImageSideBar, { restaurant: this.state.restaurant })
+			);
+		},
+	
+		render: function () {
+			if (!this.state.restaurant) {
+				return React.createElement('div', { className: 'restaurant-show-page' });
+			}
+			return React.createElement(
+				'div',
+				{ className: 'restaurant-show-page' },
+				React.createElement(
+					'div',
+					{ className: 'restaurant-show-page-content group' },
+					React.createElement(
+						'h1',
+						null,
+						this.state.restaurant.title
+					),
+					React.createElement(
+						'h4',
+						null,
+						'by ',
+						React.createElement(
+							'span',
+							{ className: 'user-name' },
+							this.state.restaurant.user.name
+						)
+					),
+					this._mainShow()
+				)
+			);
+		}
+	
+	});
+	
+	module.exports = RestaurantShow;
+
+/***/ },
+/* 253 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Store = __webpack_require__(234).Store;
+	var AppDispatcher = __webpack_require__(228);
+	var RestaurantConstants = __webpack_require__(227);
+	
+	var _restaurants = {};
+	
+	var RestaurantStore = new Store(AppDispatcher);
+	
+	var _addRestaurant = function (restaurant) {
+		_restaurants[restaurant.id] = restaurant;
+	};
+	
+	RestaurantStore.all = function () {
+		var return_copy = {};
+		Object.assign(return_copy, _restaurants);
+		return return_copy;
+	};
+	
+	RestaurantStore.find = function (id) {
+		return _restaurants[id];
+	};
+	
+	RestaurantStore.__onDispatch = function (payload) {
+		switch (payload.actionType) {
+			case RestaurantConstants.RESTAURANT_RECEIVED:
+				_addRestaurant(payload.restaurant);
+				RestaurantStore.__emitChange();
+				break;
+		}
+	};
+	
+	module.exports = RestaurantStore;
+
+/***/ },
+/* 254 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -32604,12 +32714,12 @@
 	module.exports = ImageSideBar;
 
 /***/ },
-/* 253 */
+/* 255 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var PropTypes = React.PropTypes;
-	var RestaurantSearchStore = __webpack_require__(254);
+	var RestaurantSearchStore = __webpack_require__(233);
 	var IndexItem = __webpack_require__(256);
 	var RestaurantActions = __webpack_require__(226);
 	
@@ -32650,7 +32760,7 @@
 	        )
 	      );
 	    }
-	    // this should render index items
+	
 	    var restaurants = this.state.restaurants.map(function (restaurant) {
 	      return React.createElement(
 	        'div',
@@ -32667,6 +32777,9 @@
 	      React.createElement(
 	        'div',
 	        { className: 'search-results group' },
+	        React.createElement('div', {
+	          className: 'search-exit-button fa fa-times', onClick: RestaurantActions.clearSearchRestaurants
+	        }),
 	        restaurants
 	      )
 	    );
@@ -32677,50 +32790,6 @@
 	module.exports = SearchIndex;
 
 /***/ },
-/* 254 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Store = __webpack_require__(235).Store;
-	var AppDispatcher = __webpack_require__(228);
-	var RestaurantConstants = __webpack_require__(227);
-	
-	var _restaurants = [];
-	
-	var RestaurantIndexStore = new Store(AppDispatcher);
-	
-	var _newRestaurants = function (restaurants) {
-	  if (restaurants.length === 0) {
-	    _restaurants = ["none"];
-	  } else {
-	    _restaurants = restaurants;
-	  }
-	};
-	
-	RestaurantIndexStore.all = function () {
-	  return _restaurants.slice(0);
-	};
-	
-	RestaurantIndexStore.find = function (id) {
-	  return _restaurants[id];
-	};
-	
-	RestaurantIndexStore.__onDispatch = function (payload) {
-	  switch (payload.actionType) {
-	    case RestaurantConstants.RESTAURANTS_RECEIVED:
-	      _newRestaurants(payload.restaurants);
-	      RestaurantIndexStore.__emitChange();
-	      break;
-	    case RestaurantConstants.CLEAR_SEARCH_RESTAURANTS:
-	      _restaurants = [];
-	      RestaurantIndexStore.__emitChange();
-	      break;
-	  }
-	};
-	
-	module.exports = RestaurantIndexStore;
-
-/***/ },
-/* 255 */,
 /* 256 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -32790,6 +32859,8 @@
 					React.createElement(
 						"p",
 						null,
+						React.createElement("i", { className: "fa fa-map-marker" }),
+						"   ",
 						this.props.restaurant.city.name
 					)
 				),
@@ -32804,7 +32875,7 @@
 					React.createElement(
 						"li",
 						null,
-						percentDone + "%",
+						percentDone.toFixed(2) + "%",
 						React.createElement("br", null),
 						React.createElement(
 							"span",
@@ -32831,7 +32902,7 @@
 						React.createElement(
 							"span",
 							{ className: "index-item-stats-label" },
-							"left"
+							"days to go"
 						)
 					)
 				)
@@ -32841,6 +32912,190 @@
 	});
 	
 	module.exports = IndexItem;
+
+/***/ },
+/* 257 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var PropTypes = React.PropTypes;
+	var CuisineSelector = __webpack_require__(258);
+	var RestaurantIndexStore = __webpack_require__(261);
+	var IndexItem = __webpack_require__(256);
+	var RestaurantIndex = React.createClass({
+		displayName: 'RestaurantIndex',
+	
+	
+		getInitialState: function () {
+			return { restaurants: [] };
+		},
+	
+		componentDidMount: function () {
+			this.listenToken = RestaurantIndexStore.addListener(this.handleChange);
+		},
+	
+		componentWillUnmount: function () {
+			this.listenToken.remove();
+		},
+	
+		handleChange: function () {
+			this.setState({ restaurants: RestaurantIndexStore.all() });
+		},
+	
+		render: function () {
+			var restaurants;
+	
+			if (this.state.restaurants.length < 1) {
+				restaurants = React.createElement('div', null);
+			} else {
+				restaurants = this.state.restaurants.map(function (restaurant) {
+					return React.createElement(
+						'div',
+						{ key: restaurant.id, className: 'index-item-wrapper-small' },
+						React.createElement(IndexItem, {
+							restaurant: restaurant
+						})
+					);
+				});
+			}
+	
+			return React.createElement(
+				'div',
+				{ className: 'restaurant-index group' },
+				React.createElement(CuisineSelector, null),
+				restaurants
+			);
+		}
+	
+	});
+	
+	module.exports = RestaurantIndex;
+
+/***/ },
+/* 258 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var PropTypes = React.PropTypes;
+	var CuisineStore = __webpack_require__(259);
+	var ApiUtil = __webpack_require__(225);
+	
+	var CuisineSelector = React.createClass({
+		displayName: 'CuisineSelector',
+	
+	
+		getInitialState: function () {
+			return { cuisines: [], selected: "" };
+		},
+	
+		handleChange: function () {
+			this.setState({ cuisines: CuisineStore.all() });
+		},
+	
+		select: function (cuisine) {
+			this.state.selected = cuisine;
+			ApiUtil.fetchRestaurantsByCuisine(cuisine.id);
+		},
+	
+		componentDidMount: function () {
+			this.listenToken = CuisineStore.addListener(this.handleChange);
+			ApiUtil.fetchCuisines();
+		},
+	
+		componentWillUnmount: function () {
+			this.listenToken.remove();
+		},
+	
+		render: function () {
+			return React.createElement(
+				'div',
+				{ className: 'cuisine-options' },
+				this.renderListItems()
+			);
+		},
+	
+		renderListItems: function () {
+			var items = [];
+			if (this.state.cuisines.length < 0) {
+				return React.createElement('div', null);
+			}
+	
+			for (var i = 0; i < this.state.cuisines.length; i++) {
+				var item = this.state.cuisines[i];
+				items.push(React.createElement(
+					'div',
+					{ key: item.id, className: 'cuisine-selection-item', onClick: this.select.bind(null, item) },
+					React.createElement(
+						'span',
+						null,
+						item.food
+					)
+				));
+			}
+			return items;
+		}
+	
+	});
+	
+	module.exports = CuisineSelector;
+
+/***/ },
+/* 259 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Store = __webpack_require__(234).Store;
+	var AppDispatcher = __webpack_require__(228);
+	var CuisinesConstants = __webpack_require__(227);
+	
+	var CuisineStore = new Store(AppDispatcher);
+	
+	var _cuisines = [];
+	
+	CuisineStore.all = function () {
+		return _cuisines.slice(0);
+	};
+	
+	CuisineStore.__onDispatch = function (payload) {
+		switch (payload.actionType) {
+			case CuisinesConstants.CUISINES_RECEIVED:
+				_cuisines = payload.cuisines;
+				CuisineStore.__emitChange();
+		}
+	};
+	
+	module.exports = CuisineStore;
+
+/***/ },
+/* 260 */,
+/* 261 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Store = __webpack_require__(234).Store;
+	var AppDispatcher = __webpack_require__(228);
+	var RestaurantConstants = __webpack_require__(227);
+	
+	var _restaurants = [];
+	
+	var RestaurantIndexPageStore = new Store(AppDispatcher);
+	
+	RestaurantIndexPageStore.all = function () {
+		return _restaurants.slice(0);
+	};
+	
+	RestaurantIndexPageStore.find = function (id) {
+		return _restaurants[id];
+	};
+	
+	RestaurantIndexPageStore.__onDispatch = function (payload) {
+		switch (payload.actionType) {
+			case RestaurantConstants.RESTAURANT_INDEX_RECEIVED:
+				_restaurants = payload.restaurants;
+				RestaurantIndexPageStore.__emitChange();
+				break;
+		}
+	};
+	
+	module.exports = RestaurantIndexPageStore;
 
 /***/ }
 /******/ ]);

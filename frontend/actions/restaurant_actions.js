@@ -18,7 +18,14 @@ var RestaurantActions = {
 
 	clearSearchRestaurants: function () {
 		AppDispatcher.dispatch({
-			actionType: RestaurantConstants.CLEAR_SEARCH_RESTAURANTS,
+			actionType: RestaurantConstants.CLEAR_SEARCH_RESTAURANTS
+		});
+	},
+
+	receiveIndexRestaurants: function (restaurants) {
+		AppDispatcher.dispatch({
+			actionType: RestaurantConstants.RESTAURANT_INDEX_RECEIVED,
+			restaurants: restaurants
 		});
 	}
 };

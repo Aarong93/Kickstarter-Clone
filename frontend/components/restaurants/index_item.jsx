@@ -43,17 +43,19 @@ var IndexItem = React.createClass({
 					<p>{this.props.restaurant.blurb}</p>
 				</div>
 				<div className="index-item-location">
-					<p>{this.props.restaurant.city.name}</p>
+					<p>
+						<i className="fa fa-map-marker" />   {this.props.restaurant.city.name}
+					</p>
 				</div>
 				<div className="progress-bar-wrapper">
 					<div style={progressWidth} className="progress-bar" />
 				</div>
 				<ul className="index-item-stats group">
-					<li>{percentDone + "%"}<br /><span className="index-item-stats-label">funded</span></li>
+					<li>{(percentDone).toFixed(2) + "%"}<br /><span className="index-item-stats-label">funded</span></li>
 					<li>
 							{"$" + this.props.restaurant.total}<br /><span className="index-item-stats-label">pledged</span>
 					</li>
-					<li>{daysLeft}<br /><span className="index-item-stats-label">left</span></li>
+					<li>{daysLeft}<br /><span className="index-item-stats-label">days to go</span></li>
 				</ul>
 			</div>
 		);

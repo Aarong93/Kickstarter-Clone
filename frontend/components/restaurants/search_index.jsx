@@ -36,7 +36,7 @@ var SearchIndex = React.createClass({
 				</div>
 			);
     }
-    // this should render index items
+  
 		var restaurants = this.state.restaurants.map(function (restaurant) {
 			return (
 				<div key={restaurant.id} className="index-item-wrapper-small">
@@ -50,6 +50,9 @@ var SearchIndex = React.createClass({
     return (
 			<div className="search-dropdown">
 	      <div className="search-results group">
+					<div
+						className="search-exit-button fa fa-times" onClick={RestaurantActions.clearSearchRestaurants}
+						 />
 					{restaurants}
 	      </div>
 			</div>

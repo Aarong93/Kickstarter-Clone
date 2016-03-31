@@ -20,7 +20,7 @@ var NavBar = React.createClass({
 	_nav: function () {
 		return (
 			<ul className="global-nav">
-				<li><a href="#">Discover</a></li>
+				<li><a href="/restaurants">Discover</a></li>
 				<li><a href="#">Start a Project</a></li>
 				<li><a href="#">About Us</a></li>
 			</ul>
