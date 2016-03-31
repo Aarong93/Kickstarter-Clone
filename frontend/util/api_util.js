@@ -20,9 +20,9 @@ var ApiUtil = {
 			type: "GET",
 			url: "/api/restaurants",
 			dataType: "json",
-			data: {params: {string: str}},
+			data: {str: str},
 			success: function (restaurants) {
-				RestaurantActions.receiveRestaurants(restaurant);
+				RestaurantActions.receiveRestaurants(restaurants);
 			}
 		});
 	},

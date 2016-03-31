@@ -8,12 +8,15 @@ var browserHistory = ReactRouter.browserHistory;
 var NavBar = require('./components/nav/nav_bar');
 var Footer = require('./components/nav/footer_bar');
 var RestaurantShow = require('./components/restaurants/restaurant_show');
+var SearchIndex = require('./components/restaurants/search_index.jsx');
+
 
 var App = React.createClass({
   render: function () {
     return (
       <div id="kitchen-starter-app">
         <NavBar />
+        <SearchIndex size="small" />
         {this.props.children}
 				<Footer />
       </div>

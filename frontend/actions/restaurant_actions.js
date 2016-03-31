@@ -14,6 +14,12 @@ var RestaurantActions = {
 			actionType: RestaurantConstants.RESTAURANTS_RECEIVED,
 			restaurants: restaurants
 		});
+	},
+
+	clearSearchRestaurants: function () {
+		AppDispatcher.dispatch({
+			actionType: RestaurantConstants.CLEAR_SEARCH_RESTAURANTS,
+		});
 	}
 };
 

@@ -26,6 +26,8 @@ gem 'bcrypt', '~> 3.1.7'
 
 gem 'font-awesome-sass', '~> 4.5.0'
 
+gem 'faker'
+
 # Use Unicorn as the app server
 # gem 'unicorn'
 
