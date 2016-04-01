@@ -5,6 +5,8 @@ var SessionStore = require('../../stores/session_store');
 
 var NavBar = React.createClass({
 
+  contextTypes: {router: React.PropTypes.object.isRequired},
+
 	getInitialState: function () {
 		var name = "";
 		if (SessionStore.isLoggedIn()) {
@@ -41,15 +43,25 @@ var NavBar = React.createClass({
 		);
 	},
 
+  _newRestaurant: function(e) {
+    e.preventDefault();
+    this.context.router.push('/restaurants/new');
+  },
+
 	_nav: function () {
 		return (
 			<ul className="global-nav">
-				<li><a href="#">Discover</a></li>
-				<li><a href="#">Start a Project</a></li>
+				<li><a href="#" onClick={this._restaurantIndex}>Discover</a></li>
+				<li><a href="#" onClick={this._newRestaurant}>Start a Project</a></li>
 				<li><a href="#">About Us</a></li>
 			</ul>
 		);
 	},
+
+  _restaurantIndex: function (e) {
+    e.preventDefault();
+    this.context.router.push('/restaurants');
+  },
 
 	_handleYouPopoutExitClick: function () {
 		this.setState({expandYou: false});
@@ -74,14 +86,24 @@ var NavBar = React.createClass({
 		this.setState({expandYou: !this.state.expandYou});
 	},
 
+  _signUp: function (e) {
+    e.preventDefault();
+    this.context.router.push('/users/new');
+  },
+
+  _signIn: function (e) {
+    e.preventDefault();
+    this.context.router.push('/session/new');
+  },
+
 	render: function () {
 		var accountTab;
 
 		if (!this.state.isLoggedIn) {//placeholder for logged in
 			accountTab = (
 				<ul className="login-nav">
-					<li><a href="/users/new">Sign up</a></li>
-					<li><a href="#">Login</a></li>
+					<li><a onClick={this._signUp} >Sign up</a></li>
+					<li><a onClick={this._signIn} >Login</a></li>
 				</ul>
 			);
 		} else {

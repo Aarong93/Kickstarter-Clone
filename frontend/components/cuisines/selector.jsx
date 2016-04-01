@@ -7,7 +7,7 @@ var ApiUtil = require('../../util/api_util');
 var CuisineSelector = React.createClass({
 
 	getInitialState: function () {
-		return {cuisines: [], selected: ""};
+		return {cuisines: [], selected: {}};
 	},
 
 	handleChange: function () {
@@ -30,7 +30,7 @@ var CuisineSelector = React.createClass({
 
 	render: function() {
 		return(
-			<div className="cuisine-options">
+			<div className="cuisine-options group">
 				{this.renderListItems()}
 			</div>
 		);
@@ -44,7 +44,11 @@ var CuisineSelector = React.createClass({
 
 	 for (var i = 0; i < this.state.cuisines.length; i++) {
 		 var item = this.state.cuisines[i];
-		 items.push(<div key={item.id} className="cuisine-selection-item" onClick={this.select.bind(null, item)}>
+     var selected = "";
+     if (item.id === this.state.selected.id) {
+       selected = "selected";
+     }
+		 items.push(<div key={item.id} className={"cuisine-selection-item " + selected} onClick={this.select.bind(null, item)}>
 				<span>{item.food}</span>
 		 </div>);
 	  }

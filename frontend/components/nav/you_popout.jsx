@@ -10,8 +10,7 @@ var YouPopout = React.createClass({
 	_signOut: function (e) {
 		e.preventDefault();
 		this.props.closeCB();
-		ApiUtils.logout();
-		this.context.router.push('/session/new');
+		ApiUtils.logout(this.context.router.push.bind(this, '/session/new'));
 	},
 
 	handleClickOutside: function () {

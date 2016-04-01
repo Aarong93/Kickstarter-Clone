@@ -58,9 +58,12 @@
 	var SearchIndex = __webpack_require__(259);
 	var RestaurantIndex = __webpack_require__(261);
 	var LoginForm = __webpack_require__(265);
+	var SignUpForm = __webpack_require__(266);
+	var RestaurantNew = __webpack_require__(267);
 	
 	var SessionStore = __webpack_require__(254);
-	var ApiUtil = __webpack_require__(225);
+	var ApiUtil = __webpack_require__(219);
+	var RestaurantActions = __webpack_require__(220);
 	
 	var App = React.createClass({
 	  displayName: 'App',
@@ -81,12 +84,14 @@
 	
 	var router = React.createElement(
 	  Router,
-	  { history: browserHistory },
+	  { history: browserHistory, onUpdate: _onUpdate },
 	  React.createElement(
 	    Route,
 	    { path: '/', component: App, onEnter: _onLoad },
-	    React.createElement(Route, { path: '/session/new', component: LoginForm }),
+	    React.createElement(Route, { path: '/session/new', component: LoginForm, onEnter: _alreadyLoggedIn }),
+	    React.createElement(Route, { path: '/users/new', component: SignUpForm, onEnter: _alreadyLoggedIn }),
 	    React.createElement(Route, { path: '/restaurants', component: RestaurantIndex }),
+	    React.createElement(Route, { path: '/restaurants/new', component: RestaurantNew, onEnter: _requireLoggedIn }),
 	    React.createElement(Route, { path: '/restaurants/:id', component: RestaurantShow })
 	  )
 	);
@@ -97,23 +102,48 @@
 	
 	function _onLoad(nextState, replace, asyncCompletionCallback) {
 	  ApiUtil.fetchCurrentUser(asyncCompletionCallback);
-	};
+	}
+	
+	function _onUpdate() {
+	  RestaurantActions.clearSearchRestaurants();
+	  window.scrollTo(0, 0);
+	}
 	
 	function _requireLoggedIn(nextState, replace, asyncCompletionCallback) {
+	  var requestRoute = nextState.routes[nextState.routes.length - 1].path;
 	  if (!SessionStore.currentUserHasBeenFetched()) {
-	    ApiUtil.fetchCurrentUser(_redirectIfNotLoggedIn);
+	    ApiUtil.fetchCurrentUser(_redirectIfNotLoggedIn.bind(null, replace, asyncCompletionCallback, requestRoute));
 	  } else {
-	    _redirectIfNotLoggedIn();
+	    _redirectIfNotLoggedIn(replace, asyncCompletionCallback);
 	  }
-	};
+	}
 	
-	function _redirectIfNotLoggedIn() {
+	function _alreadyLoggedIn(nextState, replace, asyncCompletionCallback) {
+	  if (!SessionStore.currentUserHasBeenFetched()) {
+	    ApiUtil.fetchCurrentUser(_redirectIfLoggedIn.bind(null, replace, asyncCompletionCallback));
+	  } else {
+	    _redirectIfLoggedIn(replace, asyncCompletionCallback);
+	  }
+	}
+	
+	function _redirectIfLoggedIn(replace, callback) {
+	  if (SessionStore.isLoggedIn()) {
+	    replace("/");
+	  }
+	
+	  callback();
+	}
+	
+	function _redirectIfNotLoggedIn(replace, callback, requestRoute) {
+	  var query = $.param({ nextRoute: requestRoute });
+	  var path = "/session/new/?" + query;
+	
 	  if (!SessionStore.isLoggedIn()) {
-	    replace("/login");
+	    replace(path);
 	  }
 	
-	  asyncCompletionCallback();
-	};
+	  callback();
+	}
 
 /***/ },
 /* 1 */
@@ -24789,12 +24819,14 @@
 
 	var React = __webpack_require__(1);
 	var YouPopout = __webpack_require__(217);
-	var SearchBar = __webpack_require__(220);
+	var SearchBar = __webpack_require__(230);
 	var SessionStore = __webpack_require__(254);
 	
 	var NavBar = React.createClass({
 		displayName: 'NavBar',
 	
+	
+		contextTypes: { router: React.PropTypes.object.isRequired },
 	
 		getInitialState: function () {
 			var name = "";
@@ -24843,6 +24875,11 @@
 			);
 		},
 	
+		_newRestaurant: function (e) {
+			e.preventDefault();
+			this.context.router.push('/restaurants/new');
+		},
+	
 		_nav: function () {
 			return React.createElement(
 				'ul',
@@ -24852,7 +24889,7 @@
 					null,
 					React.createElement(
 						'a',
-						{ href: '#' },
+						{ href: '#', onClick: this._restaurantIndex },
 						'Discover'
 					)
 				),
@@ -24861,7 +24898,7 @@
 					null,
 					React.createElement(
 						'a',
-						{ href: '#' },
+						{ href: '#', onClick: this._newRestaurant },
 						'Start a Project'
 					)
 				),
@@ -24875,6 +24912,11 @@
 					)
 				)
 			);
+		},
+	
+		_restaurantIndex: function (e) {
+			e.preventDefault();
+			this.context.router.push('/restaurants');
 		},
 	
 		_handleYouPopoutExitClick: function () {
@@ -24898,6 +24940,16 @@
 			this.setState({ expandYou: !this.state.expandYou });
 		},
 	
+		_signUp: function (e) {
+			e.preventDefault();
+			this.context.router.push('/users/new');
+		},
+	
+		_signIn: function (e) {
+			e.preventDefault();
+			this.context.router.push('/session/new');
+		},
+	
 		render: function () {
 			var accountTab;
 	
@@ -24911,7 +24963,7 @@
 						null,
 						React.createElement(
 							'a',
-							{ href: '/users/new' },
+							{ onClick: this._signUp },
 							'Sign up'
 						)
 					),
@@ -24920,7 +24972,7 @@
 						null,
 						React.createElement(
 							'a',
-							{ href: '#' },
+							{ onClick: this._signIn },
 							'Login'
 						)
 					)
@@ -24961,20 +25013,19 @@
 
 	var React = __webpack_require__(1);
 	var enhanceWithClickOutside = __webpack_require__(218);
-	var ApiUtils = __webpack_require__(225);
+	var ApiUtils = __webpack_require__(219);
 	
 	var YouPopout = React.createClass({
 		displayName: 'YouPopout',
 	
-		mixins: [__webpack_require__(219)],
+		mixins: [__webpack_require__(229)],
 	
 		contextTypes: { router: React.PropTypes.object.isRequired },
 	
 		_signOut: function (e) {
 			e.preventDefault();
 			this.props.closeCB();
-			ApiUtils.logout();
-			this.context.router.push('/session/new');
+			ApiUtils.logout(this.context.router.push.bind(this, '/session/new'));
 		},
 	
 		handleClickOutside: function () {
@@ -25068,442 +25119,9 @@
 /* 219 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
-	 * A mixin for handling (effectively) onClickOutside for React components.
-	 * Note that we're not intercepting any events in this approach, and we're
-	 * not using double events for capturing and discarding in layers or wrappers.
-	 *
-	 * The idea is that components define function
-	 *
-	 *   handleClickOutside: function() { ... }
-	 *
-	 * If no such function is defined, an error will be thrown, as this means
-	 * either it still needs to be written, or the component should not be using
-	 * this mixing since it will not exhibit onClickOutside behaviour.
-	 *
-	 */
-	(function (root, factory) {
-	  if (true) {
-	    // AMD. Register as an anonymous module.
-	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(158)], __WEBPACK_AMD_DEFINE_RESULT__ = function(reactDom) {
-	      return factory(root, reactDom);
-	    }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	  } else if (typeof exports === 'object') {
-	    // Node. Note that this does not work with strict
-	    // CommonJS, but only CommonJS-like environments
-	    // that support module.exports
-	    module.exports = factory(root, require('react-dom'));
-	  } else {
-	    // Browser globals (root is window)
-	    root.OnClickOutside = factory(root, ReactDOM);
-	  }
-	}(this, function (root, ReactDOM) {
-	  "use strict";
-	
-	  // Use a parallel array because we can't use
-	  // objects as keys, they get toString-coerced
-	  var registeredComponents = [];
-	  var handlers = [];
-	
-	  var IGNORE_CLASS = 'ignore-react-onclickoutside';
-	
-	  var isSourceFound = function(source, localNode, ignoreClass) {
-	    if (source === localNode) {
-	      return true;
-	    }
-	    // SVG <use/> elements do not technically reside in the rendered DOM, so
-	    // they do not have classList directly, but they offer a link to their
-	    // corresponding element, which can have classList. This extra check is for
-	    // that case.
-	    // See: http://www.w3.org/TR/SVG11/struct.html#InterfaceSVGUseElement
-	    // Discussion: https://github.com/Pomax/react-onclickoutside/pull/17
-	    if (source.correspondingElement) {
-	      return source.correspondingElement.classList.contains(ignoreClass);
-	    }
-	    return source.classList.contains(ignoreClass);
-	  };
-	
-	  return {
-	    componentDidMount: function() {
-	      if(typeof this.handleClickOutside !== "function")
-	        throw new Error("Component lacks a handleClickOutside(event) function for processing outside click events.");
-	
-	      var fn = this.__outsideClickHandler = (function(localNode, eventHandler, ignoreClass) {
-	        return function(evt) {
-	          evt.stopPropagation();
-	          var source = evt.target;
-	          var found = false;
-	          // If source=local then this event came from "somewhere"
-	          // inside and should be ignored. We could handle this with
-	          // a layered approach, too, but that requires going back to
-	          // thinking in terms of Dom node nesting, running counter
-	          // to React's "you shouldn't care about the DOM" philosophy.
-	          while(source.parentNode) {
-	            found = isSourceFound(source, localNode, ignoreClass);
-	            if(found) return;
-	            source = source.parentNode;
-	          }
-	          // If element is in detached DOM, consider it not clicked
-	          // outside as it can't be known whether it was outside.
-	          if(source !== document) return;
-	          eventHandler(evt);
-	        }
-	      }(ReactDOM.findDOMNode(this), this.handleClickOutside, this.props.outsideClickIgnoreClass || IGNORE_CLASS));
-	
-	      var pos = registeredComponents.length;
-	      registeredComponents.push(this);
-	      handlers[pos] = fn;
-	
-	      // If there is a truthy disableOnClickOutside property for this
-	      // component, don't immediately start listening for outside events.
-	      if (!this.props.disableOnClickOutside) {
-	        this.enableOnClickOutside();
-	      }
-	    },
-	
-	    componentWillUnmount: function() {
-	      this.disableOnClickOutside();
-	      this.__outsideClickHandler = false;
-	      var pos = registeredComponents.indexOf(this);
-	      if( pos>-1) {
-	        if (handlers[pos]) {
-	          // clean up so we don't leak memory
-	          handlers.splice(pos, 1);
-	          registeredComponents.splice(pos, 1);
-	        }
-	      }
-	    },
-	
-	    /**
-	     * Can be called to explicitly enable event listening
-	     * for clicks and touches outside of this element.
-	     */
-	    enableOnClickOutside: function() {
-	      var fn = this.__outsideClickHandler;
-	      if (document != null) {
-	        document.addEventListener("mousedown", fn);
-	        document.addEventListener("touchstart", fn);
-	      }
-	    },
-	
-	    /**
-	     * Can be called to explicitly disable event listening
-	     * for clicks and touches outside of this element.
-	     */
-	    disableOnClickOutside: function() {
-	      var fn = this.__outsideClickHandler;
-	      if (document != null) {
-	        document.removeEventListener("mousedown", fn);
-	        document.removeEventListener("touchstart", fn);
-	      }
-	    }
-	  };
-	
-	}));
-
-
-/***/ },
-/* 220 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var PropTypes = React.PropTypes;
-	var LinkedStateMixin = __webpack_require__(221);
-	var ApiUtil = __webpack_require__(225);
-	var RestaurantActions = __webpack_require__(226);
-	var RestaurantIndexStore = __webpack_require__(235);
-	
-	var SearchBar = React.createClass({
-		displayName: 'SearchBar',
-	
-		mixins: [LinkedStateMixin],
-	
-		getInitialState: function () {
-			return { searchVal: "" };
-		},
-	
-		clearIfSearchEmpty: function () {
-			if (RestaurantIndexStore.all().length < 1) {
-				this.setState({ searchVal: "" });
-			}
-		},
-	
-		componentDidMount: function () {
-			this.listener = RestaurantIndexStore.addListener(this.clearIfSearchEmpty);
-		},
-	
-		componentWillUnmount: function () {
-			this.listener.remove();
-		},
-	
-		searchCallback: function () {
-			ApiUtil.fetchRestaurantByNameContain(this.state.searchVal);
-		},
-	
-		onChange: function (e) {
-			clearTimeout(this.searchToken);
-	
-			if (e.target.value !== "") {
-				this.searchToken = setTimeout(this.searchCallback, 500);
-			} else {
-				this.searchToken = RestaurantActions.clearSearchRestaurants();
-			}
-		},
-	
-		render: function () {
-			return React.createElement(
-				'div',
-				{ className: 'searchBar' },
-				React.createElement('div', { id: 'searchIcon', className: 'fa fa-search' }),
-				React.createElement('input', { type: 'text',
-					valueLink: this.linkState('searchVal'),
-					placeholder: 'Search Restaurants',
-					onInput: this.onChange
-				})
-			);
-		}
-	
-	});
-	
-	module.exports = SearchBar;
-
-/***/ },
-/* 221 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__(222);
-
-/***/ },
-/* 222 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Copyright 2013-2015, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule LinkedStateMixin
-	 * @typechecks static-only
-	 */
-	
-	'use strict';
-	
-	var ReactLink = __webpack_require__(223);
-	var ReactStateSetters = __webpack_require__(224);
-	
-	/**
-	 * A simple mixin around ReactLink.forState().
-	 */
-	var LinkedStateMixin = {
-	  /**
-	   * Create a ReactLink that's linked to part of this component's state. The
-	   * ReactLink will have the current value of this.state[key] and will call
-	   * setState() when a change is requested.
-	   *
-	   * @param {string} key state key to update. Note: you may want to use keyOf()
-	   * if you're using Google Closure Compiler advanced mode.
-	   * @return {ReactLink} ReactLink instance linking to the state.
-	   */
-	  linkState: function (key) {
-	    return new ReactLink(this.state[key], ReactStateSetters.createStateKeySetter(this, key));
-	  }
-	};
-	
-	module.exports = LinkedStateMixin;
-
-/***/ },
-/* 223 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Copyright 2013-2015, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule ReactLink
-	 * @typechecks static-only
-	 */
-	
-	'use strict';
-	
-	/**
-	 * ReactLink encapsulates a common pattern in which a component wants to modify
-	 * a prop received from its parent. ReactLink allows the parent to pass down a
-	 * value coupled with a callback that, when invoked, expresses an intent to
-	 * modify that value. For example:
-	 *
-	 * React.createClass({
-	 *   getInitialState: function() {
-	 *     return {value: ''};
-	 *   },
-	 *   render: function() {
-	 *     var valueLink = new ReactLink(this.state.value, this._handleValueChange);
-	 *     return <input valueLink={valueLink} />;
-	 *   },
-	 *   _handleValueChange: function(newValue) {
-	 *     this.setState({value: newValue});
-	 *   }
-	 * });
-	 *
-	 * We have provided some sugary mixins to make the creation and
-	 * consumption of ReactLink easier; see LinkedValueUtils and LinkedStateMixin.
-	 */
-	
-	var React = __webpack_require__(2);
-	
-	/**
-	 * @param {*} value current value of the link
-	 * @param {function} requestChange callback to request a change
-	 */
-	function ReactLink(value, requestChange) {
-	  this.value = value;
-	  this.requestChange = requestChange;
-	}
-	
-	/**
-	 * Creates a PropType that enforces the ReactLink API and optionally checks the
-	 * type of the value being passed inside the link. Example:
-	 *
-	 * MyComponent.propTypes = {
-	 *   tabIndexLink: ReactLink.PropTypes.link(React.PropTypes.number)
-	 * }
-	 */
-	function createLinkTypeChecker(linkType) {
-	  var shapes = {
-	    value: typeof linkType === 'undefined' ? React.PropTypes.any.isRequired : linkType.isRequired,
-	    requestChange: React.PropTypes.func.isRequired
-	  };
-	  return React.PropTypes.shape(shapes);
-	}
-	
-	ReactLink.PropTypes = {
-	  link: createLinkTypeChecker
-	};
-	
-	module.exports = ReactLink;
-
-/***/ },
-/* 224 */
-/***/ function(module, exports) {
-
-	/**
-	 * Copyright 2013-2015, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule ReactStateSetters
-	 */
-	
-	'use strict';
-	
-	var ReactStateSetters = {
-	  /**
-	   * Returns a function that calls the provided function, and uses the result
-	   * of that to set the component's state.
-	   *
-	   * @param {ReactCompositeComponent} component
-	   * @param {function} funcReturningState Returned callback uses this to
-	   *                                      determine how to update state.
-	   * @return {function} callback that when invoked uses funcReturningState to
-	   *                    determined the object literal to setState.
-	   */
-	  createStateSetter: function (component, funcReturningState) {
-	    return function (a, b, c, d, e, f) {
-	      var partialState = funcReturningState.call(component, a, b, c, d, e, f);
-	      if (partialState) {
-	        component.setState(partialState);
-	      }
-	    };
-	  },
-	
-	  /**
-	   * Returns a single-argument callback that can be used to update a single
-	   * key in the component's state.
-	   *
-	   * Note: this is memoized function, which makes it inexpensive to call.
-	   *
-	   * @param {ReactCompositeComponent} component
-	   * @param {string} key The key in the state that you should update.
-	   * @return {function} callback of 1 argument which calls setState() with
-	   *                    the provided keyName and callback argument.
-	   */
-	  createStateKeySetter: function (component, key) {
-	    // Memoize the setters.
-	    var cache = component.__keySetters || (component.__keySetters = {});
-	    return cache[key] || (cache[key] = createStateKeySetter(component, key));
-	  }
-	};
-	
-	function createStateKeySetter(component, key) {
-	  // Partial state is allocated outside of the function closure so it can be
-	  // reused with every call, avoiding memory allocation when this function
-	  // is called.
-	  var partialState = {};
-	  return function stateKeySetter(value) {
-	    partialState[key] = value;
-	    component.setState(partialState);
-	  };
-	}
-	
-	ReactStateSetters.Mixin = {
-	  /**
-	   * Returns a function that calls the provided function, and uses the result
-	   * of that to set the component's state.
-	   *
-	   * For example, these statements are equivalent:
-	   *
-	   *   this.setState({x: 1});
-	   *   this.createStateSetter(function(xValue) {
-	   *     return {x: xValue};
-	   *   })(1);
-	   *
-	   * @param {function} funcReturningState Returned callback uses this to
-	   *                                      determine how to update state.
-	   * @return {function} callback that when invoked uses funcReturningState to
-	   *                    determined the object literal to setState.
-	   */
-	  createStateSetter: function (funcReturningState) {
-	    return ReactStateSetters.createStateSetter(this, funcReturningState);
-	  },
-	
-	  /**
-	   * Returns a single-argument callback that can be used to update a single
-	   * key in the component's state.
-	   *
-	   * For example, these statements are equivalent:
-	   *
-	   *   this.setState({x: 1});
-	   *   this.createStateKeySetter('x')(1);
-	   *
-	   * Note: this is memoized function, which makes it inexpensive to call.
-	   *
-	   * @param {string} key The key in the state that you should update.
-	   * @return {function} callback of 1 argument which calls setState() with
-	   *                    the provided keyName and callback argument.
-	   */
-	  createStateKeySetter: function (key) {
-	    return ReactStateSetters.createStateKeySetter(this, key);
-	  }
-	};
-	
-	module.exports = ReactStateSetters;
-
-/***/ },
-/* 225 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var RestaurantActions = __webpack_require__(226);
-	var CuisineActions = __webpack_require__(232);
-	var SessionActions = __webpack_require__(233);
+	var RestaurantActions = __webpack_require__(220);
+	var CuisineActions = __webpack_require__(226);
+	var SessionActions = __webpack_require__(227);
 	
 	var ApiUtil = {
 	
@@ -25514,6 +25132,41 @@
 				dataType: "json",
 				success: function (restaurant) {
 					RestaurantActions.receiveRestaurant(restaurant);
+				}
+			});
+		},
+	
+		createRestaurant: function (params) {
+			$.ajax({
+				type: "POST",
+				url: "/api/restaurants",
+				dataType: "json",
+				data: { restaurant: params },
+				success: function (restaurant) {
+					RestaurantActions.receiveCreatedRestaurant(restaurant);
+				}
+			});
+		},
+	
+		patchRestaurant: function (params) {
+			$.ajax({
+				type: "PATCH",
+				url: "api/restaurants",
+				dataType: "json",
+				data: { restaurant: params },
+				success: function (restaurant) {
+					RestaurantActions.receiveCreatedRestaurant(restaurant);
+				}
+			});
+		},
+	
+		fetchCreatedRestaurant: function (id) {
+			$.ajax({
+				type: "GET",
+				url: "/api/restaurants/" + id,
+				dataType: "json",
+				success: function (restaurant) {
+					RestaurantActions.receiveCreatedRestaurant(restaurant);
 				}
 			});
 		},
@@ -25566,13 +25219,27 @@
 			});
 		},
 	
-		logout: function () {
+		logout: function (callback) {
 			$.ajax({
 				type: "DELETE",
 				url: "/api/session",
 				dataType: "json",
 				success: function () {
 					SessionActions.logout();
+					callback && callback();
+				}
+			});
+		},
+	
+		createUser: function (info, callback) {
+			$.ajax({
+				type: "POST",
+				url: "/api/users",
+				dataType: "json",
+				data: { user: info },
+				success: function (currentUser) {
+					SessionActions.currentUserReceived(currentUser);
+					callback && callback();
 				}
 			});
 		},
@@ -25583,7 +25250,9 @@
 				url: "/api/session",
 				dataType: "json",
 				success: function (currentUser) {
-					SessionActions.currentUserReceived(currentUser);
+					if (currentUser.message !== "Not logged in") {
+						SessionActions.currentUserReceived(currentUser);
+					}
 				},
 				complete: function () {
 					completion && completion();
@@ -25596,11 +25265,11 @@
 	module.exports = ApiUtil;
 
 /***/ },
-/* 226 */
+/* 220 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var RestaurantConstants = __webpack_require__(227);
-	var AppDispatcher = __webpack_require__(228);
+	var RestaurantConstants = __webpack_require__(221);
+	var AppDispatcher = __webpack_require__(222);
 	
 	var RestaurantActions = {
 		receiveRestaurant: function (restaurant) {
@@ -25628,33 +25297,41 @@
 				actionType: RestaurantConstants.RESTAURANT_INDEX_RECEIVED,
 				restaurants: restaurants
 			});
+		},
+	
+		receiveCreatedRestaurant: function (restaurant) {
+			AppDispatcher.dispatch({
+				actionType: RestaurantConstants.CREATED_RESTAURANT_RECEIVED,
+				restaurant: restaurant
+			});
 		}
 	};
 	
 	module.exports = RestaurantActions;
 
 /***/ },
-/* 227 */
+/* 221 */
 /***/ function(module, exports) {
 
 	var RestaurantConstants = {
 		RESTAURANT_RECEIVED: "RESTAURANT_RECEIVED",
 		RESTAURANTS_RECEIVED: "RESTAURANTS_RECEIVED",
 		CLEAR_SEARCH_RESTAURANTS: "CLEAR_SEARCH_RESTAURANTS",
-		RESTAURANT_INDEX_RECEIVED: "RESTAURANT_INDEX_RECEIVED"
+		RESTAURANT_INDEX_RECEIVED: "RESTAURANT_INDEX_RECEIVED",
+		CREATED_RESTAURANT_RECEIVED: "CREATED_RESTAURANT_RECEIVED"
 	};
 	
 	module.exports = RestaurantConstants;
 
 /***/ },
-/* 228 */
+/* 222 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Dispatcher = __webpack_require__(229).Dispatcher;
+	var Dispatcher = __webpack_require__(223).Dispatcher;
 	module.exports = new Dispatcher();
 
 /***/ },
-/* 229 */
+/* 223 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -25666,11 +25343,11 @@
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 */
 	
-	module.exports.Dispatcher = __webpack_require__(230);
+	module.exports.Dispatcher = __webpack_require__(224);
 
 
 /***/ },
-/* 230 */
+/* 224 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25692,7 +25369,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(231);
+	var invariant = __webpack_require__(225);
 	
 	var _prefix = 'ID_';
 	
@@ -25907,7 +25584,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 231 */
+/* 225 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25962,11 +25639,11 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 232 */
+/* 226 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var CuisinesConstants = __webpack_require__(227);
-	var AppDispatcher = __webpack_require__(228);
+	var CuisinesConstants = __webpack_require__(221);
+	var AppDispatcher = __webpack_require__(222);
 	
 	var CuisineActions = {
 		receiveCuisines: function (cuisines) {
@@ -25980,11 +25657,11 @@
 	module.exports = CuisineActions;
 
 /***/ },
-/* 233 */
+/* 227 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var AppDispatcher = __webpack_require__(228);
-	var SessionConstants = __webpack_require__(234);
+	var AppDispatcher = __webpack_require__(222);
+	var SessionConstants = __webpack_require__(228);
 	
 	var SessionActions = {
 	  currentUserReceived: function (currentUser) {
@@ -26004,7 +25681,7 @@
 	module.exports = SessionActions;
 
 /***/ },
-/* 234 */
+/* 228 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -26013,12 +25690,445 @@
 	};
 
 /***/ },
+/* 229 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
+	 * A mixin for handling (effectively) onClickOutside for React components.
+	 * Note that we're not intercepting any events in this approach, and we're
+	 * not using double events for capturing and discarding in layers or wrappers.
+	 *
+	 * The idea is that components define function
+	 *
+	 *   handleClickOutside: function() { ... }
+	 *
+	 * If no such function is defined, an error will be thrown, as this means
+	 * either it still needs to be written, or the component should not be using
+	 * this mixing since it will not exhibit onClickOutside behaviour.
+	 *
+	 */
+	(function (root, factory) {
+	  if (true) {
+	    // AMD. Register as an anonymous module.
+	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(158)], __WEBPACK_AMD_DEFINE_RESULT__ = function(reactDom) {
+	      return factory(root, reactDom);
+	    }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	  } else if (typeof exports === 'object') {
+	    // Node. Note that this does not work with strict
+	    // CommonJS, but only CommonJS-like environments
+	    // that support module.exports
+	    module.exports = factory(root, require('react-dom'));
+	  } else {
+	    // Browser globals (root is window)
+	    root.OnClickOutside = factory(root, ReactDOM);
+	  }
+	}(this, function (root, ReactDOM) {
+	  "use strict";
+	
+	  // Use a parallel array because we can't use
+	  // objects as keys, they get toString-coerced
+	  var registeredComponents = [];
+	  var handlers = [];
+	
+	  var IGNORE_CLASS = 'ignore-react-onclickoutside';
+	
+	  var isSourceFound = function(source, localNode, ignoreClass) {
+	    if (source === localNode) {
+	      return true;
+	    }
+	    // SVG <use/> elements do not technically reside in the rendered DOM, so
+	    // they do not have classList directly, but they offer a link to their
+	    // corresponding element, which can have classList. This extra check is for
+	    // that case.
+	    // See: http://www.w3.org/TR/SVG11/struct.html#InterfaceSVGUseElement
+	    // Discussion: https://github.com/Pomax/react-onclickoutside/pull/17
+	    if (source.correspondingElement) {
+	      return source.correspondingElement.classList.contains(ignoreClass);
+	    }
+	    return source.classList.contains(ignoreClass);
+	  };
+	
+	  return {
+	    componentDidMount: function() {
+	      if(typeof this.handleClickOutside !== "function")
+	        throw new Error("Component lacks a handleClickOutside(event) function for processing outside click events.");
+	
+	      var fn = this.__outsideClickHandler = (function(localNode, eventHandler, ignoreClass) {
+	        return function(evt) {
+	          evt.stopPropagation();
+	          var source = evt.target;
+	          var found = false;
+	          // If source=local then this event came from "somewhere"
+	          // inside and should be ignored. We could handle this with
+	          // a layered approach, too, but that requires going back to
+	          // thinking in terms of Dom node nesting, running counter
+	          // to React's "you shouldn't care about the DOM" philosophy.
+	          while(source.parentNode) {
+	            found = isSourceFound(source, localNode, ignoreClass);
+	            if(found) return;
+	            source = source.parentNode;
+	          }
+	          // If element is in detached DOM, consider it not clicked
+	          // outside as it can't be known whether it was outside.
+	          if(source !== document) return;
+	          eventHandler(evt);
+	        }
+	      }(ReactDOM.findDOMNode(this), this.handleClickOutside, this.props.outsideClickIgnoreClass || IGNORE_CLASS));
+	
+	      var pos = registeredComponents.length;
+	      registeredComponents.push(this);
+	      handlers[pos] = fn;
+	
+	      // If there is a truthy disableOnClickOutside property for this
+	      // component, don't immediately start listening for outside events.
+	      if (!this.props.disableOnClickOutside) {
+	        this.enableOnClickOutside();
+	      }
+	    },
+	
+	    componentWillUnmount: function() {
+	      this.disableOnClickOutside();
+	      this.__outsideClickHandler = false;
+	      var pos = registeredComponents.indexOf(this);
+	      if( pos>-1) {
+	        if (handlers[pos]) {
+	          // clean up so we don't leak memory
+	          handlers.splice(pos, 1);
+	          registeredComponents.splice(pos, 1);
+	        }
+	      }
+	    },
+	
+	    /**
+	     * Can be called to explicitly enable event listening
+	     * for clicks and touches outside of this element.
+	     */
+	    enableOnClickOutside: function() {
+	      var fn = this.__outsideClickHandler;
+	      if (document != null) {
+	        document.addEventListener("mousedown", fn);
+	        document.addEventListener("touchstart", fn);
+	      }
+	    },
+	
+	    /**
+	     * Can be called to explicitly disable event listening
+	     * for clicks and touches outside of this element.
+	     */
+	    disableOnClickOutside: function() {
+	      var fn = this.__outsideClickHandler;
+	      if (document != null) {
+	        document.removeEventListener("mousedown", fn);
+	        document.removeEventListener("touchstart", fn);
+	      }
+	    }
+	  };
+	
+	}));
+
+
+/***/ },
+/* 230 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var PropTypes = React.PropTypes;
+	var LinkedStateMixin = __webpack_require__(231);
+	var ApiUtil = __webpack_require__(219);
+	var RestaurantActions = __webpack_require__(220);
+	var RestaurantIndexStore = __webpack_require__(235);
+	
+	var SearchBar = React.createClass({
+		displayName: 'SearchBar',
+	
+		mixins: [LinkedStateMixin],
+	
+		getInitialState: function () {
+			return { searchVal: "" };
+		},
+	
+		clearIfSearchEmpty: function () {
+			if (RestaurantIndexStore.all().length < 1) {
+				this.setState({ searchVal: "" });
+			}
+		},
+	
+		componentDidMount: function () {
+			this.listener = RestaurantIndexStore.addListener(this.clearIfSearchEmpty);
+		},
+	
+		componentWillUnmount: function () {
+			this.listener.remove();
+		},
+	
+		searchCallback: function () {
+			ApiUtil.fetchRestaurantByNameContain(this.state.searchVal);
+		},
+	
+		onChange: function (e) {
+			clearTimeout(this.searchToken);
+	
+			if (e.target.value !== "") {
+				this.searchToken = setTimeout(this.searchCallback, 500);
+			} else {
+				this.searchToken = RestaurantActions.clearSearchRestaurants();
+			}
+		},
+	
+		render: function () {
+			return React.createElement(
+				'div',
+				{ className: 'searchBar' },
+				React.createElement('div', { id: 'searchIcon', className: 'fa fa-search' }),
+				React.createElement('input', { type: 'text',
+					valueLink: this.linkState('searchVal'),
+					placeholder: 'Search Restaurants',
+					onInput: this.onChange
+				})
+			);
+		}
+	
+	});
+	
+	module.exports = SearchBar;
+
+/***/ },
+/* 231 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(232);
+
+/***/ },
+/* 232 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright 2013-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule LinkedStateMixin
+	 * @typechecks static-only
+	 */
+	
+	'use strict';
+	
+	var ReactLink = __webpack_require__(233);
+	var ReactStateSetters = __webpack_require__(234);
+	
+	/**
+	 * A simple mixin around ReactLink.forState().
+	 */
+	var LinkedStateMixin = {
+	  /**
+	   * Create a ReactLink that's linked to part of this component's state. The
+	   * ReactLink will have the current value of this.state[key] and will call
+	   * setState() when a change is requested.
+	   *
+	   * @param {string} key state key to update. Note: you may want to use keyOf()
+	   * if you're using Google Closure Compiler advanced mode.
+	   * @return {ReactLink} ReactLink instance linking to the state.
+	   */
+	  linkState: function (key) {
+	    return new ReactLink(this.state[key], ReactStateSetters.createStateKeySetter(this, key));
+	  }
+	};
+	
+	module.exports = LinkedStateMixin;
+
+/***/ },
+/* 233 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright 2013-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule ReactLink
+	 * @typechecks static-only
+	 */
+	
+	'use strict';
+	
+	/**
+	 * ReactLink encapsulates a common pattern in which a component wants to modify
+	 * a prop received from its parent. ReactLink allows the parent to pass down a
+	 * value coupled with a callback that, when invoked, expresses an intent to
+	 * modify that value. For example:
+	 *
+	 * React.createClass({
+	 *   getInitialState: function() {
+	 *     return {value: ''};
+	 *   },
+	 *   render: function() {
+	 *     var valueLink = new ReactLink(this.state.value, this._handleValueChange);
+	 *     return <input valueLink={valueLink} />;
+	 *   },
+	 *   _handleValueChange: function(newValue) {
+	 *     this.setState({value: newValue});
+	 *   }
+	 * });
+	 *
+	 * We have provided some sugary mixins to make the creation and
+	 * consumption of ReactLink easier; see LinkedValueUtils and LinkedStateMixin.
+	 */
+	
+	var React = __webpack_require__(2);
+	
+	/**
+	 * @param {*} value current value of the link
+	 * @param {function} requestChange callback to request a change
+	 */
+	function ReactLink(value, requestChange) {
+	  this.value = value;
+	  this.requestChange = requestChange;
+	}
+	
+	/**
+	 * Creates a PropType that enforces the ReactLink API and optionally checks the
+	 * type of the value being passed inside the link. Example:
+	 *
+	 * MyComponent.propTypes = {
+	 *   tabIndexLink: ReactLink.PropTypes.link(React.PropTypes.number)
+	 * }
+	 */
+	function createLinkTypeChecker(linkType) {
+	  var shapes = {
+	    value: typeof linkType === 'undefined' ? React.PropTypes.any.isRequired : linkType.isRequired,
+	    requestChange: React.PropTypes.func.isRequired
+	  };
+	  return React.PropTypes.shape(shapes);
+	}
+	
+	ReactLink.PropTypes = {
+	  link: createLinkTypeChecker
+	};
+	
+	module.exports = ReactLink;
+
+/***/ },
+/* 234 */
+/***/ function(module, exports) {
+
+	/**
+	 * Copyright 2013-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule ReactStateSetters
+	 */
+	
+	'use strict';
+	
+	var ReactStateSetters = {
+	  /**
+	   * Returns a function that calls the provided function, and uses the result
+	   * of that to set the component's state.
+	   *
+	   * @param {ReactCompositeComponent} component
+	   * @param {function} funcReturningState Returned callback uses this to
+	   *                                      determine how to update state.
+	   * @return {function} callback that when invoked uses funcReturningState to
+	   *                    determined the object literal to setState.
+	   */
+	  createStateSetter: function (component, funcReturningState) {
+	    return function (a, b, c, d, e, f) {
+	      var partialState = funcReturningState.call(component, a, b, c, d, e, f);
+	      if (partialState) {
+	        component.setState(partialState);
+	      }
+	    };
+	  },
+	
+	  /**
+	   * Returns a single-argument callback that can be used to update a single
+	   * key in the component's state.
+	   *
+	   * Note: this is memoized function, which makes it inexpensive to call.
+	   *
+	   * @param {ReactCompositeComponent} component
+	   * @param {string} key The key in the state that you should update.
+	   * @return {function} callback of 1 argument which calls setState() with
+	   *                    the provided keyName and callback argument.
+	   */
+	  createStateKeySetter: function (component, key) {
+	    // Memoize the setters.
+	    var cache = component.__keySetters || (component.__keySetters = {});
+	    return cache[key] || (cache[key] = createStateKeySetter(component, key));
+	  }
+	};
+	
+	function createStateKeySetter(component, key) {
+	  // Partial state is allocated outside of the function closure so it can be
+	  // reused with every call, avoiding memory allocation when this function
+	  // is called.
+	  var partialState = {};
+	  return function stateKeySetter(value) {
+	    partialState[key] = value;
+	    component.setState(partialState);
+	  };
+	}
+	
+	ReactStateSetters.Mixin = {
+	  /**
+	   * Returns a function that calls the provided function, and uses the result
+	   * of that to set the component's state.
+	   *
+	   * For example, these statements are equivalent:
+	   *
+	   *   this.setState({x: 1});
+	   *   this.createStateSetter(function(xValue) {
+	   *     return {x: xValue};
+	   *   })(1);
+	   *
+	   * @param {function} funcReturningState Returned callback uses this to
+	   *                                      determine how to update state.
+	   * @return {function} callback that when invoked uses funcReturningState to
+	   *                    determined the object literal to setState.
+	   */
+	  createStateSetter: function (funcReturningState) {
+	    return ReactStateSetters.createStateSetter(this, funcReturningState);
+	  },
+	
+	  /**
+	   * Returns a single-argument callback that can be used to update a single
+	   * key in the component's state.
+	   *
+	   * For example, these statements are equivalent:
+	   *
+	   *   this.setState({x: 1});
+	   *   this.createStateKeySetter('x')(1);
+	   *
+	   * Note: this is memoized function, which makes it inexpensive to call.
+	   *
+	   * @param {string} key The key in the state that you should update.
+	   * @return {function} callback of 1 argument which calls setState() with
+	   *                    the provided keyName and callback argument.
+	   */
+	  createStateKeySetter: function (key) {
+	    return ReactStateSetters.createStateKeySetter(this, key);
+	  }
+	};
+	
+	module.exports = ReactStateSetters;
+
+/***/ },
 /* 235 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Store = __webpack_require__(236).Store;
-	var AppDispatcher = __webpack_require__(228);
-	var RestaurantConstants = __webpack_require__(227);
+	var AppDispatcher = __webpack_require__(222);
+	var RestaurantConstants = __webpack_require__(221);
 	var HelperUtil = __webpack_require__(253);
 	
 	var _restaurants = [];
@@ -26101,7 +26211,7 @@
 	
 	var FluxStoreGroup = __webpack_require__(238);
 	
-	var invariant = __webpack_require__(231);
+	var invariant = __webpack_require__(225);
 	var shallowEqual = __webpack_require__(239);
 	
 	var DEFAULT_OPTIONS = {
@@ -26279,7 +26389,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(231);
+	var invariant = __webpack_require__(225);
 	
 	/**
 	 * FluxStoreGroup allows you to execute a callback on every dispatch after
@@ -26420,7 +26530,7 @@
 	var FluxReduceStore = __webpack_require__(241);
 	var Immutable = __webpack_require__(251);
 	
-	var invariant = __webpack_require__(231);
+	var invariant = __webpack_require__(225);
 	
 	/**
 	 * This is a simple store. It allows caching key value pairs. An implementation
@@ -26570,7 +26680,7 @@
 	var FluxStore = __webpack_require__(242);
 	
 	var abstractMethod = __webpack_require__(250);
-	var invariant = __webpack_require__(231);
+	var invariant = __webpack_require__(225);
 	
 	var FluxReduceStore = (function (_FluxStore) {
 	  _inherits(FluxReduceStore, _FluxStore);
@@ -26676,7 +26786,7 @@
 	
 	var EventEmitter = _require.EventEmitter;
 	
-	var invariant = __webpack_require__(231);
+	var invariant = __webpack_require__(225);
 	
 	/**
 	 * This class should be extended by the stores in your application, like so:
@@ -27383,7 +27493,7 @@
 	
 	'use strict';
 	
-	var invariant = __webpack_require__(231);
+	var invariant = __webpack_require__(225);
 	
 	function abstractMethod(className, methodName) {
 	   true ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Subclasses of %s must override %s() with their own implementation.', className, methodName) : invariant(false) : undefined;
@@ -32399,7 +32509,7 @@
 	
 	var FluxStoreGroup = __webpack_require__(238);
 	
-	var invariant = __webpack_require__(231);
+	var invariant = __webpack_require__(225);
 	
 	/**
 	 * `FluxContainer` should be preferred over this mixin, but it requires using
@@ -32529,8 +32639,8 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var Store = __webpack_require__(236).Store;
-	var SessionConstants = __webpack_require__(234);
-	var AppDispatcher = __webpack_require__(228);
+	var SessionConstants = __webpack_require__(228);
+	var AppDispatcher = __webpack_require__(222);
 	
 	var SessionStore = new Store(AppDispatcher);
 	
@@ -32703,7 +32813,7 @@
 
 	var React = __webpack_require__(1);
 	var RestaurantStore = __webpack_require__(257);
-	var ApiUtil = __webpack_require__(225);
+	var ApiUtil = __webpack_require__(219);
 	var ImageSideBar = __webpack_require__(258);
 	
 	var RestaurantShow = React.createClass({
@@ -32796,8 +32906,8 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var Store = __webpack_require__(236).Store;
-	var AppDispatcher = __webpack_require__(228);
-	var RestaurantConstants = __webpack_require__(227);
+	var AppDispatcher = __webpack_require__(222);
+	var RestaurantConstants = __webpack_require__(221);
 	
 	var _restaurants = {};
 	
@@ -32927,7 +33037,7 @@
 	var PropTypes = React.PropTypes;
 	var RestaurantSearchStore = __webpack_require__(235);
 	var IndexItem = __webpack_require__(260);
-	var RestaurantActions = __webpack_require__(226);
+	var RestaurantActions = __webpack_require__(220);
 	
 	var SearchIndex = React.createClass({
 	  displayName: 'SearchIndex',
@@ -33169,7 +33279,11 @@
 				'div',
 				{ className: 'restaurant-index group' },
 				React.createElement(CuisineSelector, null),
-				restaurants
+				React.createElement(
+					'div',
+					{ className: 'restaurant-index-holder group' },
+					restaurants
+				)
 			);
 		}
 	
@@ -33184,14 +33298,14 @@
 	var React = __webpack_require__(1);
 	var PropTypes = React.PropTypes;
 	var CuisineStore = __webpack_require__(263);
-	var ApiUtil = __webpack_require__(225);
+	var ApiUtil = __webpack_require__(219);
 	
 	var CuisineSelector = React.createClass({
 		displayName: 'CuisineSelector',
 	
 	
 		getInitialState: function () {
-			return { cuisines: [], selected: "" };
+			return { cuisines: [], selected: {} };
 		},
 	
 		handleChange: function () {
@@ -33215,7 +33329,7 @@
 		render: function () {
 			return React.createElement(
 				'div',
-				{ className: 'cuisine-options' },
+				{ className: 'cuisine-options group' },
 				this.renderListItems()
 			);
 		},
@@ -33228,9 +33342,13 @@
 	
 			for (var i = 0; i < this.state.cuisines.length; i++) {
 				var item = this.state.cuisines[i];
+				var selected = "";
+				if (item.id === this.state.selected.id) {
+					selected = "selected";
+				}
 				items.push(React.createElement(
 					'div',
-					{ key: item.id, className: 'cuisine-selection-item', onClick: this.select.bind(null, item) },
+					{ key: item.id, className: "cuisine-selection-item " + selected, onClick: this.select.bind(null, item) },
 					React.createElement(
 						'span',
 						null,
@@ -33250,8 +33368,8 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var Store = __webpack_require__(236).Store;
-	var AppDispatcher = __webpack_require__(228);
-	var CuisinesConstants = __webpack_require__(227);
+	var AppDispatcher = __webpack_require__(222);
+	var CuisinesConstants = __webpack_require__(221);
 	var HelperUtil = __webpack_require__(253);
 	
 	var CuisineStore = new Store(AppDispatcher);
@@ -33277,8 +33395,8 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var Store = __webpack_require__(236).Store;
-	var AppDispatcher = __webpack_require__(228);
-	var RestaurantConstants = __webpack_require__(227);
+	var AppDispatcher = __webpack_require__(222);
+	var RestaurantConstants = __webpack_require__(221);
 	var HelperUtil = __webpack_require__(253);
 	
 	var _restaurants = [];
@@ -33309,7 +33427,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var ApiUtil = __webpack_require__(225);
+	var ApiUtil = __webpack_require__(219);
 	
 	var LoginForm = React.createClass({
 	  displayName: 'LoginForm',
@@ -33360,12 +33478,12 @@
 	
 	  handleSubmit: function (e) {
 	    e.preventDefault();
-	
-	    var router = this.context.router;
-	
-	    ApiUtil.login(this.state, function () {
-	      router.push("/");
-	    });
+	    var nextRoute = this.props.location.query.nextRoute;
+	    if (nextRoute) {
+	      ApiUtil.login(this.state, this.context.router.push(nextRoute));
+	    } else {
+	      ApiUtil.login(this.state, this.context.router.goBack.bind(this));
+	    }
 	  },
 	
 	  updateEmail: function (e) {
@@ -33379,6 +33497,208 @@
 	});
 	
 	module.exports = LoginForm;
+
+/***/ },
+/* 266 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ApiUtil = __webpack_require__(219);
+	
+	var SignUpForm = React.createClass({
+	  displayName: 'SignUpForm',
+	
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
+	
+	  getInitialState: function () {
+	    return {
+	      email: "",
+	      name: "",
+	      password: ""
+	    };
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'h1',
+	        null,
+	        'Please Sign Up'
+	      ),
+	      React.createElement(
+	        'form',
+	        { onSubmit: this.handleSubmit },
+	        React.createElement(
+	          'label',
+	          { htmlFor: 'email' },
+	          'Email'
+	        ),
+	        React.createElement('input', { onChange: this.updateEmail, type: 'text', value: this.state.email }),
+	        React.createElement(
+	          'label',
+	          { htmlFor: 'email' },
+	          'Name'
+	        ),
+	        React.createElement('input', { onChange: this.updateName, type: 'text', value: this.state.name }),
+	        React.createElement(
+	          'label',
+	          { htmlFor: 'password' },
+	          'Password'
+	        ),
+	        React.createElement('input', { onChange: this.updatePassword, type: 'password', value: this.state.password }),
+	        React.createElement(
+	          'button',
+	          null,
+	          'Submit'
+	        )
+	      )
+	    );
+	  },
+	
+	  handleSubmit: function (e) {
+	    e.preventDefault();
+	    ApiUtil.createUser(this.state, this.context.router.goBack.bind(this));
+	  },
+	
+	  updateEmail: function (e) {
+	    this.setState({ email: e.currentTarget.value });
+	  },
+	
+	  updateName: function (e) {
+	    this.setState({ name: e.currentTarget.value });
+	  },
+	
+	  updatePassword: function (e) {
+	    this.setState({ password: e.currentTarget.value });
+	  }
+	
+	});
+	
+	module.exports = SignUpForm;
+
+/***/ },
+/* 267 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var PropTypes = React.PropTypes;
+	var ApiUtil = __webpack_require__(219);
+	var LinkedStateMixin = __webpack_require__(231);
+	var CuisineStore = __webpack_require__(263);
+	
+	var NewRestaurant = React.createClass({
+	  displayName: 'NewRestaurant',
+	
+	
+	  mixins: [LinkedStateMixin],
+	
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
+	
+	  getInitialState: function () {
+	    return { selected: { food: "" }, title: "", cuisines: [], showDropdown: false };
+	  },
+	
+	  _cuisineChange: function () {
+	    this.setState({ cuisines: CuisineStore.all() });
+	    this.setState({ selected: CuisineStore.all()[0] });
+	  },
+	
+	  componentDidMount: function () {
+	    this.cTokenListener = CuisineStore.addListener(this._cuisineChange);
+	    ApiUtil.fetchCuisines();
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.cTokenListener.remove();
+	  },
+	
+	  _submit: function (e) {
+	    e.preventDefault();
+	    ApiUtil.createRestaurant({ cuisine_id: this.state.cuisine_id, title: this.state.title });
+	  },
+	
+	  _handleSelector: function (e) {
+	    e.preventDefault();
+	    this.setState({ showDropdown: true });
+	  },
+	
+	  _handleSelect: function (cuisine, e) {
+	    e.preventDefault();
+	    this.setState({ showDropdown: false, selected: cuisine });
+	  },
+	
+	  render: function () {
+	    var cuisines = React.createElement('option', null);
+	    var hidden = "hide";
+	    if (this.state.showDropdown) {
+	      hidden = "";
+	      cuisines = this.state.cuisines.map(function (cuisine) {
+	        return React.createElement(
+	          'li',
+	          { key: cuisine.id,
+	            value: cuisine.id,
+	            onClick: this._handleSelect.bind(this, cuisine),
+	            className: 'cuisine-option' },
+	          cuisine.food
+	        );
+	      });
+	    }
+	    return React.createElement(
+	      'div',
+	      { className: 'new-restaruant-page' },
+	      React.createElement(
+	        'div',
+	        { className: 'new-restaurant-page-content' },
+	        React.createElement(
+	          'h1',
+	          null,
+	          'What are you going to cook?'
+	        ),
+	        React.createElement(
+	          'form',
+	          { onSubmit: this._submit },
+	          React.createElement(
+	            'span',
+	            { className: 'new-restaurant-selector' },
+	            'I want to start a '
+	          ),
+	          React.createElement(
+	            'div',
+	            { onClick: this._handleSelector, className: 'cuisine-selector' },
+	            this.state.selected.food
+	          ),
+	          React.createElement(
+	            'span',
+	            { className: 'new-restaurant-selector' },
+	            'restaurant called',
+	            React.createElement('br', null)
+	          ),
+	          React.createElement(
+	            'ul',
+	            { className: "cuisine-choices " + hidden },
+	            cuisines
+	          ),
+	          React.createElement(
+	            'label',
+	            null,
+	            'Restaurant Name:',
+	            React.createElement('input', { type: 'text', valueLink: this.linkState('title'), className: 'restaurant-name-input' })
+	          ),
+	          React.createElement('input', { type: 'submit', value: 'Create Your Project!' })
+	        )
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = NewRestaurant;
 
 /***/ }
 /******/ ]);

@@ -4,13 +4,13 @@ class Api::SessionsController < ApplicationController
     if logged_in?
       render json: current_user
     else
-      render json: { message: "Not logged in" }, status: 401
+      render json: { message: "Not logged in" }, status: 200
     end
   end
 
   def create
     user = User.find_by_credentials(
-      params[:email],
+      params[:email].downcase,
       params[:password]
     )
 

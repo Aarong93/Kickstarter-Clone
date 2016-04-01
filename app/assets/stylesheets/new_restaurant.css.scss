@@ -1,0 +1,68 @@
+.new-restaruant-page {
+  color: #0f2105;
+  min-height: 500px;
+  background-color: #F5F7F7;
+  font-weight: 200;
+  padding-top: 100px;
+}
+
+.new-restaurant-page-content {
+  width: 800px;
+  text-align: center;
+  margin: auto;
+
+}
+
+
+.new-restaurant-page-content > h1 {
+  margin-bottom: 100px;
+  font-size: 48px;
+}
+
+.new-restaurant-selector {
+  font-weight: 200;
+  font-size: 32px;
+}
+
+
+.cuisine-selector {
+  font-weight: 200;
+  font-size: 32px;
+  display: inline;
+  margin-right: 7px;
+  padding: 5px;
+  background-color: #fff;
+  border: 1px solid #D9D9DE;
+  border-radius: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.cuisine-selector:hover {
+  background-color: #F1F1F1;
+  cursor: pointer;
+}
+
+.cuisine-choices {
+  position: absolute;
+  font-size: 16px;
+  font-weight: 400;
+  height: 300px;
+  width: 300px;
+  border-radius: 8px;
+  background-color: #fff;
+  color: #828587;
+  border: 1px solid #D9D9DE;
+  top: 370px;
+  left: calc(50% - 160px);
+}
+
+.cuisine-choices > li {
+  padding: 5px;
+  float: left;
+  width: 140px;
+}
+
+.cuisine-choices > li:hover {
+  cursor: pointer;
+}

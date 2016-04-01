@@ -15,6 +15,41 @@ var ApiUtil = {
 		});
 	},
 
+  createRestaurant: function (params) {
+    $.ajax({
+      type: "POST",
+      url: "/api/restaurants",
+      dataType: "json",
+      data: {restaurant: params},
+      success: function (restaurant) {
+        RestaurantActions.receiveCreatedRestaurant(restaurant);
+      }
+    });
+  },
+
+  patchRestaurant: function (params) {
+    $.ajax({
+      type: "PATCH",
+      url: "api/restaurants",
+      dataType: "json",
+      data: {restaurant: params},
+      success: function (restaurant) {
+        RestaurantActions.receiveCreatedRestaurant(restaurant);
+      }
+    });
+  },
+
+  fetchCreatedRestaurant: function (id) {
+    $.ajax({
+      type: "GET",
+      url: "/api/restaurants/" + id,
+      dataType: "json",
+      success: function (restaurant) {
+        RestaurantActions.receiveCreatedRestaurant(restaurant);
+       }
+    });
+  },
+
 	fetchRestaurantByNameContain: function (str) {
 		$.ajax({
 			type: "GET",
@@ -63,15 +98,29 @@ var ApiUtil = {
 	});
 },
 
-logout: function() {
+logout: function(callback) {
 	$.ajax({
 		type: "DELETE",
 		url: "/api/session",
 		dataType: "json",
 		success: function() {
 			SessionActions.logout();
+      callback && callback();
 		}
 	});
+},
+
+createUser: function (info, callback) {
+  $.ajax({
+    type: "POST",
+    url: "/api/users",
+    dataType: "json",
+    data: {user: info},
+    success: function(currentUser) {
+      SessionActions.currentUserReceived(currentUser);
+      callback && callback();
+    }
+  });
 },
 
 fetchCurrentUser: function(completion) {
@@ -80,11 +129,13 @@ fetchCurrentUser: function(completion) {
 		url: "/api/session",
 		dataType: "json",
 		success: function(currentUser) {
-			SessionActions.currentUserReceived(currentUser);
+      if (currentUser.message !== "Not logged in") {
+        SessionActions.currentUserReceived(currentUser);
+      }
 		},
-		complete: function() {
-			completion && completion();
-		}
+    complete: function() {
+      completion && completion();
+    }
 	});
 }
 

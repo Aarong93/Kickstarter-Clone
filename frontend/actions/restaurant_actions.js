@@ -27,7 +27,14 @@ var RestaurantActions = {
 			actionType: RestaurantConstants.RESTAURANT_INDEX_RECEIVED,
 			restaurants: restaurants
 		});
-	}
+	},
+
+  receiveCreatedRestaurant: function (restaurant) {
+    AppDispatcher.dispatch({
+      actionType: RestaurantConstants.CREATED_RESTAURANT_RECEIVED,
+      restaurant: restaurant
+    });
+  }
 };
 
 

@@ -1,7 +1,7 @@
 var React = require('react');
 var ApiUtil = require('../../util/api_util');
 
-var LoginForm = React.createClass({
+var SignUpForm = React.createClass({
   contextTypes: {
     router: React.PropTypes.object.isRequired
   },
@@ -9,6 +9,7 @@ var LoginForm = React.createClass({
   getInitialState: function() {
     return {
       email: "",
+      name: "",
       password: ""
     };
   },
@@ -16,11 +17,14 @@ var LoginForm = React.createClass({
   render: function() {
     return (
       <div>
-        <h1>Please Log in</h1>
+        <h1>Please Sign Up</h1>
 
         <form onSubmit={this.handleSubmit}>
           <label htmlFor="email">Email</label>
           <input onChange={this.updateEmail} type="text" value={this.state.email}/>
+
+          <label htmlFor="email">Name</label>
+          <input onChange={this.updateName} type="text" value={this.state.name}/>
 
           <label htmlFor="password">Password</label>
           <input onChange={this.updatePassword} type="password" value={this.state.password}/>
@@ -33,17 +37,15 @@ var LoginForm = React.createClass({
 
   handleSubmit: function(e) {
     e.preventDefault();
-    var nextRoute = this.props.location.query.nextRoute;
-    if (nextRoute) {
-      ApiUtil.login(this.state, this.context.router.push(nextRoute));
-    }
-    else {
-      ApiUtil.login(this.state, this.context.router.goBack.bind(this));
-    }
+    ApiUtil.createUser(this.state, this.context.router.goBack.bind(this));
   },
 
   updateEmail: function(e) {
     this.setState({ email: e.currentTarget.value });
+  },
+
+  updateName: function(e) {
+    this.setState({ name: e.currentTarget.value });
   },
 
   updatePassword: function(e) {
@@ -52,4 +54,4 @@ var LoginForm = React.createClass({
 
 });
 
-module.exports = LoginForm;
+module.exports = SignUpForm;
