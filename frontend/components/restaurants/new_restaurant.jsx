@@ -38,6 +38,13 @@ var NewRestaurant = React.createClass({
   _handleSelector: function (e) {
     e.preventDefault();
     this.setState({showDropdown: true});
+    window.addEventListener('click', this._handleClose);
+  },
+
+  _handleClose: function (e) {
+    debugger
+    this.setState({showDropdown: false});
+    window.removeEventListener('click', this._handleClose);
   },
 
   _handleSelect: function (cuisine, e) {
