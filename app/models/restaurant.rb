@@ -4,7 +4,9 @@ class Restaurant < ActiveRecord::Base
 	belongs_to :city
 	has_many :contributions
 
-
+	validates :user_id, :cuisine_id, :title, presence: true
+	validates :title, uniqueness: true
+	
 	def self.with_total()
 		restaurants = Restaurant.joins("LEFT OUTER JOIN contributions ON contributions.restaurant_id = restaurants.id").
 		group(:id).select("restaurants.*, SUM(contributions.value) as total, COUNT(contributions.user_id) as number_contributions")

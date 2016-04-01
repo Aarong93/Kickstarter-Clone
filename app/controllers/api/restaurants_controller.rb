@@ -1,4 +1,5 @@
 class Api::RestaurantsController < ApplicationController
+	before_action :ensure_logged_in, only: :create
 
 	def show
 		@restaurant = Restaurant.with_total.find(params[:id])

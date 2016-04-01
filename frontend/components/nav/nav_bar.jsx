@@ -1,10 +1,34 @@
 var React = require('react');
 var YouPopout = require('./you_popout');
 var SearchBar = require('./search_bar');
+var SessionStore = require('../../stores/session_store');
+
 var NavBar = React.createClass({
 
 	getInitialState: function () {
-		return {expandYou: false};
+		var name = "";
+		if (SessionStore.isLoggedIn()) {
+			name = SessionStore.currentUser().name;
+		}
+		return {expandYou: false, isLoggedIn: SessionStore.isLoggedIn(), name: name};
+	},
+
+	onChange: function () {
+		var name = "";
+		if (SessionStore.isLoggedIn()) {
+			name = SessionStore.currentUser().name;
+		}
+		this.setState({
+			isLoggedIn: SessionStore.isLoggedIn(), name: name
+		});
+	},
+
+	componentDidMount: function () {
+		this.listenToken = SessionStore.addListener(this.onChange);
+	},
+
+	componentWillUnmount: function () {
+		this.listenToken.remove();
 	},
 
 	_logo: function () {
@@ -20,7 +44,7 @@ var NavBar = React.createClass({
 	_nav: function () {
 		return (
 			<ul className="global-nav">
-				<li><a href="/restaurants">Discover</a></li>
+				<li><a href="#">Discover</a></li>
 				<li><a href="#">Start a Project</a></li>
 				<li><a href="#">About Us</a></li>
 			</ul>
@@ -37,6 +61,8 @@ var NavBar = React.createClass({
 				<YouPopout
 					handleExitClick={this._handleYouPopoutExitClick}
 					disableOnClickOutside={true}
+					name={this.state.name}
+					closeCB = {this._handleYouPopoutExitClick}
 				/>
 			);
 		} else {
@@ -50,12 +76,12 @@ var NavBar = React.createClass({
 
 	render: function () {
 		var accountTab;
-		var loggedIn = true;
-		if (!loggedIn) {//placeholder for logged in
+
+		if (!this.state.isLoggedIn) {//placeholder for logged in
 			accountTab = (
 				<ul className="login-nav">
 					<li><a href="/users/new">Sign up</a></li>
-					<li><a href="/session/new">Login</a></li>
+					<li><a href="#">Login</a></li>
 				</ul>
 			);
 		} else {

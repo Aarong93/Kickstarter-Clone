@@ -51,14 +51,20 @@
 	var Route = ReactRouter.Route;
 	var IndexRoute = ReactRouter.IndexRoute;
 	var browserHistory = ReactRouter.browserHistory;
+	
 	var NavBar = __webpack_require__(216);
-	var Footer = __webpack_require__(251);
-	var RestaurantShow = __webpack_require__(252);
-	var SearchIndex = __webpack_require__(255);
-	var RestaurantIndex = __webpack_require__(257);
+	var Footer = __webpack_require__(255);
+	var RestaurantShow = __webpack_require__(256);
+	var SearchIndex = __webpack_require__(259);
+	var RestaurantIndex = __webpack_require__(261);
+	var LoginForm = __webpack_require__(265);
+	
+	var SessionStore = __webpack_require__(254);
+	var ApiUtil = __webpack_require__(225);
 	
 	var App = React.createClass({
 	  displayName: 'App',
+	
 	
 	  render: function () {
 	    return React.createElement(
@@ -70,6 +76,7 @@
 	      React.createElement(Footer, null)
 	    );
 	  }
+	
 	});
 	
 	var router = React.createElement(
@@ -77,7 +84,8 @@
 	  { history: browserHistory },
 	  React.createElement(
 	    Route,
-	    { path: '/', component: App },
+	    { path: '/', component: App, onEnter: _onLoad },
+	    React.createElement(Route, { path: '/session/new', component: LoginForm }),
 	    React.createElement(Route, { path: '/restaurants', component: RestaurantIndex }),
 	    React.createElement(Route, { path: '/restaurants/:id', component: RestaurantShow })
 	  )
@@ -86,6 +94,26 @@
 	$(function () {
 	  ReactDOM.render(router, $('#root')[0]);
 	});
+	
+	function _onLoad(nextState, replace, asyncCompletionCallback) {
+	  ApiUtil.fetchCurrentUser(asyncCompletionCallback);
+	};
+	
+	function _requireLoggedIn(nextState, replace, asyncCompletionCallback) {
+	  if (!SessionStore.currentUserHasBeenFetched()) {
+	    ApiUtil.fetchCurrentUser(_redirectIfNotLoggedIn);
+	  } else {
+	    _redirectIfNotLoggedIn();
+	  }
+	};
+	
+	function _redirectIfNotLoggedIn() {
+	  if (!SessionStore.isLoggedIn()) {
+	    replace("/login");
+	  }
+	
+	  asyncCompletionCallback();
+	};
 
 /***/ },
 /* 1 */
@@ -24762,12 +24790,36 @@
 	var React = __webpack_require__(1);
 	var YouPopout = __webpack_require__(217);
 	var SearchBar = __webpack_require__(220);
+	var SessionStore = __webpack_require__(254);
+	
 	var NavBar = React.createClass({
 		displayName: 'NavBar',
 	
 	
 		getInitialState: function () {
-			return { expandYou: false };
+			var name = "";
+			if (SessionStore.isLoggedIn()) {
+				name = SessionStore.currentUser().name;
+			}
+			return { expandYou: false, isLoggedIn: SessionStore.isLoggedIn(), name: name };
+		},
+	
+		onChange: function () {
+			var name = "";
+			if (SessionStore.isLoggedIn()) {
+				name = SessionStore.currentUser().name;
+			}
+			this.setState({
+				isLoggedIn: SessionStore.isLoggedIn(), name: name
+			});
+		},
+	
+		componentDidMount: function () {
+			this.listenToken = SessionStore.addListener(this.onChange);
+		},
+	
+		componentWillUnmount: function () {
+			this.listenToken.remove();
 		},
 	
 		_logo: function () {
@@ -24800,7 +24852,7 @@
 					null,
 					React.createElement(
 						'a',
-						{ href: '/restaurants' },
+						{ href: '#' },
 						'Discover'
 					)
 				),
@@ -24833,7 +24885,9 @@
 			if (this.state.expandYou) {
 				return React.createElement(YouPopout, {
 					handleExitClick: this._handleYouPopoutExitClick,
-					disableOnClickOutside: true
+					disableOnClickOutside: true,
+					name: this.state.name,
+					closeCB: this._handleYouPopoutExitClick
 				});
 			} else {
 				return "";
@@ -24846,8 +24900,8 @@
 	
 		render: function () {
 			var accountTab;
-			var loggedIn = true;
-			if (!loggedIn) {
+	
+			if (!this.state.isLoggedIn) {
 				//placeholder for logged in
 				accountTab = React.createElement(
 					'ul',
@@ -24866,7 +24920,7 @@
 						null,
 						React.createElement(
 							'a',
-							{ href: '/session/new' },
+							{ href: '#' },
 							'Login'
 						)
 					)
@@ -24907,14 +24961,20 @@
 
 	var React = __webpack_require__(1);
 	var enhanceWithClickOutside = __webpack_require__(218);
+	var ApiUtils = __webpack_require__(225);
 	
 	var YouPopout = React.createClass({
 		displayName: 'YouPopout',
 	
 		mixins: [__webpack_require__(219)],
 	
+		contextTypes: { router: React.PropTypes.object.isRequired },
+	
 		_signOut: function (e) {
 			e.preventDefault();
+			this.props.closeCB();
+			ApiUtils.logout();
+			this.context.router.push('/session/new');
 		},
 	
 		handleClickOutside: function () {
@@ -24940,6 +25000,16 @@
 							'li',
 							null,
 							'Backed Projects'
+						)
+					),
+					React.createElement(
+						'p',
+						null,
+						'Signed in as ',
+						React.createElement(
+							'span',
+							{ id: 'logged-in-name' },
+							this.props.name
 						)
 					),
 					React.createElement(
@@ -25141,7 +25211,7 @@
 	var LinkedStateMixin = __webpack_require__(221);
 	var ApiUtil = __webpack_require__(225);
 	var RestaurantActions = __webpack_require__(226);
-	var RestaurantIndexStore = __webpack_require__(233);
+	var RestaurantIndexStore = __webpack_require__(235);
 	
 	var SearchBar = React.createClass({
 		displayName: 'SearchBar',
@@ -25433,6 +25503,7 @@
 
 	var RestaurantActions = __webpack_require__(226);
 	var CuisineActions = __webpack_require__(232);
+	var SessionActions = __webpack_require__(233);
 	
 	var ApiUtil = {
 	
@@ -25478,6 +25549,44 @@
 				dataType: "json",
 				success: function (cuisines) {
 					CuisineActions.receiveCuisines(cuisines);
+				}
+			});
+		},
+	
+		login: function (credentials, callback) {
+			$.ajax({
+				type: "POST",
+				url: "/api/session",
+				dataType: "json",
+				data: credentials,
+				success: function (currentUser) {
+					SessionActions.currentUserReceived(currentUser);
+					callback && callback();
+				}
+			});
+		},
+	
+		logout: function () {
+			$.ajax({
+				type: "DELETE",
+				url: "/api/session",
+				dataType: "json",
+				success: function () {
+					SessionActions.logout();
+				}
+			});
+		},
+	
+		fetchCurrentUser: function (completion) {
+			$.ajax({
+				type: "GET",
+				url: "/api/session",
+				dataType: "json",
+				success: function (currentUser) {
+					SessionActions.currentUserReceived(currentUser);
+				},
+				complete: function () {
+					completion && completion();
 				}
 			});
 		}
@@ -25874,10 +25983,43 @@
 /* 233 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Store = __webpack_require__(234).Store;
+	var AppDispatcher = __webpack_require__(228);
+	var SessionConstants = __webpack_require__(234);
+	
+	var SessionActions = {
+	  currentUserReceived: function (currentUser) {
+	    AppDispatcher.dispatch({
+	      actionType: SessionConstants.CURRENT_USER_RECEIVED,
+	      currentUser: currentUser
+	    });
+	  },
+	
+	  logout: function () {
+	    AppDispatcher.dispatch({
+	      actionType: SessionConstants.LOGOUT
+	    });
+	  }
+	};
+	
+	module.exports = SessionActions;
+
+/***/ },
+/* 234 */
+/***/ function(module, exports) {
+
+	module.exports = {
+	  CURRENT_USER_RECEIVED: "CURRENT_USER_RECEIVED",
+	  LOGOUT: "LOGOUT"
+	};
+
+/***/ },
+/* 235 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Store = __webpack_require__(236).Store;
 	var AppDispatcher = __webpack_require__(228);
 	var RestaurantConstants = __webpack_require__(227);
-	var HelperUtil = __webpack_require__(261);
+	var HelperUtil = __webpack_require__(253);
 	
 	var _restaurants = [];
 	
@@ -25915,7 +26057,7 @@
 	module.exports = RestaurantIndexStore;
 
 /***/ },
-/* 234 */
+/* 236 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -25927,15 +26069,15 @@
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 */
 	
-	module.exports.Container = __webpack_require__(235);
-	module.exports.MapStore = __webpack_require__(238);
-	module.exports.Mixin = __webpack_require__(250);
-	module.exports.ReduceStore = __webpack_require__(239);
-	module.exports.Store = __webpack_require__(240);
+	module.exports.Container = __webpack_require__(237);
+	module.exports.MapStore = __webpack_require__(240);
+	module.exports.Mixin = __webpack_require__(252);
+	module.exports.ReduceStore = __webpack_require__(241);
+	module.exports.Store = __webpack_require__(242);
 
 
 /***/ },
-/* 235 */
+/* 237 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25957,10 +26099,10 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxStoreGroup = __webpack_require__(236);
+	var FluxStoreGroup = __webpack_require__(238);
 	
 	var invariant = __webpack_require__(231);
-	var shallowEqual = __webpack_require__(237);
+	var shallowEqual = __webpack_require__(239);
 	
 	var DEFAULT_OPTIONS = {
 	  pure: true,
@@ -26118,7 +26260,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 236 */
+/* 238 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26199,7 +26341,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 237 */
+/* 239 */
 /***/ function(module, exports) {
 
 	/**
@@ -26254,7 +26396,7 @@
 	module.exports = shallowEqual;
 
 /***/ },
-/* 238 */
+/* 240 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26275,8 +26417,8 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxReduceStore = __webpack_require__(239);
-	var Immutable = __webpack_require__(249);
+	var FluxReduceStore = __webpack_require__(241);
+	var Immutable = __webpack_require__(251);
 	
 	var invariant = __webpack_require__(231);
 	
@@ -26404,7 +26546,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 239 */
+/* 241 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26425,9 +26567,9 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxStore = __webpack_require__(240);
+	var FluxStore = __webpack_require__(242);
 	
-	var abstractMethod = __webpack_require__(248);
+	var abstractMethod = __webpack_require__(250);
 	var invariant = __webpack_require__(231);
 	
 	var FluxReduceStore = (function (_FluxStore) {
@@ -26511,7 +26653,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 240 */
+/* 242 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26530,7 +26672,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var _require = __webpack_require__(241);
+	var _require = __webpack_require__(243);
 	
 	var EventEmitter = _require.EventEmitter;
 	
@@ -26694,7 +26836,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 241 */
+/* 243 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -26707,14 +26849,14 @@
 	 */
 	
 	var fbemitter = {
-	  EventEmitter: __webpack_require__(242)
+	  EventEmitter: __webpack_require__(244)
 	};
 	
 	module.exports = fbemitter;
 
 
 /***/ },
-/* 242 */
+/* 244 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26733,11 +26875,11 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var EmitterSubscription = __webpack_require__(243);
-	var EventSubscriptionVendor = __webpack_require__(245);
+	var EmitterSubscription = __webpack_require__(245);
+	var EventSubscriptionVendor = __webpack_require__(247);
 	
-	var emptyFunction = __webpack_require__(247);
-	var invariant = __webpack_require__(246);
+	var emptyFunction = __webpack_require__(249);
+	var invariant = __webpack_require__(248);
 	
 	/**
 	 * @class BaseEventEmitter
@@ -26911,7 +27053,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 243 */
+/* 245 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -26932,7 +27074,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var EventSubscription = __webpack_require__(244);
+	var EventSubscription = __webpack_require__(246);
 	
 	/**
 	 * EmitterSubscription represents a subscription with listener and context data.
@@ -26964,7 +27106,7 @@
 	module.exports = EmitterSubscription;
 
 /***/ },
-/* 244 */
+/* 246 */
 /***/ function(module, exports) {
 
 	/**
@@ -27018,7 +27160,7 @@
 	module.exports = EventSubscription;
 
 /***/ },
-/* 245 */
+/* 247 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -27037,7 +27179,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(246);
+	var invariant = __webpack_require__(248);
 	
 	/**
 	 * EventSubscriptionVendor stores a set of EventSubscriptions that are
@@ -27127,7 +27269,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 246 */
+/* 248 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -27182,7 +27324,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 247 */
+/* 249 */
 /***/ function(module, exports) {
 
 	/**
@@ -27224,7 +27366,7 @@
 	module.exports = emptyFunction;
 
 /***/ },
-/* 248 */
+/* 250 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -27251,7 +27393,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 249 */
+/* 251 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -32238,7 +32380,7 @@
 	}));
 
 /***/ },
-/* 250 */
+/* 252 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -32255,7 +32397,7 @@
 	
 	'use strict';
 	
-	var FluxStoreGroup = __webpack_require__(236);
+	var FluxStoreGroup = __webpack_require__(238);
 	
 	var invariant = __webpack_require__(231);
 	
@@ -32361,7 +32503,70 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 251 */
+/* 253 */
+/***/ function(module, exports) {
+
+	var HelperUtil = {
+	
+	  sortObjectArrayAlphabetical: function (arr, key) {
+	    return arr.sort(function (a, b) {
+	      if (a[key] > b[key]) {
+	        return 1;
+	      }
+	      if (a[key] < b[key]) {
+	        return -1;
+	      }
+	      return 0;
+	    });
+	  }
+	
+	};
+	
+	module.exports = HelperUtil;
+
+/***/ },
+/* 254 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Store = __webpack_require__(236).Store;
+	var SessionConstants = __webpack_require__(234);
+	var AppDispatcher = __webpack_require__(228);
+	
+	var SessionStore = new Store(AppDispatcher);
+	
+	var _currentUser;
+	var _currentUserHasBeenFetched = false;
+	
+	SessionStore.currentUser = function () {
+	  return _currentUser;
+	};
+	
+	SessionStore.isLoggedIn = function () {
+	  return !!_currentUser;
+	};
+	
+	SessionStore.currentUserHasBeenFetched = function () {
+	  return _currentUserHasBeenFetched;
+	};
+	
+	SessionStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case SessionConstants.CURRENT_USER_RECEIVED:
+	      _currentUser = payload.currentUser;
+	      _currentUserHasBeenFetched = true;
+	      SessionStore.__emitChange();
+	      break;
+	    case SessionConstants.LOGOUT:
+	      _currentUser = null;
+	      SessionStore.__emitChange();
+	      break;
+	  }
+	};
+	
+	module.exports = SessionStore;
+
+/***/ },
+/* 255 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -32493,13 +32698,13 @@
 	module.exports = FooterBar;
 
 /***/ },
-/* 252 */
+/* 256 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var RestaurantStore = __webpack_require__(253);
+	var RestaurantStore = __webpack_require__(257);
 	var ApiUtil = __webpack_require__(225);
-	var ImageSideBar = __webpack_require__(254);
+	var ImageSideBar = __webpack_require__(258);
 	
 	var RestaurantShow = React.createClass({
 		displayName: 'RestaurantShow',
@@ -32587,10 +32792,10 @@
 	module.exports = RestaurantShow;
 
 /***/ },
-/* 253 */
+/* 257 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Store = __webpack_require__(234).Store;
+	var Store = __webpack_require__(236).Store;
 	var AppDispatcher = __webpack_require__(228);
 	var RestaurantConstants = __webpack_require__(227);
 	
@@ -32624,7 +32829,7 @@
 	module.exports = RestaurantStore;
 
 /***/ },
-/* 254 */
+/* 258 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -32715,13 +32920,13 @@
 	module.exports = ImageSideBar;
 
 /***/ },
-/* 255 */
+/* 259 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var PropTypes = React.PropTypes;
-	var RestaurantSearchStore = __webpack_require__(233);
-	var IndexItem = __webpack_require__(256);
+	var RestaurantSearchStore = __webpack_require__(235);
+	var IndexItem = __webpack_require__(260);
 	var RestaurantActions = __webpack_require__(226);
 	
 	var SearchIndex = React.createClass({
@@ -32791,7 +32996,7 @@
 	module.exports = SearchIndex;
 
 /***/ },
-/* 256 */
+/* 260 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -32915,14 +33120,14 @@
 	module.exports = IndexItem;
 
 /***/ },
-/* 257 */
+/* 261 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var PropTypes = React.PropTypes;
-	var CuisineSelector = __webpack_require__(258);
-	var RestaurantIndexStore = __webpack_require__(260);
-	var IndexItem = __webpack_require__(256);
+	var CuisineSelector = __webpack_require__(262);
+	var RestaurantIndexStore = __webpack_require__(264);
+	var IndexItem = __webpack_require__(260);
 	var RestaurantIndex = React.createClass({
 		displayName: 'RestaurantIndex',
 	
@@ -32973,12 +33178,12 @@
 	module.exports = RestaurantIndex;
 
 /***/ },
-/* 258 */
+/* 262 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var PropTypes = React.PropTypes;
-	var CuisineStore = __webpack_require__(259);
+	var CuisineStore = __webpack_require__(263);
 	var ApiUtil = __webpack_require__(225);
 	
 	var CuisineSelector = React.createClass({
@@ -33041,13 +33246,13 @@
 	module.exports = CuisineSelector;
 
 /***/ },
-/* 259 */
+/* 263 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Store = __webpack_require__(234).Store;
+	var Store = __webpack_require__(236).Store;
 	var AppDispatcher = __webpack_require__(228);
 	var CuisinesConstants = __webpack_require__(227);
-	var HelperUtil = __webpack_require__(261);
+	var HelperUtil = __webpack_require__(253);
 	
 	var CuisineStore = new Store(AppDispatcher);
 	
@@ -33068,13 +33273,13 @@
 	module.exports = CuisineStore;
 
 /***/ },
-/* 260 */
+/* 264 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Store = __webpack_require__(234).Store;
+	var Store = __webpack_require__(236).Store;
 	var AppDispatcher = __webpack_require__(228);
 	var RestaurantConstants = __webpack_require__(227);
-	var HelperUtil = __webpack_require__(261);
+	var HelperUtil = __webpack_require__(253);
 	
 	var _restaurants = [];
 	
@@ -33100,26 +33305,80 @@
 	module.exports = RestaurantIndexPageStore;
 
 /***/ },
-/* 261 */
-/***/ function(module, exports) {
+/* 265 */
+/***/ function(module, exports, __webpack_require__) {
 
-	var HelperUtil = {
+	var React = __webpack_require__(1);
+	var ApiUtil = __webpack_require__(225);
 	
-	  sortObjectArrayAlphabetical: function (arr, key) {
-	    return arr.sort(function (a, b) {
-	      if (a[key] > b[key]) {
-	        return 1;
-	      }
-	      if (a[key] < b[key]) {
-	        return -1;
-	      }
-	      return 0;
+	var LoginForm = React.createClass({
+	  displayName: 'LoginForm',
+	
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
+	
+	  getInitialState: function () {
+	    return {
+	      email: "",
+	      password: ""
+	    };
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'h1',
+	        null,
+	        'Please Log in'
+	      ),
+	      React.createElement(
+	        'form',
+	        { onSubmit: this.handleSubmit },
+	        React.createElement(
+	          'label',
+	          { htmlFor: 'email' },
+	          'Email'
+	        ),
+	        React.createElement('input', { onChange: this.updateEmail, type: 'text', value: this.state.email }),
+	        React.createElement(
+	          'label',
+	          { htmlFor: 'password' },
+	          'Password'
+	        ),
+	        React.createElement('input', { onChange: this.updatePassword, type: 'password', value: this.state.password }),
+	        React.createElement(
+	          'button',
+	          null,
+	          'Submit'
+	        )
+	      )
+	    );
+	  },
+	
+	  handleSubmit: function (e) {
+	    e.preventDefault();
+	
+	    var router = this.context.router;
+	
+	    ApiUtil.login(this.state, function () {
+	      router.push("/");
 	    });
+	  },
+	
+	  updateEmail: function (e) {
+	    this.setState({ email: e.currentTarget.value });
+	  },
+	
+	  updatePassword: function (e) {
+	    this.setState({ password: e.currentTarget.value });
 	  }
 	
-	};
+	});
 	
-	module.exports = HelperUtil;
+	module.exports = LoginForm;
 
 /***/ }
 /******/ ]);

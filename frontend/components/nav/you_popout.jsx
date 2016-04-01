@@ -1,13 +1,18 @@
 var React = require('react');
 var enhanceWithClickOutside = require('react-click-outside');
+var ApiUtils = require('../../util/api_util');
 
 var YouPopout = React.createClass({
 	mixins: [require('react-onclickoutside')],
 
+	contextTypes: {router: React.PropTypes.object.isRequired},
+
 	_signOut: function (e) {
 		e.preventDefault();
+		this.props.closeCB();
+		ApiUtils.logout();
+		this.context.router.push('/session/new');
 	},
-
 
 	handleClickOutside: function () {
 		this.props.handleExitClick();
@@ -21,6 +26,7 @@ var YouPopout = React.createClass({
 					<ul>
 						<li>Backed Projects</li>
 					</ul>
+					<p>Signed in as <span id="logged-in-name">{this.props.name}</span></p>
 					<a href="#" onClick={this._signOut}>Sign Out</a>
 				</div>
 			</div>
