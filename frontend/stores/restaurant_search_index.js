@@ -1,6 +1,7 @@
 var Store = require('flux/utils').Store;
 var AppDispatcher = require('../dispatcher/dispatcher');
 var RestaurantConstants = require('../constants/restaurant_constants');
+var HelperUtil = require('../util/helper_util');
 
 var _restaurants = [];
 
@@ -11,7 +12,7 @@ var _newRestaurants = function (restaurants) {
   if (restaurants.length === 0) {
     _restaurants = ["none"];
   } else {
-    _restaurants = restaurants;
+    _restaurants = HelperUtil.sortObjectArrayAlphabetical(restaurants, "title");
   }
 };
 

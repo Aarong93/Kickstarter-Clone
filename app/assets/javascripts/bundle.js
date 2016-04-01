@@ -25877,6 +25877,7 @@
 	var Store = __webpack_require__(234).Store;
 	var AppDispatcher = __webpack_require__(228);
 	var RestaurantConstants = __webpack_require__(227);
+	var HelperUtil = __webpack_require__(261);
 	
 	var _restaurants = [];
 	
@@ -25886,7 +25887,7 @@
 	  if (restaurants.length === 0) {
 	    _restaurants = ["none"];
 	  } else {
-	    _restaurants = restaurants;
+	    _restaurants = HelperUtil.sortObjectArrayAlphabetical(restaurants, "title");
 	  }
 	};
 	
@@ -32920,7 +32921,7 @@
 	var React = __webpack_require__(1);
 	var PropTypes = React.PropTypes;
 	var CuisineSelector = __webpack_require__(258);
-	var RestaurantIndexStore = __webpack_require__(261);
+	var RestaurantIndexStore = __webpack_require__(260);
 	var IndexItem = __webpack_require__(256);
 	var RestaurantIndex = React.createClass({
 		displayName: 'RestaurantIndex',
@@ -33046,6 +33047,7 @@
 	var Store = __webpack_require__(234).Store;
 	var AppDispatcher = __webpack_require__(228);
 	var CuisinesConstants = __webpack_require__(227);
+	var HelperUtil = __webpack_require__(261);
 	
 	var CuisineStore = new Store(AppDispatcher);
 	
@@ -33058,7 +33060,7 @@
 	CuisineStore.__onDispatch = function (payload) {
 		switch (payload.actionType) {
 			case CuisinesConstants.CUISINES_RECEIVED:
-				_cuisines = payload.cuisines;
+				_cuisines = HelperUtil.sortObjectArrayAlphabetical(payload.cuisines, "food");
 				CuisineStore.__emitChange();
 		}
 	};
@@ -33066,13 +33068,13 @@
 	module.exports = CuisineStore;
 
 /***/ },
-/* 260 */,
-/* 261 */
+/* 260 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Store = __webpack_require__(234).Store;
 	var AppDispatcher = __webpack_require__(228);
 	var RestaurantConstants = __webpack_require__(227);
+	var HelperUtil = __webpack_require__(261);
 	
 	var _restaurants = [];
 	
@@ -33089,13 +33091,35 @@
 	RestaurantIndexPageStore.__onDispatch = function (payload) {
 		switch (payload.actionType) {
 			case RestaurantConstants.RESTAURANT_INDEX_RECEIVED:
-				_restaurants = payload.restaurants;
+				_restaurants = HelperUtil.sortObjectArrayAlphabetical(payload.restaurants, "title");
 				RestaurantIndexPageStore.__emitChange();
 				break;
 		}
 	};
 	
 	module.exports = RestaurantIndexPageStore;
+
+/***/ },
+/* 261 */
+/***/ function(module, exports) {
+
+	var HelperUtil = {
+	
+	  sortObjectArrayAlphabetical: function (arr, key) {
+	    return arr.sort(function (a, b) {
+	      if (a[key] > b[key]) {
+	        return 1;
+	      }
+	      if (a[key] < b[key]) {
+	        return -1;
+	      }
+	      return 0;
+	    });
+	  }
+	
+	};
+	
+	module.exports = HelperUtil;
 
 /***/ }
 /******/ ]);

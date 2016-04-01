@@ -1,6 +1,7 @@
 var Store = require('flux/utils').Store;
 var AppDispatcher = require('../dispatcher/dispatcher');
 var RestaurantConstants = require('../constants/restaurant_constants');
+var HelperUtil = require('../util/helper_util');
 
 var _restaurants = [];
 
@@ -18,7 +19,7 @@ RestaurantIndexPageStore.find = function (id) {
 RestaurantIndexPageStore.__onDispatch = function (payload) {
 	switch (payload.actionType) {
 		case RestaurantConstants.RESTAURANT_INDEX_RECEIVED:
-			_restaurants = payload.restaurants;
+			_restaurants = HelperUtil.sortObjectArrayAlphabetical(payload.restaurants, "title");
 			RestaurantIndexPageStore.__emitChange();
 			break;
 	}
