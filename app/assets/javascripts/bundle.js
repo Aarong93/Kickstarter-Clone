@@ -33647,7 +33647,7 @@
 	            className: 'cuisine-option' },
 	          cuisine.food
 	        );
-	      });
+	      }.bind(this));
 	    }
 	    return React.createElement(
 	      'div',

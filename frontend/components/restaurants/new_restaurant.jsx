@@ -55,7 +55,7 @@ var NewRestaurant = React.createClass({
           value={cuisine.id}
           onClick={this._handleSelect.bind(this, cuisine)}
           className="cuisine-option">{cuisine.food}</li>;
-      });
+      }.bind(this));
     }
     return (
       <div className="new-restaruant-page">
