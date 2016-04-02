@@ -25213,8 +25213,7 @@
 				dataType: "json",
 				data: credentials,
 				success: function (currentUser) {
-					SessionActions.currentUserReceived(currentUser);
-					callback && callback();
+					SessionActions.currentUserReceived(currentUser, callback);
 				}
 			});
 		},
@@ -25238,8 +25237,7 @@
 				dataType: "json",
 				data: { user: info },
 				success: function (currentUser) {
-					SessionActions.currentUserReceived(currentUser);
-					callback && callback();
+					SessionActions.currentUserReceived(currentUser, callback);
 				}
 			});
 		},
@@ -25664,10 +25662,11 @@
 	var SessionConstants = __webpack_require__(228);
 	
 	var SessionActions = {
-	  currentUserReceived: function (currentUser) {
+	  currentUserReceived: function (currentUser, callback) {
 	    AppDispatcher.dispatch({
 	      actionType: SessionConstants.CURRENT_USER_RECEIVED,
-	      currentUser: currentUser
+	      currentUser: currentUser,
+	      callback: callback
 	    });
 	  },
 	
@@ -32633,6 +32632,14 @@
 	};
 	
 	module.exports = HelperUtil;
+	
+	String.prototype.startsWithVowel = function () {
+	  if (this.length < 1) {
+	    return false;
+	  }
+	  vowels = ['a', 'e', 'i', 'o', 'u'];
+	  return vowels.includes(this[0].toLowerCase());
+	};
 
 /***/ },
 /* 254 */
@@ -32665,6 +32672,7 @@
 	      _currentUser = payload.currentUser;
 	      _currentUserHasBeenFetched = true;
 	      SessionStore.__emitChange();
+	      payload.callback && payload.callback();
 	      break;
 	    case SessionConstants.LOGOUT:
 	      _currentUser = null;
@@ -33480,7 +33488,7 @@
 	    e.preventDefault();
 	    var nextRoute = this.props.location.query.nextRoute;
 	    if (nextRoute) {
-	      ApiUtil.login(this.state, this.context.router.push(nextRoute));
+	      ApiUtil.login(this.state, this.context.router.push.bind(this, nextRoute));
 	    } else {
 	      ApiUtil.login(this.state, this.context.router.goBack.bind(this));
 	    }
@@ -33625,12 +33633,12 @@
 	
 	  _handleSelector: function (e) {
 	    e.preventDefault();
+	    e.stopPropagation();
 	    this.setState({ showDropdown: true });
 	    window.addEventListener('click', this._handleClose);
 	  },
 	
 	  _handleClose: function (e) {
-	    debugger;
 	    this.setState({ showDropdown: false });
 	    window.removeEventListener('click', this._handleClose);
 	  },
@@ -33642,6 +33650,14 @@
 	
 	  render: function () {
 	    var cuisines = React.createElement('option', null);
+	    var disabled = "disabled";
+	    if (this.state.title) {
+	      disabled = "";
+	    }
+	    var an = "a";
+	    if (this.state.selected.food.startsWithVowel()) {
+	      an = "an";
+	    }
 	    var hidden = "hide";
 	    if (this.state.showDropdown) {
 	      hidden = "";
@@ -33670,15 +33686,19 @@
 	        React.createElement(
 	          'form',
 	          { onSubmit: this._submit },
+	          React.createElement('div', { className: "triangle-cuisine-choice-selector" + hidden }),
 	          React.createElement(
 	            'span',
 	            { className: 'new-restaurant-selector' },
-	            'I want to start a '
+	            'I want to start ',
+	            an,
+	            ' '
 	          ),
 	          React.createElement(
 	            'div',
 	            { onClick: this._handleSelector, className: 'cuisine-selector' },
-	            this.state.selected.food
+	            this.state.selected.food,
+	            React.createElement('span', { className: 'select-arrow fa fa-sort-desc' })
 	          ),
 	          React.createElement(
 	            'span',
@@ -33691,13 +33711,9 @@
 	            { className: "cuisine-choices " + hidden },
 	            cuisines
 	          ),
-	          React.createElement(
-	            'label',
-	            null,
-	            'Restaurant Name:',
-	            React.createElement('input', { type: 'text', valueLink: this.linkState('title'), className: 'restaurant-name-input' })
-	          ),
-	          React.createElement('input', { type: 'submit', value: 'Create Your Project!' })
+	          React.createElement('input', { type: 'text', placeholder: 'title...', valueLink: this.linkState('title'), className: 'restaurant-name-input' }),
+	          React.createElement('br', null),
+	          React.createElement('input', { type: 'submit', className: 'submit-new-restaurant', disabled: disabled, value: 'Create Your Restaurant!' })
 	        )
 	      )
 	    );

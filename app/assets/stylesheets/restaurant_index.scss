@@ -30,4 +30,9 @@
 
 .selected {
   background-color: #CACEE3;
+
+}
+
+.selected:hover {
+	cursor: default;
 }

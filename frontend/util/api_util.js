@@ -92,8 +92,7 @@ var ApiUtil = {
 		dataType: "json",
 		data: credentials,
 		success: function(currentUser) {
-			SessionActions.currentUserReceived(currentUser);
-			callback && callback();
+			SessionActions.currentUserReceived(currentUser, callback);
 		}
 	});
 },
@@ -117,8 +116,7 @@ createUser: function (info, callback) {
     dataType: "json",
     data: {user: info},
     success: function(currentUser) {
-      SessionActions.currentUserReceived(currentUser);
-      callback && callback();
+      SessionActions.currentUserReceived(currentUser, callback);
     }
   });
 },

@@ -37,12 +37,12 @@ var NewRestaurant = React.createClass({
 
   _handleSelector: function (e) {
     e.preventDefault();
+    e.stopPropagation();
     this.setState({showDropdown: true});
     window.addEventListener('click', this._handleClose);
   },
 
   _handleClose: function (e) {
-    debugger
     this.setState({showDropdown: false});
     window.removeEventListener('click', this._handleClose);
   },
@@ -54,6 +54,12 @@ var NewRestaurant = React.createClass({
 
   render: function() {
     var cuisines = <option></option>;
+    var disabled = "disabled";
+    if (this.state.title) { disabled = ""; }
+    var an = "a";
+    if (this.state.selected.food.startsWithVowel()) {
+      an = "an";
+    }
     var hidden = "hide";
     if (this.state.showDropdown) {
       hidden = "";
@@ -69,17 +75,17 @@ var NewRestaurant = React.createClass({
         <div className="new-restaurant-page-content">
           <h1>What are you going to cook?</h1>
           <form onSubmit={this._submit}>
-            <span className="new-restaurant-selector">I want to start a </span>
+            <div className={"triangle-cuisine-choice-selector" + hidden} />
+            <span className="new-restaurant-selector">I want to start {an} </span>
             <div  onClick={this._handleSelector} className="cuisine-selector">
-              {this.state.selected.food}
+              {this.state.selected.food}<span className='select-arrow fa fa-sort-desc' />
             </div><span className="new-restaurant-selector" >restaurant called<br></br></span>
-          <ul className= {"cuisine-choices " + hidden}>
+            <ul className= {"cuisine-choices " + hidden}>
               {cuisines}
             </ul>
-            <label>Restaurant Name:
-              <input type="text" valueLink={this.linkState('title')} className="restaurant-name-input"></input>
-            </label>
-            <input type="submit" value="Create Your Project!"/>
+            <input type="text" placeholder="title..." valueLink={this.linkState('title')} className="restaurant-name-input" />
+            <br></br>
+            <input type="submit" className="submit-new-restaurant" disabled={disabled} value="Create Your Restaurant!"/>
           </form>
         </div>
       </div>

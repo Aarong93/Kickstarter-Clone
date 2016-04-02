@@ -35,7 +35,7 @@ var LoginForm = React.createClass({
     e.preventDefault();
     var nextRoute = this.props.location.query.nextRoute;
     if (nextRoute) {
-      ApiUtil.login(this.state, this.context.router.push(nextRoute));
+      ApiUtil.login(this.state, this.context.router.push.bind(this, nextRoute));
     }
     else {
       ApiUtil.login(this.state, this.context.router.goBack.bind(this));

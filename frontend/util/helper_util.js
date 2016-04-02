@@ -15,3 +15,12 @@ var HelperUtil = {
 };
 
 module.exports = HelperUtil;
+
+
+String.prototype.startsWithVowel = function() {
+  if (this.length < 1) {
+    return false;
+  }
+  vowels = ['a', 'e', 'i', 'o', 'u'];
+  return (vowels.includes(this[0].toLowerCase()));
+};
