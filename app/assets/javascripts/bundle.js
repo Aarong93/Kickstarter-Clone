@@ -33744,7 +33744,7 @@
 	            { className: "cuisine-choices " + hidden },
 	            cuisines
 	          ),
-	          React.createElement('input', { type: 'text', placeholder: 'title...', valueLink: this.linkState('title'), className: 'restaurant-name-input' }),
+	          React.createElement('input', { type: 'text', placeholder: 'name...', valueLink: this.linkState('title'), className: 'restaurant-name-input' }),
 	          React.createElement(
 	            'div',
 	            { className: 'city-selector-holder group' },

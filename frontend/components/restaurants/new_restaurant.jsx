@@ -100,7 +100,7 @@ var NewRestaurant = React.createClass({
             <ul className= {"cuisine-choices " + hidden}>
               {cuisines}
             </ul>
-            <input type="text" placeholder="title..." valueLink={this.linkState('title')} className="restaurant-name-input" />
+            <input type="text" placeholder="name..." valueLink={this.linkState('title')} className="restaurant-name-input" />
             <div className="city-selector-holder group">
               <p>Pick a city</p>
               <select id="city-selector" valueLink={this.linkState('selectedCity')} >
