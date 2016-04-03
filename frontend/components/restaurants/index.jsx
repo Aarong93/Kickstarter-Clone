@@ -41,11 +41,13 @@ var RestaurantIndex = React.createClass({
 
 
 		return (
-			<div className="restaurant-index group">
-				<CuisineSelector />
-        <div className="restaurant-index-holder group">
-				  {restaurants}
-        </div>
+			<div className="restaurant-index-page">
+				<div className="restaurant-index group">
+					<CuisineSelector />
+	        <div className="restaurant-index-holder group">
+					  {restaurants}
+	        </div>
+				</div>
 			</div>
 		);
 	}

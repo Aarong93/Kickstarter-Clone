@@ -10,6 +10,7 @@
   width: 800px;
   text-align: center;
   margin: auto;
+  position: relative;
 
 }
 
@@ -29,7 +30,7 @@
   font-weight: 200;
   font-size: 32px;
   display: inline;
-  margin-right: 7px;
+  margin-right: 8px;
   padding: 5px;
   background-color: #fff;
   border: 1px solid #D9D9DE;
@@ -39,22 +40,23 @@
 }
 
 .cuisine-selector:hover {
-  background-color: #F1F1F1;
+  background-color: #DFE6F9;
   cursor: pointer;
 }
 
 .cuisine-choices {
+  padding-top: 10px;
   position: absolute;
   font-size: 16px;
   font-weight: 400;
-  height: 200px;
+  height: 190px;
   width: 300px;
   border-radius: 8px;
   background-color: #fff;
   color: #828587;
   border: 1px solid #D9D9DE;
-  top: 330px;
-  left: calc(50% - 165px);
+  top: 165px;
+  left: calc(50% - 155px);
   z-index: 100;
 }
 
@@ -65,7 +67,7 @@
   border-color: transparent transparent #D9D9DE transparent;
   border-width: 0 20px 20px 20px;
   position: absolute;
-  top: 320px;
+  top: 155px;
   left: 47.5%;
 }
 
@@ -87,6 +89,7 @@
   margin-bottom: 10px;
 }
 .restaurant-name-input {
+  color: #0f2105;
   margin-top: 50px;
   width: 600px;
   font-size: 26px;
@@ -117,6 +120,7 @@
 
 .submit-new-restaurant:hover {
   cursor: pointer;
+  background-color: #1db95c;
 }
 
 .submit-new-restaurant:disabled {
@@ -125,4 +129,53 @@
 
 .submit-new-restaurant:hover:disabled {
   cursor: default;
+  background-color: #2BDE73;
+}
+
+.city-selector-holder {
+  position: absolute;
+  top: 150px;
+  float: left;
+  font-size: 18px;
+  color: #0f2105;
+  margin-top: 150px;
+  margin-right: 0;
+  padding-right: 0;
+}
+
+.city-selector-holder > p {
+  float: left;
+  display: inline-block;
+  margin-right: 5px;
+  margin-top: 6px;
+}
+
+.city-selector-holder > select {
+  display: inline-block;
+  float: left;
+}
+
+#city-selector, .city-selector-click-box {
+  -webkit-appearance: none;
+  -moz-outline-style: none;
+  outline: none;
+  font-size: 18px;
+  padding: 4px;
+  border: 1px solid #D9D9DE;
+}
+
+.city-selector-click-box {
+  display: inline-block;
+}
+
+#city-selector:hover, #city-selector-arrow:hover, .city-selector-click-box {
+  background-color: #DFE6F9;
+  cursor: pointer;
+}
+
+#city-selector-arrow {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  z-index: 1000;
 }

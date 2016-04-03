@@ -14,6 +14,7 @@ var RestaurantIndex = require('./components/restaurants/index');
 var LoginForm = require('./components/users/login_form.jsx');
 var SignUpForm = require('./components/users/sign_up_form');
 var RestaurantNew = require('./components/restaurants/new_restaurant');
+var RestaurantEdit = require('./components/restaurants/edit_restaurant');
 
 var SessionStore = require('./stores/session_store');
 var ApiUtil = require('./util/api_util');
@@ -41,6 +42,7 @@ var router = (
      <Route path="/users/new" component={SignUpForm} onEnter={_alreadyLoggedIn}/>
 		 <Route path="/restaurants" component={RestaurantIndex} />
      <Route path="/restaurants/new" component={RestaurantNew} onEnter={_requireLoggedIn} />
+     <Route path="/restaurants/edit/:id" component={RestaurantEdit} onEnter={_requireLoggedIn} />
 		 <Route path="/restaurants/:id" component={RestaurantShow} />
    </Route>
  </Router>

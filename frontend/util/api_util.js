@@ -1,6 +1,7 @@
 var RestaurantActions = require('../actions/restaurant_actions');
 var CuisineActions = require('../actions/cuisine_actions');
 var SessionActions = require('../actions/session_actions');
+var CityActions = require('../actions/city_actions');
 
 var ApiUtil = {
 
@@ -15,7 +16,7 @@ var ApiUtil = {
 		});
 	},
 
-  createRestaurant: function (params) {
+  createRestaurant: function (params, callback) {
     $.ajax({
       type: "POST",
       url: "/api/restaurants",
@@ -23,6 +24,7 @@ var ApiUtil = {
       data: {restaurant: params},
       success: function (restaurant) {
         RestaurantActions.receiveCreatedRestaurant(restaurant);
+				callback && callback("/restaurants/edit/" + restaurant.id);
       }
     });
   },
@@ -86,56 +88,68 @@ var ApiUtil = {
 	},
 
 	login: function(credentials, callback) {
-	$.ajax({
-		type: "POST",
-		url: "/api/session",
-		dataType: "json",
-		data: credentials,
-		success: function(currentUser) {
-			SessionActions.currentUserReceived(currentUser, callback);
-		}
-	});
-},
+		$.ajax({
+			type: "POST",
+			url: "/api/session",
+			dataType: "json",
+			data: credentials,
+			success: function(currentUser) {
+				SessionActions.currentUserReceived(currentUser);
+				callback && callback();
+			}
+		});
+	},
 
-logout: function(callback) {
-	$.ajax({
-		type: "DELETE",
-		url: "/api/session",
-		dataType: "json",
-		success: function() {
-			SessionActions.logout();
-      callback && callback();
-		}
-	});
-},
+	logout: function(callback) {
+		$.ajax({
+			type: "DELETE",
+			url: "/api/session",
+			dataType: "json",
+			success: function() {
+				SessionActions.logout();
+	      callback && callback();
+			}
+		});
+	},
 
-createUser: function (info, callback) {
-  $.ajax({
-    type: "POST",
-    url: "/api/users",
-    dataType: "json",
-    data: {user: info},
-    success: function(currentUser) {
-      SessionActions.currentUserReceived(currentUser, callback);
-    }
-  });
-},
+	createUser: function (info, callback) {
+	  $.ajax({
+	    type: "POST",
+	    url: "/api/users",
+	    dataType: "json",
+	    data: {user: info},
+	    success: function(currentUser) {
+	      SessionActions.currentUserReceived(currentUser, callback);
+	    }
+	  });
+	},
 
-fetchCurrentUser: function(completion) {
-	$.ajax({
-		type: "GET",
-		url: "/api/session",
-		dataType: "json",
-		success: function(currentUser) {
-      if (currentUser.message !== "Not logged in") {
-        SessionActions.currentUserReceived(currentUser);
-      }
-		},
-    complete: function() {
-      completion && completion();
-    }
-	});
-}
+	fetchCurrentUser: function(completion) {
+		$.ajax({
+			type: "GET",
+			url: "/api/session",
+			dataType: "json",
+			success: function(currentUser) {
+	      if (currentUser.message !== "Not logged in") {
+	        SessionActions.currentUserReceived(currentUser);
+	      }
+			},
+	    complete: function() {
+	      completion && completion();
+	    }
+		});
+	},
+
+	fetchCities: function() {
+		$.ajax({
+			type: "GET",
+			url: "/api/cities",
+			dataType: "json",
+			success: function (cities) {
+				CityActions.receiveCities(cities);
+			}
+		});
+	}
 
 };
 

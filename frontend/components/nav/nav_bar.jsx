@@ -20,9 +20,7 @@ var NavBar = React.createClass({
 		if (SessionStore.isLoggedIn()) {
 			name = SessionStore.currentUser().name;
 		}
-		this.setState({
-			isLoggedIn: SessionStore.isLoggedIn(), name: name
-		});
+		this.setState({isLoggedIn: SessionStore.isLoggedIn(), name: name});
 	},
 
 	componentDidMount: function () {

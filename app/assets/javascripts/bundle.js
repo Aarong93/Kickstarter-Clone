@@ -60,6 +60,7 @@
 	var LoginForm = __webpack_require__(265);
 	var SignUpForm = __webpack_require__(266);
 	var RestaurantNew = __webpack_require__(267);
+	var RestaurantEdit = __webpack_require__(272);
 	
 	var SessionStore = __webpack_require__(254);
 	var ApiUtil = __webpack_require__(219);
@@ -92,6 +93,7 @@
 	    React.createElement(Route, { path: '/users/new', component: SignUpForm, onEnter: _alreadyLoggedIn }),
 	    React.createElement(Route, { path: '/restaurants', component: RestaurantIndex }),
 	    React.createElement(Route, { path: '/restaurants/new', component: RestaurantNew, onEnter: _requireLoggedIn }),
+	    React.createElement(Route, { path: '/restaurants/edit/:id', component: RestaurantEdit, onEnter: _requireLoggedIn }),
 	    React.createElement(Route, { path: '/restaurants/:id', component: RestaurantShow })
 	  )
 	);
@@ -24841,9 +24843,7 @@
 			if (SessionStore.isLoggedIn()) {
 				name = SessionStore.currentUser().name;
 			}
-			this.setState({
-				isLoggedIn: SessionStore.isLoggedIn(), name: name
-			});
+			this.setState({ isLoggedIn: SessionStore.isLoggedIn(), name: name });
 		},
 	
 		componentDidMount: function () {
@@ -25122,6 +25122,7 @@
 	var RestaurantActions = __webpack_require__(220);
 	var CuisineActions = __webpack_require__(226);
 	var SessionActions = __webpack_require__(227);
+	var CityActions = __webpack_require__(269);
 	
 	var ApiUtil = {
 	
@@ -25136,7 +25137,7 @@
 			});
 		},
 	
-		createRestaurant: function (params) {
+		createRestaurant: function (params, callback) {
 			$.ajax({
 				type: "POST",
 				url: "/api/restaurants",
@@ -25144,6 +25145,7 @@
 				data: { restaurant: params },
 				success: function (restaurant) {
 					RestaurantActions.receiveCreatedRestaurant(restaurant);
+					callback && callback("/restaurants/edit/" + restaurant.id);
 				}
 			});
 		},
@@ -25213,7 +25215,8 @@
 				dataType: "json",
 				data: credentials,
 				success: function (currentUser) {
-					SessionActions.currentUserReceived(currentUser, callback);
+					SessionActions.currentUserReceived(currentUser);
+					callback && callback();
 				}
 			});
 		},
@@ -25254,6 +25257,17 @@
 				},
 				complete: function () {
 					completion && completion();
+				}
+			});
+		},
+	
+		fetchCities: function () {
+			$.ajax({
+				type: "GET",
+				url: "/api/cities",
+				dataType: "json",
+				success: function (cities) {
+					CityActions.receiveCities(cities);
 				}
 			});
 		}
@@ -25640,7 +25654,7 @@
 /* 226 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var CuisinesConstants = __webpack_require__(221);
+	var CuisinesConstants = __webpack_require__(268);
 	var AppDispatcher = __webpack_require__(222);
 	
 	var CuisineActions = {
@@ -32672,7 +32686,6 @@
 	      _currentUser = payload.currentUser;
 	      _currentUserHasBeenFetched = true;
 	      SessionStore.__emitChange();
-	      payload.callback && payload.callback();
 	      break;
 	    case SessionConstants.LOGOUT:
 	      _currentUser = null;
@@ -32926,9 +32939,7 @@
 	};
 	
 	RestaurantStore.all = function () {
-		var return_copy = {};
-		Object.assign(return_copy, _restaurants);
-		return return_copy;
+		return jQuery.extend(true, {}, _restaurants);
 	};
 	
 	RestaurantStore.find = function (id) {
@@ -33285,12 +33296,16 @@
 	
 			return React.createElement(
 				'div',
-				{ className: 'restaurant-index group' },
-				React.createElement(CuisineSelector, null),
+				{ className: 'restaurant-index-page' },
 				React.createElement(
 					'div',
-					{ className: 'restaurant-index-holder group' },
-					restaurants
+					{ className: 'restaurant-index group' },
+					React.createElement(CuisineSelector, null),
+					React.createElement(
+						'div',
+						{ className: 'restaurant-index-holder group' },
+						restaurants
+					)
 				)
 			);
 		}
@@ -33377,7 +33392,7 @@
 
 	var Store = __webpack_require__(236).Store;
 	var AppDispatcher = __webpack_require__(222);
-	var CuisinesConstants = __webpack_require__(221);
+	var CuisinesConstants = __webpack_require__(268);
 	var HelperUtil = __webpack_require__(253);
 	
 	var CuisineStore = new Store(AppDispatcher);
@@ -33597,6 +33612,7 @@
 	var ApiUtil = __webpack_require__(219);
 	var LinkedStateMixin = __webpack_require__(231);
 	var CuisineStore = __webpack_require__(263);
+	var CityStore = __webpack_require__(271);
 	
 	var NewRestaurant = React.createClass({
 	  displayName: 'NewRestaurant',
@@ -33604,12 +33620,14 @@
 	
 	  mixins: [LinkedStateMixin],
 	
+	  contextTypes: { router: React.PropTypes.object.isRequired },
+	
 	  contextTypes: {
 	    router: React.PropTypes.object.isRequired
 	  },
 	
 	  getInitialState: function () {
-	    return { selected: { food: "" }, title: "", cuisines: [], showDropdown: false };
+	    return { selected: { food: "" }, title: "", cuisines: [], showDropdown: false, cities: [], selectedCity: { name: "" } };
 	  },
 	
 	  _cuisineChange: function () {
@@ -33617,18 +33635,26 @@
 	    this.setState({ selected: CuisineStore.all()[0] });
 	  },
 	
+	  _cityChange: function () {
+	    this.setState({ cities: CityStore.all() });
+	    this.setState({ selectedCity: CityStore.find('New York').id });
+	  },
+	
 	  componentDidMount: function () {
 	    this.cTokenListener = CuisineStore.addListener(this._cuisineChange);
+	    this.cityTokenListener = CityStore.addListener(this._cityChange);
 	    ApiUtil.fetchCuisines();
+	    ApiUtil.fetchCities();
 	  },
 	
 	  componentWillUnmount: function () {
 	    this.cTokenListener.remove();
+	    this.cityTokenListener.remove();
 	  },
 	
 	  _submit: function (e) {
 	    e.preventDefault();
-	    ApiUtil.createRestaurant({ cuisine_id: this.state.cuisine_id, title: this.state.title });
+	    ApiUtil.createRestaurant({ cuisine_id: this.state.selected.id, title: this.state.title, city_id: this.state.selectedCity }, this.context.router.push.bind(this));
 	  },
 	
 	  _handleSelector: function (e) {
@@ -33651,6 +33677,13 @@
 	  render: function () {
 	    var cuisines = React.createElement('option', null);
 	    var disabled = "disabled";
+	    var cities = this.state.cities.map(function (city) {
+	      return React.createElement(
+	        'option',
+	        { key: city.id, value: city.id },
+	        city.name
+	      );
+	    });
 	    if (this.state.title) {
 	      disabled = "";
 	    }
@@ -33712,7 +33745,20 @@
 	            cuisines
 	          ),
 	          React.createElement('input', { type: 'text', placeholder: 'title...', valueLink: this.linkState('title'), className: 'restaurant-name-input' }),
-	          React.createElement('br', null),
+	          React.createElement(
+	            'div',
+	            { className: 'city-selector-holder group' },
+	            React.createElement(
+	              'p',
+	              null,
+	              'Pick a city'
+	            ),
+	            React.createElement(
+	              'select',
+	              { id: 'city-selector', valueLink: this.linkState('selectedCity') },
+	              cities
+	            )
+	          ),
 	          React.createElement('input', { type: 'submit', className: 'submit-new-restaurant', disabled: disabled, value: 'Create Your Restaurant!' })
 	        )
 	      )
@@ -33722,6 +33768,131 @@
 	});
 	
 	module.exports = NewRestaurant;
+
+/***/ },
+/* 268 */
+/***/ function(module, exports) {
+
+	var CuisineConstants = {
+		CUISINES_RECEIVED: "CUISINES_RECEIVED"
+	};
+	
+	module.exports = CuisineConstants;
+
+/***/ },
+/* 269 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var CityConstants = __webpack_require__(270);
+	var AppDispatcher = __webpack_require__(222);
+	
+	var CityActions = {
+		receiveCities: function (cities) {
+			AppDispatcher.dispatch({
+				actionType: CityConstants.CITIES_RECEIVED,
+				cities: cities
+			});
+		}
+	};
+	
+	module.exports = CityActions;
+
+/***/ },
+/* 270 */
+/***/ function(module, exports) {
+
+	var CityConstants = {
+		CITIES_RECEIVED: "CITIES_RECEIVED"
+	};
+	
+	module.exports = CityConstants;
+
+/***/ },
+/* 271 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Store = __webpack_require__(236).Store;
+	var AppDispatcher = __webpack_require__(222);
+	var CityConstants = __webpack_require__(270);
+	var HelperUtil = __webpack_require__(253);
+	
+	var CityStore = new Store(AppDispatcher);
+	
+	var _cities = [];
+	
+	CityStore.all = function () {
+		return _cities.slice(0);
+	};
+	
+	CityStore.find = function (str) {
+		for (var i = 0; i < _cities.length; i++) {
+			if (_cities[i].name === str) {
+				return jQuery.extend(true, {}, _cities[i]);
+			}
+		}
+	
+		return {};
+	};
+	
+	CityStore.__onDispatch = function (payload) {
+		switch (payload.actionType) {
+			case CityConstants.CITIES_RECEIVED:
+				_cities = HelperUtil.sortObjectArrayAlphabetical(payload.cities, "name");
+				CityStore.__emitChange();
+		}
+	};
+	
+	module.exports = CityStore;
+
+/***/ },
+/* 272 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var PropTypes = React.PropTypes;
+	var CuisineStore = __webpack_require__(263);
+	var CityStore = __webpack_require__(271);
+	var RestaurantEditStore = __webpack_require__(273);
+	
+	var EditRestaurant = React.createClass({
+	  displayName: 'EditRestaurant',
+	
+	
+	  render: function () {
+	    return React.createElement('div', { id: 'edit-restaurant-page' });
+	  }
+	
+	});
+	
+	module.exports = EditRestaurant;
+
+/***/ },
+/* 273 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Store = __webpack_require__(236).Store;
+	var AppDispatcher = __webpack_require__(222);
+	var RestaurantConstants = __webpack_require__(221);
+	var HelperUtil = __webpack_require__(253);
+	
+	var _restaurant = {};
+	
+	var RestaurantCreateStore = new Store(AppDispatcher);
+	
+	RestaurantCreateStore.all = function () {
+		return extend(true, {}, _restaurant);
+	};
+	
+	RestaurantCreateStore.__onDispatch = function (payload) {
+		switch (payload.actionType) {
+			case RestaurantConstants.CREATED_RESTAURANT_RECEIVED:
+				_restaurant = payload.restaurant;
+				RestaurantCreateStore.__emitChange();
+				break;
+		}
+	};
+	
+	module.exports = RestaurantCreateStore;
 
 /***/ }
 /******/ ]);

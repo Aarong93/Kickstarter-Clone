@@ -29,6 +29,10 @@ class ApplicationController < ActionController::Base
 		end
 	end
 
+	def logged_in_as?(id)
+		current_user.id == id
+	end
+
 	def ensure_logged_out
 		redirect_to posts_url if logged_in?
 	end

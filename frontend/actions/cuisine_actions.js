@@ -1,4 +1,4 @@
-var CuisinesConstants = require('../constants/restaurant_constants');
+var CuisinesConstants = require('../constants/cuisine_constants');
 var AppDispatcher = require('../dispatcher/dispatcher');
 
 var CuisineActions = {

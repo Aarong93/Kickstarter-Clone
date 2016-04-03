@@ -11,9 +11,7 @@ var _addRestaurant = function (restaurant) {
 };
 
 RestaurantStore.all = function () {
-	var return_copy = {};
-	Object.assign(return_copy, _restaurants);
-	return return_copy;
+	return jQuery.extend(true, {}, _restaurants);
 };
 
 RestaurantStore.find = function (id) {

@@ -48,6 +48,7 @@ footer, header, hgroup, menu, nav, section {
 }
 body {
 	line-height: 1;
+  background-color: #0F2105;
 }
 ol, ul {
 	list-style: none;
@@ -218,6 +219,7 @@ header {
 
 #you-popout {
 	position: absolute;
+  z-index: 10000000;
 	top:66px;
 	left: -271px;
 	font-size: 12px;

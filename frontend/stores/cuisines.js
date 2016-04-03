@@ -1,6 +1,6 @@
 var Store = require('flux/utils').Store;
 var AppDispatcher = require('../dispatcher/dispatcher');
-var CuisinesConstants = require('../constants/restaurant_constants');
+var CuisinesConstants = require('../constants/cuisine_constants');
 var HelperUtil = require('../util/helper_util');
 
 var CuisineStore = new Store(AppDispatcher);
