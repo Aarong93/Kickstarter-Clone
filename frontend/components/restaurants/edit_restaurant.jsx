@@ -67,9 +67,7 @@ var EditRestaurant = React.createClass({
   },
 
   redirectIfNotCreator: function () {
-    if (SessionStore.currentUser().id !== RestaurantEditStore.get().user.id) {
-      this.context.router.push('/');
-    }
+    this.context.router.push('/');
   },
 
   componentWillUnmount: function () {

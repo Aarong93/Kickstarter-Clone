@@ -11,8 +11,10 @@ var ApiUtil = {
 			url: "/api/restaurants/" + id,
 			dataType: "json",
 			success: function (restaurant) {
-				callback && callback(restaurant);
 				RestaurantActions.receiveRestaurant(restaurant);
+			},
+			error: function () {
+				callback && callback({published: false});
 			}
 		});
 	},
@@ -47,10 +49,13 @@ var ApiUtil = {
       type: "GET",
       url: "/api/restaurants/" + id,
       dataType: "json",
+			data: {edit: true},
       success: function (restaurant) {
         RestaurantActions.receiveCreatedRestaurant(restaurant);
+      },
+			error: function () {
 				callback && callback();
-      }
+			}
     });
   },
 

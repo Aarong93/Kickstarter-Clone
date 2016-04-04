@@ -3,6 +3,11 @@ class Api::RestaurantsController < ApplicationController
 
 	def show
 		@restaurant = Restaurant.with_total.find(params[:id])
+		if !@restaurant.published && !params[:edit]
+			render text: "This restaurant is not public yet", status: 400
+		elsif params[:edit] && current_user.id != @restaurant.user_id
+			render text: "This restaurant is not your restaurant", status: 401
+		end
 	end
 
 	def update

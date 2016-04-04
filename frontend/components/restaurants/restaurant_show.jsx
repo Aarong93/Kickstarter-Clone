@@ -9,7 +9,7 @@ var RestaurantShow = React.createClass({
 
 	getInitialState: function () {
 		return ({
-			restaurant: RestaurantStore.find(this.props.params.id),
+			restaurant: {},
 			imageClass: "hide-image"
 		});
 	},
@@ -57,7 +57,7 @@ var RestaurantShow = React.createClass({
 	},
 
 	render: function () {
-		if (!this.state.restaurant) {
+		if (!this.state.restaurant.id) {
 			return <div className="restaurant-show-page"></div>;
 		}
 		return (

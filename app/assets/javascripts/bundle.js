@@ -25139,8 +25139,10 @@
 				url: "/api/restaurants/" + id,
 				dataType: "json",
 				success: function (restaurant) {
-					callback && callback(restaurant);
 					RestaurantActions.receiveRestaurant(restaurant);
+				},
+				error: function () {
+					callback && callback({ published: false });
 				}
 			});
 		},
@@ -25175,8 +25177,11 @@
 				type: "GET",
 				url: "/api/restaurants/" + id,
 				dataType: "json",
+				data: { edit: true },
 				success: function (restaurant) {
 					RestaurantActions.receiveCreatedRestaurant(restaurant);
+				},
+				error: function () {
 					callback && callback();
 				}
 			});
@@ -32905,7 +32910,7 @@
 	
 		getInitialState: function () {
 			return {
-				restaurant: RestaurantStore.find(this.props.params.id),
+				restaurant: {},
 				imageClass: "hide-image"
 			};
 		},
@@ -32955,7 +32960,7 @@
 		},
 	
 		render: function () {
-			if (!this.state.restaurant) {
+			if (!this.state.restaurant.id) {
 				return React.createElement('div', { className: 'restaurant-show-page' });
 			}
 			return React.createElement(
@@ -33945,9 +33950,7 @@
 	  },
 	
 	  redirectIfNotCreator: function () {
-	    if (SessionStore.currentUser().id !== RestaurantEditStore.get().user.id) {
-	      this.context.router.push('/');
-	    }
+	    this.context.router.push('/');
 	  },
 	
 	  componentWillUnmount: function () {
