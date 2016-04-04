@@ -20,3 +20,20 @@
 #img-timer {
   width: 0px;
 }
+
+.home-page-index-area {
+  width: 720px;
+  padding: 40px;
+  margin: auto;
+}
+
+.cuisine-selector-area {
+  width: 250px;
+  border-left: 1px solid #D9D9DE;
+  float: right;
+}
+
+cuisine-selector-area > ul {
+  font-weight: bold;
+  font-size: 14px;
+}

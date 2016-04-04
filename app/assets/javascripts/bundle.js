@@ -33371,7 +33371,7 @@
 				React.createElement(
 					'div',
 					{ className: 'restaurant-index group' },
-					React.createElement(CuisineSelector, null),
+					React.createElement(CuisineSelector, { selected: this.props.selected }),
 					React.createElement(
 						'div',
 						{ className: 'restaurant-index-holder group' },
@@ -33399,7 +33399,7 @@
 	
 	
 		getInitialState: function () {
-			return { cuisines: [], selected: {} };
+			return { cuisines: [], selected: this.props.selected || {} };
 		},
 	
 		handleChange: function () {
@@ -36244,55 +36244,89 @@
 
 	var React = __webpack_require__(1);
 	var RestaurantStore = __webpack_require__(260);
+	var CuisineStore = __webpack_require__(266);
 	var ApiUtil = __webpack_require__(219);
+	var CityStore = __webpack_require__(271);
 	
 	var Home = React.createClass({
-		displayName: 'Home',
+	  displayName: 'Home',
 	
 	
-		contextTypes: { router: React.PropTypes.object.isRequired },
+	  contextTypes: { router: React.PropTypes.object.isRequired },
 	
-		getInitialState: function () {
-			return {
-				restaurant: {},
-				imageClass: "hide-image"
-			};
-		},
+	  getInitialState: function () {
+	    return {
+	      restaurant: {},
+	      imageClass: "hide-image",
+	      cuisines: []
+	    };
+	  },
 	
-		componentDidMount: function () {
-			this.listenerToken = RestaurantStore.addListener(this._onChange);
-			ApiUtil.fetchRestaurantByParams({ featured: true });
-		},
+	  componentDidMount: function () {
+	    this.cTokenListener = CuisineStore.addListener(this._cuisineChange);
+	    this.rTokenListener = RestaurantStore.addListener(this._onChange);
+	    ApiUtil.fetchRestaurantByParams({ featured: true });
+	    ApiUtil.fetchCuisines();
+	  },
 	
-		_onChange: function () {
-			this.setState({ restaurant: RestaurantStore.get() });
-		},
+	  _onChange: function () {
+	    this.setState({ restaurant: RestaurantStore.get() });
+	  },
 	
-		componentWillUnmount: function () {
-			this.listenerToken.remove();
-		},
+	  _cuisineChange: function () {
+	    this.setState({ cuisines: CuisineStore.all() });
+	    this.setState({ selected: CuisineStore.all()[0] });
+	  },
 	
-		_imageReady: function () {
-			this.setState({ imageClass: "show-image" });
-		},
+	  componentWillUnmount: function () {
+	    this.cTokenListener.remove();
+	    this.rTokenListener.remove();
+	  },
 	
-		render: function () {
-			if (!this.state.restaurant.image_url) {
-				return React.createElement('div', { id: 'home-page' });
-			}
-			var style = { backgroundImage: 'url(' + this.state.restaurant.image_url + ')' };
-			debugger;
-			return React.createElement(
-				'div',
-				{ id: 'home-page' },
-				React.createElement(
-					'div',
-					{ className: 'home-page-image-wrapper' },
-					React.createElement('div', { className: this.state.imageClass, style: style })
-				),
-				React.createElement('img', { id: 'img-timer', onLoad: this._imageReady, src: this.state.restaurant.image_url })
-			);
-		}
+	  _imageReady: function () {
+	    this.setState({ imageClass: "show-image" });
+	  },
+	
+	  render: function () {
+	    var cuisines = React.createElement('div', null);
+	    if (!this.state.restaurant.image_url) {
+	      return React.createElement('div', { id: 'home-page' });
+	    }
+	    if (this.state.cuisines.length > 0) {
+	      cuisines = this.state.cuisines.map(function (cuisine) {
+	        React.createElement(
+	          'li',
+	          null,
+	          'cuisine.food'
+	        );
+	      }.bind(this));
+	    }
+	    var style = { backgroundImage: 'url(' + this.state.restaurant.image_url + ')' };
+	    return React.createElement(
+	      'div',
+	      { id: 'home-page' },
+	      React.createElement(
+	        'div',
+	        { className: 'home-page-image-wrapper' },
+	        React.createElement('div', { className: this.state.imageClass, style: style })
+	      ),
+	      React.createElement('img', { id: 'img-timer', onLoad: this._imageReady, src: this.state.restaurant.image_url }),
+	      React.createElement(
+	        'div',
+	        { className: 'home-page-index-area group' },
+	        React.createElement('div', { className: 'project-index-item-area' }),
+	        React.createElement(
+	          'div',
+	          { className: 'cuisine-selector-area' },
+	          React.createElement(
+	            'ul',
+	            null,
+	            cuisines
+	          )
+	        )
+	      )
+	    );
+	  }
 	
 	});
 	

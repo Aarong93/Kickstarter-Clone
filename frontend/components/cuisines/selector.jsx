@@ -7,7 +7,7 @@ var ApiUtil = require('../../util/api_util');
 var CuisineSelector = React.createClass({
 
 	getInitialState: function () {
-		return {cuisines: [], selected: {}};
+		return {cuisines: [], selected: this.props.selected || {}};
 	},
 
 	handleChange: function () {
