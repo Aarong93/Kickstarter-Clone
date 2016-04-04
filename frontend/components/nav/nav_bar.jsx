@@ -31,10 +31,16 @@ var NavBar = React.createClass({
 		this.listenToken.remove();
 	},
 
+  _logoClick: function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    this.context.router.push("/");
+  },
+
 	_logo: function () {
 		return (
 			<h2 className="site-logo group">
-				<a href="/" >
+				<a onClick={this._logoClick}>
 					<span className="dark-green">KITCHEN</span><span className="green">STARTER</span>
 				</a>
 			</h2>

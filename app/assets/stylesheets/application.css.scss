@@ -129,7 +129,10 @@ header {
 	margin-right: 20px;
 	margin-left: 20px;
 	padding-top: 2px;
+}
 
+.site-logo:hover {
+  cursor: pointer;
 }
 
 .site-logo > a {

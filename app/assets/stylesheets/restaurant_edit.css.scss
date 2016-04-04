@@ -1,3 +1,39 @@
 #edit-restaurant-page {
   min-height: 600px;
+  background-color: #f7fafa;
+  position: relative;
+}
+
+#edit-restaurant-page-content {
+  width: 800px;
+  margin: auto;
+  padding-top: 50px;
+}
+
+.edit-restaurant-tabs {
+  width: 604px;
+  border-radius: 7px;
+  overflow: hidden;
+  border: 1px solid #d9d9de;
+  border-right: none;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.edit-restaurant-tabs > li {
+  float: left;
+  text-align: center;
+  width: 160px;
+  padding: 20px;
+  background-color: #fff;
+  border-right: 1px solid #d9d9de;
+}
+
+.edit-restaurant-tabs > li:hover {
+  cursor: pointer;
+  background-color: #F1F1F1;
+}
+
+#selected-tab {
+  background-color: #F1F1F1
 }

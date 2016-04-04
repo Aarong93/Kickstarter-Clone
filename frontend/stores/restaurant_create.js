@@ -8,8 +8,8 @@ var _restaurant = {};
 var RestaurantCreateStore = new Store(AppDispatcher);
 
 
-RestaurantCreateStore.all = function () {
-  return extend(true, {}, _restaurant);
+RestaurantCreateStore.get = function () {
+  return jQuery.extend(true, {}, _restaurant);
 };
 
 

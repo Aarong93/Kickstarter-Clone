@@ -53,16 +53,16 @@
 	var browserHistory = ReactRouter.browserHistory;
 	
 	var NavBar = __webpack_require__(216);
-	var Footer = __webpack_require__(255);
-	var RestaurantShow = __webpack_require__(256);
-	var SearchIndex = __webpack_require__(259);
-	var RestaurantIndex = __webpack_require__(261);
-	var LoginForm = __webpack_require__(265);
-	var SignUpForm = __webpack_require__(266);
-	var RestaurantNew = __webpack_require__(267);
+	var Footer = __webpack_require__(258);
+	var RestaurantShow = __webpack_require__(259);
+	var SearchIndex = __webpack_require__(262);
+	var RestaurantIndex = __webpack_require__(264);
+	var LoginForm = __webpack_require__(268);
+	var SignUpForm = __webpack_require__(269);
+	var RestaurantNew = __webpack_require__(270);
 	var RestaurantEdit = __webpack_require__(272);
 	
-	var SessionStore = __webpack_require__(254);
+	var SessionStore = __webpack_require__(257);
 	var ApiUtil = __webpack_require__(219);
 	var RestaurantActions = __webpack_require__(220);
 	
@@ -24821,8 +24821,8 @@
 
 	var React = __webpack_require__(1);
 	var YouPopout = __webpack_require__(217);
-	var SearchBar = __webpack_require__(230);
-	var SessionStore = __webpack_require__(254);
+	var SearchBar = __webpack_require__(233);
+	var SessionStore = __webpack_require__(257);
 	
 	var NavBar = React.createClass({
 		displayName: 'NavBar',
@@ -24854,13 +24854,19 @@
 			this.listenToken.remove();
 		},
 	
+		_logoClick: function (e) {
+			e.preventDefault();
+			e.stopPropagation();
+			this.context.router.push("/");
+		},
+	
 		_logo: function () {
 			return React.createElement(
 				'h2',
 				{ className: 'site-logo group' },
 				React.createElement(
 					'a',
-					{ href: '/' },
+					{ onClick: this._logoClick },
 					React.createElement(
 						'span',
 						{ className: 'dark-green' },
@@ -25018,7 +25024,7 @@
 	var YouPopout = React.createClass({
 		displayName: 'YouPopout',
 	
-		mixins: [__webpack_require__(229)],
+		mixins: [__webpack_require__(232)],
 	
 		contextTypes: { router: React.PropTypes.object.isRequired },
 	
@@ -25121,8 +25127,8 @@
 
 	var RestaurantActions = __webpack_require__(220);
 	var CuisineActions = __webpack_require__(226);
-	var SessionActions = __webpack_require__(227);
-	var CityActions = __webpack_require__(269);
+	var SessionActions = __webpack_require__(228);
+	var CityActions = __webpack_require__(230);
 	
 	var ApiUtil = {
 	
@@ -25654,7 +25660,7 @@
 /* 226 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var CuisinesConstants = __webpack_require__(268);
+	var CuisinesConstants = __webpack_require__(227);
 	var AppDispatcher = __webpack_require__(222);
 	
 	var CuisineActions = {
@@ -25670,10 +25676,20 @@
 
 /***/ },
 /* 227 */
+/***/ function(module, exports) {
+
+	var CuisineConstants = {
+		CUISINES_RECEIVED: "CUISINES_RECEIVED"
+	};
+	
+	module.exports = CuisineConstants;
+
+/***/ },
+/* 228 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(222);
-	var SessionConstants = __webpack_require__(228);
+	var SessionConstants = __webpack_require__(229);
 	
 	var SessionActions = {
 	  currentUserReceived: function (currentUser, callback) {
@@ -25694,7 +25710,7 @@
 	module.exports = SessionActions;
 
 /***/ },
-/* 228 */
+/* 229 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -25703,7 +25719,35 @@
 	};
 
 /***/ },
-/* 229 */
+/* 230 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var CityConstants = __webpack_require__(231);
+	var AppDispatcher = __webpack_require__(222);
+	
+	var CityActions = {
+		receiveCities: function (cities) {
+			AppDispatcher.dispatch({
+				actionType: CityConstants.CITIES_RECEIVED,
+				cities: cities
+			});
+		}
+	};
+	
+	module.exports = CityActions;
+
+/***/ },
+/* 231 */
+/***/ function(module, exports) {
+
+	var CityConstants = {
+		CITIES_RECEIVED: "CITIES_RECEIVED"
+	};
+	
+	module.exports = CityConstants;
+
+/***/ },
+/* 232 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -25841,15 +25885,15 @@
 
 
 /***/ },
-/* 230 */
+/* 233 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var PropTypes = React.PropTypes;
-	var LinkedStateMixin = __webpack_require__(231);
+	var LinkedStateMixin = __webpack_require__(234);
 	var ApiUtil = __webpack_require__(219);
 	var RestaurantActions = __webpack_require__(220);
-	var RestaurantIndexStore = __webpack_require__(235);
+	var RestaurantIndexStore = __webpack_require__(238);
 	
 	var SearchBar = React.createClass({
 		displayName: 'SearchBar',
@@ -25906,13 +25950,13 @@
 	module.exports = SearchBar;
 
 /***/ },
-/* 231 */
+/* 234 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(232);
+	module.exports = __webpack_require__(235);
 
 /***/ },
-/* 232 */
+/* 235 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -25929,8 +25973,8 @@
 	
 	'use strict';
 	
-	var ReactLink = __webpack_require__(233);
-	var ReactStateSetters = __webpack_require__(234);
+	var ReactLink = __webpack_require__(236);
+	var ReactStateSetters = __webpack_require__(237);
 	
 	/**
 	 * A simple mixin around ReactLink.forState().
@@ -25953,7 +25997,7 @@
 	module.exports = LinkedStateMixin;
 
 /***/ },
-/* 233 */
+/* 236 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -26027,7 +26071,7 @@
 	module.exports = ReactLink;
 
 /***/ },
-/* 234 */
+/* 237 */
 /***/ function(module, exports) {
 
 	/**
@@ -26136,13 +26180,13 @@
 	module.exports = ReactStateSetters;
 
 /***/ },
-/* 235 */
+/* 238 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Store = __webpack_require__(236).Store;
+	var Store = __webpack_require__(239).Store;
 	var AppDispatcher = __webpack_require__(222);
 	var RestaurantConstants = __webpack_require__(221);
-	var HelperUtil = __webpack_require__(253);
+	var HelperUtil = __webpack_require__(256);
 	
 	var _restaurants = [];
 	
@@ -26180,7 +26224,7 @@
 	module.exports = RestaurantIndexStore;
 
 /***/ },
-/* 236 */
+/* 239 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -26192,15 +26236,15 @@
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 */
 	
-	module.exports.Container = __webpack_require__(237);
-	module.exports.MapStore = __webpack_require__(240);
-	module.exports.Mixin = __webpack_require__(252);
-	module.exports.ReduceStore = __webpack_require__(241);
-	module.exports.Store = __webpack_require__(242);
+	module.exports.Container = __webpack_require__(240);
+	module.exports.MapStore = __webpack_require__(243);
+	module.exports.Mixin = __webpack_require__(255);
+	module.exports.ReduceStore = __webpack_require__(244);
+	module.exports.Store = __webpack_require__(245);
 
 
 /***/ },
-/* 237 */
+/* 240 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26222,10 +26266,10 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxStoreGroup = __webpack_require__(238);
+	var FluxStoreGroup = __webpack_require__(241);
 	
 	var invariant = __webpack_require__(225);
-	var shallowEqual = __webpack_require__(239);
+	var shallowEqual = __webpack_require__(242);
 	
 	var DEFAULT_OPTIONS = {
 	  pure: true,
@@ -26383,7 +26427,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 238 */
+/* 241 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26464,7 +26508,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 239 */
+/* 242 */
 /***/ function(module, exports) {
 
 	/**
@@ -26519,7 +26563,7 @@
 	module.exports = shallowEqual;
 
 /***/ },
-/* 240 */
+/* 243 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26540,8 +26584,8 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxReduceStore = __webpack_require__(241);
-	var Immutable = __webpack_require__(251);
+	var FluxReduceStore = __webpack_require__(244);
+	var Immutable = __webpack_require__(254);
 	
 	var invariant = __webpack_require__(225);
 	
@@ -26669,7 +26713,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 241 */
+/* 244 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26690,9 +26734,9 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxStore = __webpack_require__(242);
+	var FluxStore = __webpack_require__(245);
 	
-	var abstractMethod = __webpack_require__(250);
+	var abstractMethod = __webpack_require__(253);
 	var invariant = __webpack_require__(225);
 	
 	var FluxReduceStore = (function (_FluxStore) {
@@ -26776,7 +26820,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 242 */
+/* 245 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26795,7 +26839,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var _require = __webpack_require__(243);
+	var _require = __webpack_require__(246);
 	
 	var EventEmitter = _require.EventEmitter;
 	
@@ -26959,7 +27003,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 243 */
+/* 246 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -26972,14 +27016,14 @@
 	 */
 	
 	var fbemitter = {
-	  EventEmitter: __webpack_require__(244)
+	  EventEmitter: __webpack_require__(247)
 	};
 	
 	module.exports = fbemitter;
 
 
 /***/ },
-/* 244 */
+/* 247 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26998,11 +27042,11 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var EmitterSubscription = __webpack_require__(245);
-	var EventSubscriptionVendor = __webpack_require__(247);
+	var EmitterSubscription = __webpack_require__(248);
+	var EventSubscriptionVendor = __webpack_require__(250);
 	
-	var emptyFunction = __webpack_require__(249);
-	var invariant = __webpack_require__(248);
+	var emptyFunction = __webpack_require__(252);
+	var invariant = __webpack_require__(251);
 	
 	/**
 	 * @class BaseEventEmitter
@@ -27176,7 +27220,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 245 */
+/* 248 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -27197,7 +27241,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var EventSubscription = __webpack_require__(246);
+	var EventSubscription = __webpack_require__(249);
 	
 	/**
 	 * EmitterSubscription represents a subscription with listener and context data.
@@ -27229,7 +27273,7 @@
 	module.exports = EmitterSubscription;
 
 /***/ },
-/* 246 */
+/* 249 */
 /***/ function(module, exports) {
 
 	/**
@@ -27283,7 +27327,7 @@
 	module.exports = EventSubscription;
 
 /***/ },
-/* 247 */
+/* 250 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -27302,7 +27346,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(248);
+	var invariant = __webpack_require__(251);
 	
 	/**
 	 * EventSubscriptionVendor stores a set of EventSubscriptions that are
@@ -27392,7 +27436,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 248 */
+/* 251 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -27447,7 +27491,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 249 */
+/* 252 */
 /***/ function(module, exports) {
 
 	/**
@@ -27489,7 +27533,7 @@
 	module.exports = emptyFunction;
 
 /***/ },
-/* 250 */
+/* 253 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -27516,7 +27560,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 251 */
+/* 254 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -32503,7 +32547,7 @@
 	}));
 
 /***/ },
-/* 252 */
+/* 255 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -32520,7 +32564,7 @@
 	
 	'use strict';
 	
-	var FluxStoreGroup = __webpack_require__(238);
+	var FluxStoreGroup = __webpack_require__(241);
 	
 	var invariant = __webpack_require__(225);
 	
@@ -32626,7 +32670,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 253 */
+/* 256 */
 /***/ function(module, exports) {
 
 	var HelperUtil = {
@@ -32656,11 +32700,11 @@
 	};
 
 /***/ },
-/* 254 */
+/* 257 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Store = __webpack_require__(236).Store;
-	var SessionConstants = __webpack_require__(228);
+	var Store = __webpack_require__(239).Store;
+	var SessionConstants = __webpack_require__(229);
 	var AppDispatcher = __webpack_require__(222);
 	
 	var SessionStore = new Store(AppDispatcher);
@@ -32697,7 +32741,7 @@
 	module.exports = SessionStore;
 
 /***/ },
-/* 255 */
+/* 258 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -32829,13 +32873,13 @@
 	module.exports = FooterBar;
 
 /***/ },
-/* 256 */
+/* 259 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var RestaurantStore = __webpack_require__(257);
+	var RestaurantStore = __webpack_require__(260);
 	var ApiUtil = __webpack_require__(219);
-	var ImageSideBar = __webpack_require__(258);
+	var ImageSideBar = __webpack_require__(261);
 	
 	var RestaurantShow = React.createClass({
 		displayName: 'RestaurantShow',
@@ -32923,10 +32967,10 @@
 	module.exports = RestaurantShow;
 
 /***/ },
-/* 257 */
+/* 260 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Store = __webpack_require__(236).Store;
+	var Store = __webpack_require__(239).Store;
 	var AppDispatcher = __webpack_require__(222);
 	var RestaurantConstants = __webpack_require__(221);
 	
@@ -32958,7 +33002,7 @@
 	module.exports = RestaurantStore;
 
 /***/ },
-/* 258 */
+/* 261 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -33049,13 +33093,13 @@
 	module.exports = ImageSideBar;
 
 /***/ },
-/* 259 */
+/* 262 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var PropTypes = React.PropTypes;
-	var RestaurantSearchStore = __webpack_require__(235);
-	var IndexItem = __webpack_require__(260);
+	var RestaurantSearchStore = __webpack_require__(238);
+	var IndexItem = __webpack_require__(263);
 	var RestaurantActions = __webpack_require__(220);
 	
 	var SearchIndex = React.createClass({
@@ -33125,7 +33169,7 @@
 	module.exports = SearchIndex;
 
 /***/ },
-/* 260 */
+/* 263 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -33249,14 +33293,14 @@
 	module.exports = IndexItem;
 
 /***/ },
-/* 261 */
+/* 264 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var PropTypes = React.PropTypes;
-	var CuisineSelector = __webpack_require__(262);
-	var RestaurantIndexStore = __webpack_require__(264);
-	var IndexItem = __webpack_require__(260);
+	var CuisineSelector = __webpack_require__(265);
+	var RestaurantIndexStore = __webpack_require__(267);
+	var IndexItem = __webpack_require__(263);
 	var RestaurantIndex = React.createClass({
 		displayName: 'RestaurantIndex',
 	
@@ -33315,12 +33359,12 @@
 	module.exports = RestaurantIndex;
 
 /***/ },
-/* 262 */
+/* 265 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var PropTypes = React.PropTypes;
-	var CuisineStore = __webpack_require__(263);
+	var CuisineStore = __webpack_require__(266);
 	var ApiUtil = __webpack_require__(219);
 	
 	var CuisineSelector = React.createClass({
@@ -33387,13 +33431,13 @@
 	module.exports = CuisineSelector;
 
 /***/ },
-/* 263 */
+/* 266 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Store = __webpack_require__(236).Store;
+	var Store = __webpack_require__(239).Store;
 	var AppDispatcher = __webpack_require__(222);
-	var CuisinesConstants = __webpack_require__(268);
-	var HelperUtil = __webpack_require__(253);
+	var CuisinesConstants = __webpack_require__(227);
+	var HelperUtil = __webpack_require__(256);
 	
 	var CuisineStore = new Store(AppDispatcher);
 	
@@ -33414,13 +33458,13 @@
 	module.exports = CuisineStore;
 
 /***/ },
-/* 264 */
+/* 267 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Store = __webpack_require__(236).Store;
+	var Store = __webpack_require__(239).Store;
 	var AppDispatcher = __webpack_require__(222);
 	var RestaurantConstants = __webpack_require__(221);
-	var HelperUtil = __webpack_require__(253);
+	var HelperUtil = __webpack_require__(256);
 	
 	var _restaurants = [];
 	
@@ -33446,7 +33490,7 @@
 	module.exports = RestaurantIndexPageStore;
 
 /***/ },
-/* 265 */
+/* 268 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -33522,7 +33566,7 @@
 	module.exports = LoginForm;
 
 /***/ },
-/* 266 */
+/* 269 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -33604,14 +33648,14 @@
 	module.exports = SignUpForm;
 
 /***/ },
-/* 267 */
+/* 270 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var PropTypes = React.PropTypes;
 	var ApiUtil = __webpack_require__(219);
-	var LinkedStateMixin = __webpack_require__(231);
-	var CuisineStore = __webpack_require__(263);
+	var LinkedStateMixin = __webpack_require__(234);
+	var CuisineStore = __webpack_require__(266);
 	var CityStore = __webpack_require__(271);
 	
 	var NewRestaurant = React.createClass({
@@ -33770,51 +33814,13 @@
 	module.exports = NewRestaurant;
 
 /***/ },
-/* 268 */
-/***/ function(module, exports) {
-
-	var CuisineConstants = {
-		CUISINES_RECEIVED: "CUISINES_RECEIVED"
-	};
-	
-	module.exports = CuisineConstants;
-
-/***/ },
-/* 269 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var CityConstants = __webpack_require__(270);
-	var AppDispatcher = __webpack_require__(222);
-	
-	var CityActions = {
-		receiveCities: function (cities) {
-			AppDispatcher.dispatch({
-				actionType: CityConstants.CITIES_RECEIVED,
-				cities: cities
-			});
-		}
-	};
-	
-	module.exports = CityActions;
-
-/***/ },
-/* 270 */
-/***/ function(module, exports) {
-
-	var CityConstants = {
-		CITIES_RECEIVED: "CITIES_RECEIVED"
-	};
-	
-	module.exports = CityConstants;
-
-/***/ },
 /* 271 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Store = __webpack_require__(236).Store;
+	var Store = __webpack_require__(239).Store;
 	var AppDispatcher = __webpack_require__(222);
-	var CityConstants = __webpack_require__(270);
-	var HelperUtil = __webpack_require__(253);
+	var CityConstants = __webpack_require__(231);
+	var HelperUtil = __webpack_require__(256);
 	
 	var CityStore = new Store(AppDispatcher);
 	
@@ -33850,16 +33856,100 @@
 
 	var React = __webpack_require__(1);
 	var PropTypes = React.PropTypes;
-	var CuisineStore = __webpack_require__(263);
+	var CuisineStore = __webpack_require__(266);
 	var CityStore = __webpack_require__(271);
+	var ApiUtil = __webpack_require__(219);
+	var LinkedStateMixin = __webpack_require__(234);
 	var RestaurantEditStore = __webpack_require__(273);
 	
 	var EditRestaurant = React.createClass({
 	  displayName: 'EditRestaurant',
 	
+	  mixins: [LinkedStateMixin],
+	
+	  contextTypes: { router: React.PropTypes.object.isRequired },
+	
+	  getInitialState: function () {
+	    return { active: 0, restaurant: {}, cities: [], cuisines: [], changed: { changed: false } };
+	  },
+	
+	  _cuisineChange: function () {
+	    this.setState({ cuisines: CuisineStore.all() });
+	  },
+	
+	  _cityChange: function () {
+	    this.setState({ cities: CityStore.all() });
+	  },
+	
+	  _restaurantChange: function () {
+	    this.setState({ restaurant: RestaurantEditStore.get() });
+	  },
+	
+	  componentDidMount: function () {
+	    this.cuisineToken = CuisineStore.addListener(this._cuisineChange);
+	    this.cityToken = CityStore.addListener(this._cityChange);
+	    this.restaurantToken = RestaurantEditStore.addListener(this._restaurantChange);
+	    ApiUtil.fetchCuisines();
+	    ApiUtil.fetchCities();
+	    ApiUtil.fetchCreatedRestaurant(this.props.params.id);
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.cuisineToken.remove();
+	    this.cityToken.remove();
+	    this.restaurantToken.remove();
+	  },
+	
+	  _selectTab: function (e) {
+	    e.preventDefault();
+	    this.setState({ active: e.target.value });
+	  },
+	
+	  _tabs: function () {
+	    var lis = [];
+	    var lisText = ['Basics', 'Rewards', 'Description'];
+	    var selected;
+	    for (var i = 0; i < 3; i++) {
+	      selected = "";
+	      if (this.state.active === i) {
+	        selected = "selected-tab";
+	      }
+	      lis.push(React.createElement(
+	        'li',
+	        { key: i, id: selected, onClick: this._selectTab, value: i },
+	        lisText[i]
+	      ));
+	    }
+	    return React.createElement(
+	      'ul',
+	      { className: 'edit-restaurant-tabs group' },
+	      lis
+	    );
+	  },
 	
 	  render: function () {
-	    return React.createElement('div', { id: 'edit-restaurant-page' });
+	    var form;
+	    if (this.state.active === 0) {
+	      form = React.createElement('div', null);
+	    } else if (this.state.active === 1) {
+	      form = React.createElement('div', null);
+	    } else if (this.state.active === 2) {
+	      form = React.createElement('div', null);
+	    }
+	    return React.createElement(
+	      'div',
+	      { id: 'edit-restaurant-page' },
+	      React.createElement(
+	        'div',
+	        { id: 'edit-restaurant-page-content' },
+	        this._tabs(),
+	        React.createElement(
+	          'div',
+	          { className: 'edit-restaurant-page-form-wrapper' },
+	          form
+	        )
+	      )
+	    );
 	  }
 	
 	});
@@ -33870,17 +33960,17 @@
 /* 273 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Store = __webpack_require__(236).Store;
+	var Store = __webpack_require__(239).Store;
 	var AppDispatcher = __webpack_require__(222);
 	var RestaurantConstants = __webpack_require__(221);
-	var HelperUtil = __webpack_require__(253);
+	var HelperUtil = __webpack_require__(256);
 	
 	var _restaurant = {};
 	
 	var RestaurantCreateStore = new Store(AppDispatcher);
 	
-	RestaurantCreateStore.all = function () {
-		return extend(true, {}, _restaurant);
+	RestaurantCreateStore.get = function () {
+		return jQuery.extend(true, {}, _restaurant);
 	};
 	
 	RestaurantCreateStore.__onDispatch = function (payload) {
