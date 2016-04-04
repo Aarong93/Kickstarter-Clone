@@ -36,12 +36,15 @@ var Home = React.createClass({
     if (!this.state.restaurant.image_url) {
       return <div id="home-page" />
     }
-
+    var style = {backgroundImage: 'url(' + this.state.restaurant.image_url + ')'};
+    debugger
     return (
       <div id="home-page">
         <div className="home-page-image-wrapper">
-          <img className={this.state.imageClass} src={this.state.restaurant.image_url} onLoad={this._imageReady} />
+          <div className={this.state.imageClass} style={style}>
+          </div>
         </div>
+        <img id="img-timer" onLoad={this._imageReady} src={this.state.restaurant.image_url}/>
       </div>
     );
 	}

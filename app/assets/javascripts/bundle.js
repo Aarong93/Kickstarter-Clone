@@ -36280,15 +36280,17 @@
 			if (!this.state.restaurant.image_url) {
 				return React.createElement('div', { id: 'home-page' });
 			}
-	
+			var style = { backgroundImage: 'url(' + this.state.restaurant.image_url + ')' };
+			debugger;
 			return React.createElement(
 				'div',
 				{ id: 'home-page' },
 				React.createElement(
 					'div',
 					{ className: 'home-page-image-wrapper' },
-					React.createElement('img', { className: this.state.imageClass, src: this.state.restaurant.image_url, onLoad: this._imageReady })
-				)
+					React.createElement('div', { className: this.state.imageClass, style: style })
+				),
+				React.createElement('img', { id: 'img-timer', onLoad: this._imageReady, src: this.state.restaurant.image_url })
 			);
 		}
 	

@@ -36,19 +36,20 @@ cuisines = Cuisine.create([
 	{food: "Americano"},
 	{food: "Barbecue"},
 	{food: "Indian"},
-	{food: "Thai"}
+	{food: "Thai"},
+	{food: "Bar"}
 ])
 
 Restaurant.delete_all
 
 restaurants = Restaurant.create([
-	{user_id: user.id, cuisine_id: cuisines.first.id, title: "Aaron's Pizza", city_id: cities[1].id, blurb: "Pizza!!!", target: 10000, expiration: Date.parse("2016/09/16"), published: true, featured: true, image_url: "http://www.thickslicepizza.com/img/photo3.jpg" },
+	{user_id: user.id, cuisine_id: cuisines.first.id, title: "Aaron's Pizza", city_id: cities[1].id, blurb: "Pizza!!!", target: 10000, expiration: Date.parse("2016/09/16"), published: true, featured: true, image_url: "http://burgerdays.com/wp-content/uploads/2011/03/jackson20burgerfullSMALL.jpg" },
 
-	{user_id: user.id, cuisine_id: cuisines.first.id, title: "Aaron's Burger", city_id: cities[1].id, blurb: "Pizza!!!", target: 10000, expiration: Date.parse("2016/09/16"), published: true, featured: true, image_url: "http://www.thickslicepizza.com/img/photo3.jpg" },
+	{user_id: user.id, cuisine_id: cuisines.first.id, title: "Aaron's Burger", city_id: cities[1].id, blurb: "Pizza!!!", target: 10000, expiration: Date.parse("2016/09/16"), published: true, featured: true, image_url: "http://burgerdays.com/wp-content/uploads/2011/03/jackson20burgerfullSMALL.jpg" },
 
-	{user_id: user.id, cuisine_id: cuisines.first.id, title: "Aaron's Other", city_id: cities[1].id, blurb: "Pizza!!!", target: 10000, expiration: Date.parse("2016/09/16"), published: true, featured: true, image_url: "http://www.thickslicepizza.com/img/photo3.jpg" },
+	{user_id: user.id, cuisine_id: cuisines.first.id, title: "Aaron's Other", city_id: cities[1].id, blurb: "Pizza!!!", target: 10000, expiration: Date.parse("2016/09/16"), published: true, featured: true, image_url: "http://burgerdays.com/wp-content/uploads/2011/03/jackson20burgerfullSMALL.jpg" },
 
-	{user_id: user.id, cuisine_id: cuisines.first.id, title: "Aaron's Test", city_id: cities[1].id, blurb: "Pizza!!!", target: 10000, expiration: Date.parse("2016/09/16"), published: true, featured: true, image_url: "http://www.thickslicepizza.com/img/photo3.jpg" },
+	{user_id: user.id, cuisine_id: cuisines.first.id, title: "Aaron's Test", city_id: cities[1].id, blurb: "Pizza!!!", target: 10000, expiration: Date.parse("2016/09/16"), published: true, featured: true, image_url: "http://burgerdays.com/wp-content/uploads/2011/03/jackson20burgerfullSMALL.jpg" },
 	])
 
 Contribution.delete_all
