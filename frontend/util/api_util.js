@@ -5,12 +5,13 @@ var CityActions = require('../actions/city_actions');
 
 var ApiUtil = {
 
-	fetchRestaurant: function (id) {
+	fetchRestaurant: function (id, callback) {
 		$.ajax({
 			type: "GET",
 			url: "/api/restaurants/" + id,
 			dataType: "json",
 			success: function (restaurant) {
+				callback && callback(restaurant);
 				RestaurantActions.receiveRestaurant(restaurant);
 			}
 		});
@@ -29,10 +30,10 @@ var ApiUtil = {
     });
   },
 
-  patchRestaurant: function (params) {
+  patchRestaurant: function (id, params) {
     $.ajax({
       type: "PATCH",
-      url: "api/restaurants",
+      url: "/api/restaurants/" + id,
       dataType: "json",
       data: {restaurant: params},
       success: function (restaurant) {
@@ -41,16 +42,29 @@ var ApiUtil = {
     });
   },
 
-  fetchCreatedRestaurant: function (id) {
+  fetchCreatedRestaurant: function (id, callback) {
     $.ajax({
       type: "GET",
       url: "/api/restaurants/" + id,
       dataType: "json",
       success: function (restaurant) {
         RestaurantActions.receiveCreatedRestaurant(restaurant);
-       }
+				callback && callback();
+      }
     });
   },
+
+	fetchRestaurantByParams: function (params) {
+		$.ajax({
+			type: "GET",
+			url: "/api/restaurants",
+			dataType: "json",
+			data: params,
+			success: function (restaurant) {
+				RestaurantActions.receiveRestaurant(restaurant);
+			}
+		});
+	},
 
 	fetchRestaurantByNameContain: function (str) {
 		$.ajax({
@@ -120,6 +134,7 @@ var ApiUtil = {
 	    data: {user: info},
 	    success: function(currentUser) {
 	      SessionActions.currentUserReceived(currentUser, callback);
+				callback && callback();
 	    }
 	  });
 	},

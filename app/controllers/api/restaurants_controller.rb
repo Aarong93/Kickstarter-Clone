@@ -9,7 +9,7 @@ class Api::RestaurantsController < ApplicationController
 		@restaurant = Restaurant.find(params[:id])
 		if logged_in_as?(@restaurant.user_id)
 			@restaurant.update(restaurant_params)
-			render :show
+			render :create
 		else
 			render text: "You must be logged in as owner to edit", status: 401
 		end
@@ -32,6 +32,10 @@ class Api::RestaurantsController < ApplicationController
 		elsif params[:cuisine_id]
 			cuisine_id = params[:cuisine_id].to_i
 			@restaurants = Restaurant.includes(:city, :user).with_total.where(cuisine_id: cuisine_id).where(published: true)
+		elsif
+			@restaurants = Restaurant.includes(:city, :user).with_total.where(featured: true).where(published: true)
+			@restaurant = @restaurants.shuffle.first;
+			render :show
 		end
 	end
 
@@ -47,6 +51,7 @@ class Api::RestaurantsController < ApplicationController
       :target,
       :expiration,
       :published,
+			:image_url
     )
   end
 

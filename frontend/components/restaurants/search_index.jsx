@@ -36,7 +36,7 @@ var SearchIndex = React.createClass({
 				</div>
 			);
     }
-  
+
 		var restaurants = this.state.restaurants.map(function (restaurant) {
 			return (
 				<div key={restaurant.id} className="index-item-wrapper-small">

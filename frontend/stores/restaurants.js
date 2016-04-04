@@ -2,20 +2,20 @@ var Store = require('flux/utils').Store;
 var AppDispatcher = require('../dispatcher/dispatcher');
 var RestaurantConstants = require('../constants/restaurant_constants');
 
-var _restaurants = {};
+var _restaurant = {};
 
 var RestaurantStore = new Store(AppDispatcher);
 
 var _addRestaurant = function (restaurant) {
-	_restaurants[restaurant.id] = restaurant;
+	_restaurant = restaurant;
 };
 
-RestaurantStore.all = function () {
-	return jQuery.extend(true, {}, _restaurants);
+RestaurantStore.get = function () {
+	return jQuery.extend(true, {}, _restaurant);
 };
 
-RestaurantStore.find = function (id) {
-	return _restaurants[id];
+RestaurantStore.find = function () {
+	return _restaurant;
 };
 
 RestaurantStore.__onDispatch = function (payload) {

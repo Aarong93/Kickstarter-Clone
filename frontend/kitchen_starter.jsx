@@ -15,6 +15,7 @@ var LoginForm = require('./components/users/login_form.jsx');
 var SignUpForm = require('./components/users/sign_up_form');
 var RestaurantNew = require('./components/restaurants/new_restaurant');
 var RestaurantEdit = require('./components/restaurants/edit_restaurant');
+var Home = require('./components/restaurants/home');
 
 var SessionStore = require('./stores/session_store');
 var ApiUtil = require('./util/api_util');
@@ -32,12 +33,12 @@ var App = React.createClass({
       </div>
     );
   }
-
 });
 
 var router = (
  <Router history={browserHistory} onUpdate={_onUpdate}>
    <Route path="/" component={App} onEnter={_onLoad}>
+     <IndexRoute component={Home}/>
      <Route path="/session/new" component={LoginForm} onEnter={_alreadyLoggedIn}/>
      <Route path="/users/new" component={SignUpForm} onEnter={_alreadyLoggedIn}/>
 		 <Route path="/restaurants" component={RestaurantIndex} />

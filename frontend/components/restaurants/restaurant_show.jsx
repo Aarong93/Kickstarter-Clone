@@ -16,11 +16,17 @@ var RestaurantShow = React.createClass({
 
 	componentDidMount: function () {
 		this.listenerToken = RestaurantStore.addListener(this._onChange);
-		ApiUtil.fetchRestaurant(parseInt(this.props.params.id));
+		ApiUtil.fetchRestaurant(parseInt(this.props.params.id), this.redirectIfNotPublished);
 	},
 
 	componentWillReceiveProps: function (newProps) {
 		ApiUtil.fetchRestaurant(parseInt(newProps.params.id));
+	},
+
+	redirectIfNotPublished: function (restaurant) {
+		if (!restaurant.published){
+			this.context.router.push('/');
+		}
 	},
 
 	_onChange: function () {

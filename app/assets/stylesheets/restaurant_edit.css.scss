@@ -8,10 +8,13 @@
   width: 800px;
   margin: auto;
   padding-top: 50px;
+  padding-bottom: 60px;
 }
 
 .edit-restaurant-tabs {
-  width: 604px;
+  width: 535px;
+  margin-right: 0;
+  display: inline-block;
   border-radius: 7px;
   overflow: hidden;
   border: 1px solid #d9d9de;
@@ -23,10 +26,36 @@
 .edit-restaurant-tabs > li {
   float: left;
   text-align: center;
-  width: 160px;
+  width: 137px;
   padding: 20px;
   background-color: #fff;
   border-right: 1px solid #d9d9de;
+}
+
+.launch-button {
+  float: right;
+  display: block;
+  background-color: #fff;
+  font-weight: bold;
+  text-align: center;
+  width: 120px;
+  padding: 19px;
+  border-radius: 5px;
+  border: 1px solid #d9d9de;
+}
+
+.launch-button:hover {
+  cursor: pointer;
+  background-color: #F1F1F1;
+}
+
+#disabled-launch {
+  opacity: .33;
+}
+
+#disabled-launch:hover {
+  cursor: default;
+  background-color: #fff;
 }
 
 .edit-restaurant-tabs > li:hover {
@@ -36,4 +65,111 @@
 
 #selected-tab {
   background-color: #F1F1F1
+}
+
+.edit-restaurant-page-form-wrapper {
+  border-radius: 10px;
+  margin: auto;
+  width: 552px;
+  margin-top: 50px;
+  border: 1px solid #d9d9de;
+  background-color: #fff;
+  padding: 25px;
+
+}
+
+.edit-form > label {
+  display: block;
+  padding: 20px;
+  font-size: 14px;
+  margin: 5px;
+  width: 500px;
+  float: left;
+  background-color: #f7fafa;
+  font-weight: bold;
+  border: 1px solid #d9d9de;
+  border-radius: 5px;
+}
+
+.edit-form > label > input,  .edit-form > label > textarea{
+  padding: 5px;
+  outline: none;
+  font-weight: normal;
+  border: 1px solid #d9d9de;
+  border-radius: 4px;
+  margin-left: 20px;
+  width: 300px;
+  float: right;
+}
+
+.edit-form > label > textarea {
+  height: 120px;
+}
+
+#description-textbox {
+  height: 400px;
+  width: 380px;
+}
+
+.save-button {
+  float: right;
+  padding: 20px;
+  margin-top: 10px;
+  background-color: #2BDE73;
+  border-radius: 5px;
+  color: #fff;
+  margin-right: 4px;
+}
+
+.save-button:hover {
+  cursor: pointer;
+  background-color: #1db95c;
+}
+
+#disabled-save-button {
+  opacity: .33;
+
+  background-color: #2BDE73;
+}
+
+#disabled-save-button:hover{
+  cursor: default;
+  background-color: #2BDE73;
+}
+
+.discard-button {
+  float: right;
+  padding: 20px;
+  margin-top: 10px;
+  background-color: #fd003b;
+  border-radius: 5px;
+  color: #fff;
+  margin-right: 10px;
+}
+
+.discard-button:hover {
+  cursor: pointer;
+  background-color: #e40035;
+}
+
+
+#disabled-discard-button {
+  opacity: .33;
+  background-color: #fd003b;
+}
+
+#disabled-discard-button:hover{
+  cursor: default;
+  background-color: #fd003b;
+}
+
+#modal-x {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+#modal-header {
+  text-align: center;
+  font-weight: bold;
 }
