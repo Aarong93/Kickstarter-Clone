@@ -10,34 +10,64 @@ var SignUpForm = React.createClass({
     return {
       email: "",
       name: "",
-      password: ""
+      password: "",
+			showError: false,
+			errorMessage: ""
     };
   },
 
+	_error: function () {
+		if (!this.state.showError){
+			return (<div></div>);
+		}
+		var messages =
+			this.state.errorMessage.map(function (message) {
+				return (<div key={message}><p>{message}</p><br /></div>);
+			});
+
+		return (
+			<div className="errors">
+				{messages}
+			</div>
+		);
+	},
+
+	_showError: function (errorMessage) {
+		this.setState({
+			showError: true,
+			errorMessage: errorMessage.responseJSON
+		});
+	},
+
   render: function() {
     return (
-      <div>
-        <h1>Please Sign Up</h1>
+      <div className="login-page">
 
-        <form onSubmit={this.handleSubmit}>
-          <label htmlFor="email">Email</label>
-          <input onChange={this.updateEmail} type="text" value={this.state.email}/>
+				<div className="login-form-wrapper">
+					<h1>Sign up</h1>
+	        <form onSubmit={this.handleSubmit}>
+	          <label htmlFor="email"></label>
+	          <input placeholder="Email" onChange={this.updateEmail} type="text" value={this.state.email}/>
 
-          <label htmlFor="email">Name</label>
-          <input onChange={this.updateName} type="text" value={this.state.name}/>
+	          <label htmlFor="name"></label>
+	          <input placeholder="Name" onChange={this.updateName} type="text" value={this.state.name}/>
 
-          <label htmlFor="password">Password</label>
-          <input onChange={this.updatePassword} type="password" value={this.state.password}/>
-
-          <button>Submit</button>
-        </form>
-      </div>
+	          <label htmlFor="password"></label>
+	          <input placeholder="Password" onChange={this.updatePassword} type="password" value={this.state.password}/>
+						{this._error()}
+	          <button id="log-in-button" className="submit-new-restaurant">
+							Sign me up!
+						</button>
+	        </form>
+				</div>
+			</div>
     );
   },
 
   handleSubmit: function(e) {
     e.preventDefault();
-    ApiUtil.createUser(this.state, this.context.router.goBack.bind(this));
+		this.setState({showError: false});
+    ApiUtil.createUser(this.state, this.context.router.goBack.bind(this), this._showError);
   },
 
   updateEmail: function(e) {

@@ -6,39 +6,59 @@ var LoginForm = React.createClass({
     router: React.PropTypes.object.isRequired
   },
 
-  getInitialState: function() {
+  getInitialState: function () {
     return {
       email: "",
-      password: ""
+      password: "",
+			showError: false
     };
   },
 
-  render: function() {
+	_error: function () {
+		if (!this.state.showError){
+			return (<div></div>);
+		}
+		return (
+			<div className="errors">
+				Invalid Email Address or Password
+			</div>
+		);
+	},
+
+	_showError: function () {
+		this.setState({showError: true});
+	},
+
+  render: function () {
     return (
-      <div>
-        <h1>Please Log in</h1>
+      <div className="login-page">
+				<div className="login-form-wrapper">
+					<h1> Log in</h1>
+	        <form onSubmit={this.handleSubmit}>
+	          <label htmlFor="email"></label>
+	          <input placeholder="Email" onChange={this.updateEmail} type="text" value={this.state.email}/>
 
-        <form onSubmit={this.handleSubmit}>
-          <label htmlFor="email">Email</label>
-          <input onChange={this.updateEmail} type="text" value={this.state.email}/>
-
-          <label htmlFor="password">Password</label>
-          <input onChange={this.updatePassword} type="password" value={this.state.password}/>
-
-          <button>Submit</button>
-        </form>
+	          <label htmlFor="password"></label>
+	          <input placeholder="Password" onChange={this.updatePassword} type="password" value={this.state.password}/>
+						{this._error()}
+	          <button id="log-in-button" className="submit-new-restaurant">
+							Log me in!
+						</button>
+	        </form>
+				</div>
       </div>
     );
   },
 
   handleSubmit: function(e) {
     e.preventDefault();
+		this.setState({showError: false});
     var nextRoute = this.props.location.query.nextRoute;
     if (nextRoute) {
-      ApiUtil.login(this.state, this.context.router.push.bind(this, nextRoute));
+      ApiUtil.login(this.state, this.context.router.push.bind(this, nextRoute), this._showError);
     }
     else {
-      ApiUtil.login(this.state, this.context.router.goBack.bind(this));
+      ApiUtil.login(this.state, this.context.router.goBack.bind(this), this._showError);
     }
   },
 

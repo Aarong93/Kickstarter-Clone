@@ -56,20 +56,28 @@
 .cuisine-selector-area > ul {
   font-weight: bold;
   font-size: 14px;
+	width: 95px;
 }
 
 .cuisine-selector-area > ul > li {
   padding: 15px;
+	display: inline-block;
 }
+
 
 .cuisine-selector-area > ul > li:hover {
   cursor: pointer;
-  color:  #27D417;
+  color:  #469E3E;
 }
 
-.selected-cuisine-home {
+#selected-cuisine-home {
     color: #27D417;
 }
+
+#selected-cuisine-home:hover {
+    color: #27D417;
+}
+
 
 .project-index-item-area {
   text-align: left;

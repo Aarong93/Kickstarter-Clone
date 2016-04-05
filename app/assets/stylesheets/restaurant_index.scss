@@ -31,7 +31,7 @@
 }
 
 .cuisine-selection-item:hover {
-  background-color: #CCD5FF;
+  background-color: #EBEFFF;
   cursor: pointer;
 }
 
@@ -42,4 +42,5 @@
 
 .selected:hover {
 	cursor: default;
+	background-color: #CCD5FF;
 }

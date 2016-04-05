@@ -8,7 +8,7 @@ class Api::UsersController < ApplicationController
       log_in!(@user)
       render json: @user
     else
-      render json: { message: "Invalid User Info!"}, status: 401
+      render text: @user.errors.full_messages, status: 401
     end
 
   end

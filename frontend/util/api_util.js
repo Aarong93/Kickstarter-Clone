@@ -118,7 +118,7 @@ var ApiUtil = {
 		});
 	},
 
-	login: function(credentials, callback) {
+	login: function(credentials, callback, failCallback) {
 		$.ajax({
 			type: "POST",
 			url: "/api/session",
@@ -127,6 +127,9 @@ var ApiUtil = {
 			success: function(currentUser) {
 				SessionActions.currentUserReceived(currentUser);
 				callback && callback();
+			},
+			error: function () {
+				failCallback && failCallback();
 			}
 		});
 	},
@@ -143,16 +146,19 @@ var ApiUtil = {
 		});
 	},
 
-	createUser: function (info, callback) {
+	createUser: function (info, callback, failCallback) {
 	  $.ajax({
 	    type: "POST",
 	    url: "/api/users",
 	    dataType: "json",
 	    data: {user: info},
-	    success: function(currentUser) {
+	    success: function (currentUser) {
 	      SessionActions.currentUserReceived(currentUser, callback);
 				callback && callback();
-	    }
+	    },
+			error: function (errors) {
+				failCallback && failCallback(errors);
+			}
 	  });
 	},
 

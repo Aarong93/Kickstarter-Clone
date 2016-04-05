@@ -74,7 +74,7 @@ var Home = React.createClass({
         if (this.state.selected.id === cuisine.id) {
           klass = "selected-cuisine-home";
         }
-        return (<li className={klass} onClick={this._selectCuisine.bind(this, cuisine)} key={cuisine.id}>{cuisine.food}</li>)
+        return (<li id={klass} onClick={this._selectCuisine.bind(this, cuisine)} key={cuisine.id}>{cuisine.food}</li>)
       }.bind(this));
     }
     var indexRestaurants = <div></div>;

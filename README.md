@@ -6,8 +6,9 @@
 
 ## Minimum Viable Product
 
-KitchenStarter is a web application inspired by KickStarter built using Ruby on Rails
-and React.js. KitchenStarter allows users to:
+KitchenStarter is a web application inspired by KickStarter built using Ruby on Rails and React.js. Users can get seed money for new restaurants!
+
+KitchenStarter allows users to:
 
 - [ ] Create an account
 - [ ] Log in / Log out
