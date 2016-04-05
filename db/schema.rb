@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160405152255) do
+ActiveRecord::Schema.define(version: 20160405161406) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,19 +40,23 @@ ActiveRecord::Schema.define(version: 20160405152255) do
   end
 
   create_table "restaurants", force: :cascade do |t|
-    t.integer  "user_id",     null: false
-    t.integer  "cuisine_id",  null: false
-    t.string   "title",       null: false
+    t.integer  "user_id",            null: false
+    t.integer  "cuisine_id",         null: false
+    t.string   "title",              null: false
     t.integer  "city_id"
     t.text     "blurb"
     t.string   "description"
     t.integer  "target"
     t.date     "expiration"
-    t.boolean  "published",   null: false
+    t.boolean  "published",          null: false
     t.boolean  "featured"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "image_url"
+    t.string   "image_file_name"
+    t.string   "image_content_type"
+    t.integer  "image_file_size"
+    t.datetime "image_updated_at"
   end
 
   add_index "restaurants", ["city_id"], name: "index_restaurants_on_city_id", using: :btree

@@ -77,7 +77,12 @@ var EditRestaurant = React.createClass({
   },
 
   _save: function () {
-    ApiUtil.patchRestaurant(this.state.restaurant.id, this.refs.curForm.data());
+		if (this.state.active === 0) {
+			ApiUtil.patchRestaurantWithImage(this.state.restaurant.id, this.refs.curForm.data())
+		}
+		else {
+	    ApiUtil.patchRestaurant(this.state.restaurant.id, this.refs.curForm.data());
+		}
     this.refs.curForm.setState({changed: false});
   },
 
@@ -115,8 +120,8 @@ var EditRestaurant = React.createClass({
   },
 
   _saveModal: function () {
+		this._save()
     this.closeModal();
-    this._save()
     this.setState({active: this.state.clickedTab});
   },
 

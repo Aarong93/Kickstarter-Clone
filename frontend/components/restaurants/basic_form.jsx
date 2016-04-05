@@ -13,21 +13,31 @@ var BasicForm = React.createClass({
     return {
       changed: false,
       title: this.props.restaurant.title,
-      image_url: this.props.restaurant.image_url || "",
+      imageUrl: this.props.restaurant.image_url || null,
+			imageFile: null,
       blurb: this.props.restaurant.blurb || "" ,
       expiration: this.props.restaurant.expiration || "",
       target: this.props.restaurant.target || "",
+			imageClass: "hide-image"
     }
   },
 
+	_imageReady: function () {
+		this.setState({imageClass: "show-image"});
+	},
+
   data: function () {
-    return ({
-      title: this.state.title,
-      image_url: this.state.image_url,
-      blurb: this.state.blurb,
-      expiration: this.state.expiration,
-      target: this.state.target
-    });
+		var formData = new FormData();
+
+		formData.append("restaurant[title]", this.state.title);
+		if (this.state.imageFile) {
+					formData.append("restaurant[image]", this.state.imageFile);
+		}
+		formData.append("restaurant[blurb]", this.state.blurb);
+		formData.append("restaurant[expiration]", this.state.expiration);
+		formData.append("restaurant[target]", this.state.target);
+
+    return (formData);
   },
 
   _setChanged: function () {
@@ -37,6 +47,18 @@ var BasicForm = React.createClass({
   _discardChanges: function () {
     this.setState(this.getInitialState());
   },
+
+	handleFileChange: function (e) {
+		var file = e.currentTarget.files[0];
+		var reader = new FileReader();
+
+		reader.onloadend = function () {
+			var result = reader.result;
+			this.setState({ imageFile: file, imageUrl: result, changed: true });
+		}.bind(this);
+
+		reader.readAsDataURL(file);
+	},
 
   render: function() {
     var saveButton = <div id="disabled-save-button" className="save-button">Save Changes</div>;
@@ -51,8 +73,15 @@ var BasicForm = React.createClass({
         <label>Title
           <input type="text" onInput={this._setChanged} valueLink={this.linkState('title')} />
         </label>
-        <label>Image URL
-          <input type="text" onInput={this._setChanged} valueLink={this.linkState('image_url')} />
+        <label>Image
+					<input id="file-input"
+						type="file"
+						onChange={this.handleFileChange}
+						/>
+					<h3 id="current-image-label">Current Image</h3>
+					<img onLoad={this._imageReady}
+						className={this.state.imageClass}
+						src={this.state.imageUrl} />
         </label>
         <label>Blurb
           <textarea onInput={this._setChanged} valueLink={this.linkState('blurb')} />

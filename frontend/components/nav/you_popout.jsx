@@ -25,7 +25,7 @@ var YouPopout = React.createClass({
 					<ul>
 						<li>Backed Projects</li>
 					</ul>
-					<p>Signed in as <span id="logged-in-name">{this.props.name}</span></p>
+					<p>Signed in as<br /> <span id="logged-in-name">{this.props.name}</span></p>
 					<a href="#" onClick={this._signOut}>Sign Out</a>
 				</div>
 			</div>

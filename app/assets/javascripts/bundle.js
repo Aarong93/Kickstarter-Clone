@@ -25063,7 +25063,9 @@
 					React.createElement(
 						'p',
 						null,
-						'Signed in as ',
+						'Signed in as',
+						React.createElement('br', null),
+						' ',
 						React.createElement(
 							'span',
 							{ id: 'logged-in-name' },
@@ -25156,6 +25158,20 @@
 				success: function (restaurant) {
 					RestaurantActions.receiveCreatedRestaurant(restaurant);
 					callback && callback("/restaurants/edit/" + restaurant.id);
+				}
+			});
+		},
+	
+		patchRestaurantWithImage: function (id, params) {
+			$.ajax({
+				type: "PATCH",
+				url: "/api/restaurants/" + id,
+				dataType: "json",
+				processData: false,
+				contentType: false,
+				data: params,
+				success: function (restaurant) {
+					RestaurantActions.receiveCreatedRestaurant(restaurant);
 				}
 			});
 		},
@@ -34019,7 +34035,11 @@
 	  },
 	
 	  _save: function () {
-	    ApiUtil.patchRestaurant(this.state.restaurant.id, this.refs.curForm.data());
+	    if (this.state.active === 0) {
+	      ApiUtil.patchRestaurantWithImage(this.state.restaurant.id, this.refs.curForm.data());
+	    } else {
+	      ApiUtil.patchRestaurant(this.state.restaurant.id, this.refs.curForm.data());
+	    }
 	    this.refs.curForm.setState({ changed: false });
 	  },
 	
@@ -34057,8 +34077,8 @@
 	  },
 	
 	  _saveModal: function () {
-	    this.closeModal();
 	    this._save();
+	    this.closeModal();
 	    this.setState({ active: this.state.clickedTab });
 	  },
 	
@@ -34205,21 +34225,31 @@
 	    return {
 	      changed: false,
 	      title: this.props.restaurant.title,
-	      image_url: this.props.restaurant.image_url || "",
+	      imageUrl: this.props.restaurant.image_url || null,
+	      imageFile: null,
 	      blurb: this.props.restaurant.blurb || "",
 	      expiration: this.props.restaurant.expiration || "",
-	      target: this.props.restaurant.target || ""
+	      target: this.props.restaurant.target || "",
+	      imageClass: "hide-image"
 	    };
 	  },
 	
+	  _imageReady: function () {
+	    this.setState({ imageClass: "show-image" });
+	  },
+	
 	  data: function () {
-	    return {
-	      title: this.state.title,
-	      image_url: this.state.image_url,
-	      blurb: this.state.blurb,
-	      expiration: this.state.expiration,
-	      target: this.state.target
-	    };
+	    var formData = new FormData();
+	
+	    formData.append("restaurant[title]", this.state.title);
+	    if (this.state.imageFile) {
+	      formData.append("restaurant[image]", this.state.imageFile);
+	    }
+	    formData.append("restaurant[blurb]", this.state.blurb);
+	    formData.append("restaurant[expiration]", this.state.expiration);
+	    formData.append("restaurant[target]", this.state.target);
+	
+	    return formData;
 	  },
 	
 	  _setChanged: function () {
@@ -34228,6 +34258,18 @@
 	
 	  _discardChanges: function () {
 	    this.setState(this.getInitialState());
+	  },
+	
+	  handleFileChange: function (e) {
+	    var file = e.currentTarget.files[0];
+	    var reader = new FileReader();
+	
+	    reader.onloadend = function () {
+	      var result = reader.result;
+	      this.setState({ imageFile: file, imageUrl: result, changed: true });
+	    }.bind(this);
+	
+	    reader.readAsDataURL(file);
 	  },
 	
 	  render: function () {
@@ -34266,8 +34308,19 @@
 	      React.createElement(
 	        'label',
 	        null,
-	        'Image URL',
-	        React.createElement('input', { type: 'text', onInput: this._setChanged, valueLink: this.linkState('image_url') })
+	        'Image',
+	        React.createElement('input', { id: 'file-input',
+	          type: 'file',
+	          onChange: this.handleFileChange
+	        }),
+	        React.createElement(
+	          'h3',
+	          { id: 'current-image-label' },
+	          'Current Image'
+	        ),
+	        React.createElement('img', { onLoad: this._imageReady,
+	          className: this.state.imageClass,
+	          src: this.state.imageUrl })
 	      ),
 	      React.createElement(
 	        'label',

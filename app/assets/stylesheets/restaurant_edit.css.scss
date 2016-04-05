@@ -91,6 +91,18 @@
   border-radius: 5px;
 }
 
+#file-input {
+	width: 400px;
+	background-color: #fff;
+}
+
+.edit-form > label > img {
+	margin: auto;
+	margin-top: 20px;
+	width: 300px;
+	height: 200px;
+	border-radius: 5px;
+}
 .edit-form > label > input,  .edit-form > label > textarea{
   padding: 5px;
   outline: none;
@@ -100,6 +112,12 @@
   margin-left: 20px;
   width: 300px;
   float: right;
+}
+
+#current-image-label {
+	text-align: center;
+	display: block;
+	margin-top: 40px;
 }
 
 .edit-form > label > textarea {

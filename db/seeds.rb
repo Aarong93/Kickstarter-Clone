@@ -44,9 +44,11 @@ Restaurant.delete_all
 
 restaurants = []
 
+file = File.open('app/assets/images/burger.jpg')
+
 400.times do |i|
 	target = 10000 + rand(50000)
-	restaurants.push(Restaurant.create({user_id: user.id, cuisine_id: cuisines.shuffle.first.id, title: "Seed#{i}", city_id: cities[1].id, blurb: "Seed Seed Seed !!!", target: target, expiration: Date.parse("2016/09/16"), published: true, featured: true, image_url: "http://burgerdays.com/wp-content/uploads/2011/03/jackson20burgerfullSMALL.jpg" },))
+	restaurants.push(Restaurant.create({user_id: user.id, cuisine_id: cuisines.shuffle.first.id, title: "Seed#{i}", city_id: cities[1].id, blurb: "Seed Seed Seed !!!", target: target, expiration: Date.parse("2016/09/16"), published: true, featured: true}))
 end
 
 Contribution.delete_all

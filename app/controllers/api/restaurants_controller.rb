@@ -2,7 +2,7 @@ class Api::RestaurantsController < ApplicationController
 	before_action :ensure_logged_in, only: :create
 
 	def show
-		@restaurant = Restaurant.with_total.find(params[:id])
+		@restaurant = Restaurant.with_total.includes(:city, :rewards, :user).find(params[:id])
 		if !@restaurant.published && !params[:edit]
 			render text: "This restaurant is not public yet", status: 400
 		elsif params[:edit] && current_user.id != @restaurant.user_id
@@ -30,6 +30,7 @@ class Api::RestaurantsController < ApplicationController
   end
 
 	def index
+
 		if params[:cuisine_id] && params[:featured]
 			@restaurants = Restaurant.includes(:city, :user).with_total.where(featured: true).where(published: true).where(cuisine_id: params[:cuisine_id])
 			if @restaurants
@@ -40,12 +41,12 @@ class Api::RestaurantsController < ApplicationController
 		elsif params[:str]
 			str = params[:str]
 			str = str.split.map(&:capitalize).join(' ')
-			@restaurants = Restaurant.includes(:city, :user).with_total.where("title LIKE ?", "%#{str}%").where(published: true).limit(3)
+			@restaurants = Restaurant.includes(:city, :user).with_total.where("title LIKE ?", "%#{str}%").where(published: true).where("expiration > NOW()").limit(3)
 		elsif params[:cuisine_id]
 			cuisine_id = params[:cuisine_id].to_i
-			@restaurants = Restaurant.includes(:city, :user).with_total.where(cuisine_id: cuisine_id).where(published: true)
+			@restaurants = Restaurant.includes(:city, :user).with_total.where(cuisine_id: cuisine_id).where(published: true).where("expiration > NOW()")
 		elsif params[:featured]
-			@restaurants = Restaurant.includes(:city, :user).with_total.where(featured: true).where(published: true)
+			@restaurants = Restaurant.includes(:city, :user).with_total.where(featured: true).where(published: true).where("expiration > NOW()")
 			@restaurant = @restaurants.shuffle.first;
 			render :show
 		else
@@ -67,7 +68,8 @@ class Api::RestaurantsController < ApplicationController
       :target,
       :expiration,
       :published,
-			:image_url
+			:image_url,
+			:image
     )
   end
 

@@ -28,6 +28,11 @@ gem 'font-awesome-sass', '~> 4.5.0'
 
 gem 'faker'
 
+gem 'figaro'
+
+gem 'aws-sdk', '>= 2.0'
+
+gem "paperclip", '5.0.0.beta1'
 # Use Unicorn as the app server
 # gem 'unicorn'
 

@@ -32,17 +32,31 @@ var ApiUtil = {
     });
   },
 
-  patchRestaurant: function (id, params) {
+  patchRestaurantWithImage: function (id, params) {
     $.ajax({
       type: "PATCH",
       url: "/api/restaurants/" + id,
       dataType: "json",
-      data: {restaurant: params},
+			processData: false,
+			contentType: false,
+      data: params,
       success: function (restaurant) {
         RestaurantActions.receiveCreatedRestaurant(restaurant);
       }
     });
   },
+
+	patchRestaurant: function (id, params) {
+		$.ajax({
+			type: "PATCH",
+			url: "/api/restaurants/" + id,
+			dataType: "json",
+			data: {restaurant: params},
+			success: function (restaurant) {
+				RestaurantActions.receiveCreatedRestaurant(restaurant);
+			}
+		});
+	},
 
   fetchCreatedRestaurant: function (id, callback) {
     $.ajax({
