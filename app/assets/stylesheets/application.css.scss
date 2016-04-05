@@ -260,6 +260,14 @@ header {
 	width: 100%;
 }
 
+.you-popout-col > ul > li {
+	margin-top: 10px;
+}
+
+.you-popout-col > ul > li:first-child {
+	margin-top: 0px;
+}
+
 .you-popout-col > a {
 	float: left;
 	padding: 5px;

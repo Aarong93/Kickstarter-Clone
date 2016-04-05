@@ -23,7 +23,8 @@ var YouPopout = React.createClass({
 				<div className="you-popout-col group">
 					<h3>Your Links</h3>
 					<ul>
-						<li>Backed Projects</li>
+						<li>Backed Restaurants</li>
+						<li>Your Restaurants</li>
 					</ul>
 					<p>Signed in as<br /> <span id="logged-in-name">{this.props.name}</span></p>
 					<a href="#" onClick={this._signOut}>Sign Out</a>

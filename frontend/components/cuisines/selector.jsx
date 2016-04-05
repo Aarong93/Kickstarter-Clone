@@ -7,11 +7,13 @@ var ApiUtil = require('../../util/api_util');
 var CuisineSelector = React.createClass({
 
 	getInitialState: function () {
-		return {cuisines: [], selected: this.props.selected || {}};
+		return {cuisines: [], selected: 0};
 	},
 
 	handleChange: function () {
-		this.setState({cuisines: CuisineStore.all()});
+		var selected = this.props.selected;
+		selected = selected || CuisineStore.all()[0];
+		this.setState({cuisines: CuisineStore.all()}, this.select(selected));
 	},
 
 	select: function(cuisine) {
@@ -48,7 +50,7 @@ var CuisineSelector = React.createClass({
      if (item.id === this.state.selected.id) {
        selected = "selected";
      }
-		 items.push(<div key={item.id} className={"cuisine-selection-item " + selected} onClick={this.select.bind(null, item)}>
+		 items.push(<div key={item.id} className={"cuisine-selection-item " + selected} onClick={this.select.bind(this, item)}>
 				<span>{item.food}</span>
 		 </div>);
 	  }

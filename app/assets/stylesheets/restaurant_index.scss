@@ -1,5 +1,6 @@
 .restaurant-index-page {
 	background-color: #F9FBFF;
+	padding-bottom: 20px;
 }
 
 .restaurant-index {
@@ -43,4 +44,31 @@
 .selected:hover {
 	cursor: default;
 	background-color: #CCD5FF;
+}
+
+.load-more-button {
+	padding: 20px 10px;
+	background: #fff;
+	border-color: #828587;
+	color: #828587;
+	border-style: solid;
+	border-width: 2px;
+	border-radius: 4px;
+	display: block;
+	text-align: center;
+	margin: auto;
+	width: 100px;
+}
+
+
+.load-more-button:hover {
+	cursor: pointer;
+}
+
+.disabled {
+	opacity: .33;
+}
+
+.disabled:hover {
+	cursor: default;
 }

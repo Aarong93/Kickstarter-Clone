@@ -30,8 +30,7 @@ var LoginForm = React.createClass({
 	},
 
 	_loginGuest: function (e) {
-		this.setState({email: "guest@gmail.com", password: 'password'});
-		setTimeout(this.handleSubmit.bind(this, e), 250);
+		this.setState({email: "guest@gmail.com", password: 'password'}, this.handleSubmit.bind(this, e));
 	},
 
   render: function () {

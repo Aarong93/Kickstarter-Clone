@@ -25057,7 +25057,12 @@
 						React.createElement(
 							'li',
 							null,
-							'Backed Projects'
+							'Backed Restaurants'
+						),
+						React.createElement(
+							'li',
+							null,
+							'Your Restaurants'
 						)
 					),
 					React.createElement(
@@ -25239,12 +25244,12 @@
 			});
 		},
 	
-		fetchRestaurantsByCuisine: function (cuisine_id) {
+		fetchRestaurantsByCuisine: function (cuisine_id, number) {
 			$.ajax({
 				type: "GET",
 				url: "/api/restaurants",
 				dataType: "json",
-				data: { cuisine_id: cuisine_id },
+				data: { cuisine_id: cuisine_id, per: number },
 				success: function (restaurants) {
 					RestaurantActions.receiveIndexRestaurants(restaurants);
 				}
@@ -25368,7 +25373,8 @@
 		receiveIndexRestaurants: function (restaurants) {
 			AppDispatcher.dispatch({
 				actionType: RestaurantConstants.RESTAURANT_INDEX_RECEIVED,
-				restaurants: restaurants
+				restaurants: restaurants.search_results,
+				meta: restaurants.meta
 			});
 		},
 	
@@ -33362,6 +33368,8 @@
 	var CuisineSelector = __webpack_require__(265);
 	var RestaurantIndexStore = __webpack_require__(267);
 	var IndexItem = __webpack_require__(263);
+	var ApiUtil = __webpack_require__(219);
+	
 	var RestaurantIndex = React.createClass({
 		displayName: 'RestaurantIndex',
 	
@@ -33382,6 +33390,11 @@
 			this.setState({ restaurants: RestaurantIndexStore.all() });
 		},
 	
+		nextPage: function () {
+			var meta = RestaurantIndexStore.meta();
+			ApiUtil.fetchRestaurantsByCuisine(meta.query, meta.per + 9);
+		},
+	
 		render: function () {
 			var restaurants;
 	
@@ -33399,9 +33412,14 @@
 				});
 			}
 	
+			var loadMoreClass = "";
+	
+			if (RestaurantIndexStore.all().length >= RestaurantIndexStore.meta().total_count) {
+				loadMoreClass = "disabled";
+			}
 			return React.createElement(
 				'div',
-				{ className: 'restaurant-index-page' },
+				{ className: 'restaurant-index-page group' },
 				React.createElement(
 					'div',
 					{ className: 'restaurant-index group' },
@@ -33411,6 +33429,11 @@
 						{ className: 'restaurant-index-holder group' },
 						restaurants
 					)
+				),
+				React.createElement(
+					'div',
+					{ className: loadMoreClass + " load-more-button", onClick: this.nextPage },
+					'Load More'
 				)
 			);
 		}
@@ -33433,11 +33456,13 @@
 	
 	
 		getInitialState: function () {
-			return { cuisines: [], selected: this.props.selected || {} };
+			return { cuisines: [], selected: 0 };
 		},
 	
 		handleChange: function () {
-			this.setState({ cuisines: CuisineStore.all() });
+			var selected = this.props.selected;
+			selected = selected || CuisineStore.all()[0];
+			this.setState({ cuisines: CuisineStore.all() }, this.select(selected));
 		},
 	
 		select: function (cuisine) {
@@ -33476,7 +33501,7 @@
 				}
 				items.push(React.createElement(
 					'div',
-					{ key: item.id, className: "cuisine-selection-item " + selected, onClick: this.select.bind(null, item) },
+					{ key: item.id, className: "cuisine-selection-item " + selected, onClick: this.select.bind(this, item) },
 					React.createElement(
 						'span',
 						null,
@@ -33528,6 +33553,7 @@
 	var HelperUtil = __webpack_require__(256);
 	
 	var _restaurants = [];
+	var _meta = {};
 	
 	var RestaurantIndexPageStore = new Store(AppDispatcher);
 	
@@ -33539,10 +33565,15 @@
 		return _restaurants[id];
 	};
 	
+	RestaurantIndexPageStore.meta = function (id) {
+		return $.extend(true, {}, _meta);
+	};
+	
 	RestaurantIndexPageStore.__onDispatch = function (payload) {
 		switch (payload.actionType) {
 			case RestaurantConstants.RESTAURANT_INDEX_RECEIVED:
 				_restaurants = payload.restaurants;
+				_meta = payload.meta;
 				RestaurantIndexPageStore.__emitChange();
 				break;
 		}
@@ -33588,8 +33619,7 @@
 			},
 	
 			_loginGuest: function (e) {
-					this.setState({ email: "guest@gmail.com", password: 'password' });
-					setTimeout(this.handleSubmit.bind(this, e), 250);
+					this.setState({ email: "guest@gmail.com", password: 'password' }, this.handleSubmit.bind(this, e));
 			},
 	
 			render: function () {

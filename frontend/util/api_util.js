@@ -109,12 +109,12 @@ var ApiUtil = {
 		});
 	},
 
-	fetchRestaurantsByCuisine: function (cuisine_id) {
+	fetchRestaurantsByCuisine: function (cuisine_id, number) {
 		$.ajax({
 			type: "GET",
 			url: "/api/restaurants",
 			dataType: "json",
-			data: {cuisine_id: cuisine_id},
+			data: {cuisine_id: cuisine_id, per: number},
 			success: function (restaurants) {
 				RestaurantActions.receiveIndexRestaurants(restaurants);
 			}

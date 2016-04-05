@@ -3,6 +3,8 @@ var PropTypes = React.PropTypes;
 var CuisineSelector = require('../cuisines/selector');
 var RestaurantIndexStore = require('../../stores/restaurant_index');
 var IndexItem = require('./index_item');
+var ApiUtil = require('../../util/api_util');
+
 var RestaurantIndex = React.createClass({
 
 	getInitialState: function () {
@@ -19,6 +21,11 @@ var RestaurantIndex = React.createClass({
 
 	handleChange: function () {
 		this.setState({restaurants: RestaurantIndexStore.all()});
+	},
+
+	nextPage: function () {
+		var meta = RestaurantIndexStore.meta();
+		ApiUtil.fetchRestaurantsByCuisine(meta.query, meta.per + 9);
 	},
 
 	render: function() {
@@ -38,16 +45,20 @@ var RestaurantIndex = React.createClass({
 			});
 		}
 
+		var loadMoreClass = "";
 
-
+		if (RestaurantIndexStore.all().length >= RestaurantIndexStore.meta().total_count) {
+			loadMoreClass = "disabled";
+		}
 		return (
-			<div className="restaurant-index-page">
+			<div className="restaurant-index-page group">
 				<div className="restaurant-index group">
 					<CuisineSelector selected={this.props.selected}/>
 	        <div className="restaurant-index-holder group">
 					  {restaurants}
 	        </div>
 				</div>
+					<div className={loadMoreClass + " load-more-button"} onClick={this.nextPage}>Load More</div>
 			</div>
 		);
 	}

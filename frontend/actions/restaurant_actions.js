@@ -25,7 +25,8 @@ var RestaurantActions = {
 	receiveIndexRestaurants: function (restaurants) {
 		AppDispatcher.dispatch({
 			actionType: RestaurantConstants.RESTAURANT_INDEX_RECEIVED,
-			restaurants: restaurants
+			restaurants: restaurants.search_results,
+			meta: restaurants.meta
 		});
 	},
 

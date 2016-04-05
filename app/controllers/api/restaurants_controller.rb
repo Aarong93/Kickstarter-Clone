@@ -43,8 +43,11 @@ class Api::RestaurantsController < ApplicationController
 			str = str.split.map(&:capitalize).join(' ')
 			@restaurants = Restaurant.includes(:city, :user).with_total.where("title LIKE ?", "%#{str}%").where(published: true).where("expiration > NOW()").limit(3).order(title: :asc)
 		elsif params[:cuisine_id]
+			per = params[:per] || 9
 			cuisine_id = params[:cuisine_id].to_i
-			@restaurants = Restaurant.includes(:city, :user).with_total.where(cuisine_id: cuisine_id).where(published: true).where("expiration > NOW()").order(title: :asc)
+			@restaurants = Restaurant.includes(:city, :user).where(cuisine_id: cuisine_id).where(published: true).where("expiration > NOW()").order(title: :asc).page(1).per(per)
+
+			render :search_result
 		elsif params[:featured]
 			@restaurants = Restaurant.includes(:city, :user).with_total.where(featured: true).where(published: true).where("expiration > NOW()").order(title: :asc)
 			@restaurant = @restaurants.shuffle.first;
