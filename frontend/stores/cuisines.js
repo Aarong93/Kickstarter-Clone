@@ -14,7 +14,7 @@ CuisineStore.all = function () {
 CuisineStore.__onDispatch = function (payload) {
 	switch (payload.actionType) {
 		case CuisinesConstants.CUISINES_RECEIVED:
-			_cuisines = HelperUtil.sortObjectArrayAlphabetical(payload.cuisines, "food");
+			_cuisines = payload.cuisines
 			CuisineStore.__emitChange();
 	}
 };

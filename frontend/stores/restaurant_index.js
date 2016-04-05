@@ -19,7 +19,7 @@ RestaurantIndexPageStore.find = function (id) {
 RestaurantIndexPageStore.__onDispatch = function (payload) {
 	switch (payload.actionType) {
 		case RestaurantConstants.RESTAURANT_INDEX_RECEIVED:
-			_restaurants = HelperUtil.sortObjectArrayAlphabetical(payload.restaurants, "title");
+			_restaurants = payload.restaurants;
 			RestaurantIndexPageStore.__emitChange();
 			break;
 	}

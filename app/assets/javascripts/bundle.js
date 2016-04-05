@@ -26251,7 +26251,7 @@
 	  if (restaurants.length === 0) {
 	    _restaurants = ["none"];
 	  } else {
-	    _restaurants = HelperUtil.sortObjectArrayAlphabetical(restaurants, "title");
+	    _restaurants = restaurants;
 	  }
 	};
 	
@@ -33511,7 +33511,7 @@
 	CuisineStore.__onDispatch = function (payload) {
 		switch (payload.actionType) {
 			case CuisinesConstants.CUISINES_RECEIVED:
-				_cuisines = HelperUtil.sortObjectArrayAlphabetical(payload.cuisines, "food");
+				_cuisines = payload.cuisines;
 				CuisineStore.__emitChange();
 		}
 	};
@@ -33542,7 +33542,7 @@
 	RestaurantIndexPageStore.__onDispatch = function (payload) {
 		switch (payload.actionType) {
 			case RestaurantConstants.RESTAURANT_INDEX_RECEIVED:
-				_restaurants = HelperUtil.sortObjectArrayAlphabetical(payload.restaurants, "title");
+				_restaurants = payload.restaurants;
 				RestaurantIndexPageStore.__emitChange();
 				break;
 		}
@@ -33558,83 +33558,93 @@
 	var ApiUtil = __webpack_require__(219);
 	
 	var LoginForm = React.createClass({
-	  displayName: 'LoginForm',
+			displayName: 'LoginForm',
 	
-	  contextTypes: {
-	    router: React.PropTypes.object.isRequired
-	  },
+			contextTypes: {
+					router: React.PropTypes.object.isRequired
+			},
 	
-	  getInitialState: function () {
-	    return {
-	      email: "",
-	      password: "",
-	      showError: false
-	    };
-	  },
+			getInitialState: function () {
+					return {
+							email: "",
+							password: "",
+							showError: false
+					};
+			},
 	
-	  _error: function () {
-	    if (!this.state.showError) {
-	      return React.createElement('div', null);
-	    }
-	    return React.createElement(
-	      'div',
-	      { className: 'errors' },
-	      'Invalid Email Address or Password'
-	    );
-	  },
+			_error: function () {
+					if (!this.state.showError) {
+							return React.createElement('div', null);
+					}
+					return React.createElement(
+							'div',
+							{ className: 'errors' },
+							'Invalid Email Address or Password'
+					);
+			},
 	
-	  _showError: function () {
-	    this.setState({ showError: true });
-	  },
+			_showError: function () {
+					this.setState({ showError: true });
+			},
 	
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      { className: 'login-page' },
-	      React.createElement(
-	        'div',
-	        { className: 'login-form-wrapper' },
-	        React.createElement(
-	          'h1',
-	          null,
-	          ' Log in'
-	        ),
-	        React.createElement(
-	          'form',
-	          { onSubmit: this.handleSubmit },
-	          React.createElement('label', { htmlFor: 'email' }),
-	          React.createElement('input', { placeholder: 'Email', onChange: this.updateEmail, type: 'text', value: this.state.email }),
-	          React.createElement('label', { htmlFor: 'password' }),
-	          React.createElement('input', { placeholder: 'Password', onChange: this.updatePassword, type: 'password', value: this.state.password }),
-	          this._error(),
-	          React.createElement(
-	            'button',
-	            { id: 'log-in-button', className: 'submit-new-restaurant' },
-	            'Log me in!'
-	          )
-	        )
-	      )
-	    );
-	  },
+			_loginGuest: function (e) {
+					this.setState({ email: "guest@gmail.com", password: 'password' });
+					setTimeout(this.handleSubmit.bind(this, e), 250);
+			},
 	
-	  handleSubmit: function (e) {
-	    e.preventDefault();
-	    this.setState({ showError: false });
-	    var nextRoute = this.props.location.query.nextRoute;
-	    if (nextRoute) {
-	      ApiUtil.login(this.state, this.context.router.push.bind(this, nextRoute), this._showError);
-	    } else {
-	      ApiUtil.login(this.state, this.context.router.goBack.bind(this), this._showError);
-	    }
-	  },
+			render: function () {
+					return React.createElement(
+							'div',
+							{ className: 'login-page' },
+							React.createElement(
+									'div',
+									{ className: 'login-form-wrapper' },
+									React.createElement(
+											'h1',
+											null,
+											' Log in'
+									),
+									React.createElement(
+											'form',
+											{ onSubmit: this.handleSubmit },
+											React.createElement('label', { htmlFor: 'email' }),
+											React.createElement('input', { placeholder: 'Email', onChange: this.updateEmail, type: 'text', value: this.state.email }),
+											React.createElement('label', { htmlFor: 'password' }),
+											React.createElement('input', { placeholder: 'Password', onChange: this.updatePassword, type: 'password', value: this.state.password }),
+											this._error(),
+											React.createElement(
+													'button',
+													{ id: 'log-in-button', className: 'submit-new-restaurant' },
+													'Log me in!'
+											),
+											React.createElement(
+													'div',
+													{ id: 'log-in-button-guest', className: 'submit-new-restaurant', onClick: this._loginGuest },
+													'Log in as guest!'
+											)
+									)
+							)
+					);
+			},
 	
-	  updateEmail: function (e) {
-	    this.setState({ email: e.currentTarget.value });
-	  },
+			handleSubmit: function (e) {
+					e.preventDefault();
+					this.setState({ showError: false });
+					var nextRoute = this.props.location.query.nextRoute;
+					if (nextRoute) {
+							ApiUtil.login(this.state, this.context.router.push.bind(this, nextRoute), this._showError);
+					} else {
+							ApiUtil.login(this.state, this.context.router.goBack.bind(this), this._showError);
+					}
+			},
 	
-	  updatePassword: function (e) {
-	    this.setState({ password: e.currentTarget.value });
-	  }
+			updateEmail: function (e) {
+					this.setState({ email: e.currentTarget.value });
+			},
+	
+			updatePassword: function (e) {
+					this.setState({ password: e.currentTarget.value });
+			}
 	
 	});
 	
@@ -33945,7 +33955,7 @@
 	CityStore.__onDispatch = function (payload) {
 		switch (payload.actionType) {
 			case CityConstants.CITIES_RECEIVED:
-				_cities = HelperUtil.sortObjectArrayAlphabetical(payload.cities, "name");
+				_cities = payload.cities;
 				CityStore.__emitChange();
 		}
 	};

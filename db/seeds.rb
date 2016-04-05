@@ -17,10 +17,16 @@ cities = City.create([
 User.delete_all
 
 user = User.create({
-	name: 'Aaron Grau',
-	email: 'aaron.r.grau@gmail.com',
-	password: 'password12'
-})
+		name: 'Aaron Grau',
+		email: 'aaron.r.grau@gmail.com',
+		password: 'password12'
+	})
+
+guest = User.create({
+		name: 'Guest',
+		email: 'guest@gmail.com',
+		password: 'password'
+	})
 
 
 Cuisine.delete_all
@@ -51,6 +57,11 @@ file = File.open('app/assets/images/burger.jpg')
 	restaurants.push(Restaurant.create({user_id: user.id, cuisine_id: cuisines.shuffle.first.id, title: "Seed#{i}", city_id: cities[1].id, blurb: "Seed Seed Seed !!!", target: target, expiration: Date.parse("2016/09/16"), published: true, featured: true}))
 end
 
+3.times do |i|
+	target = 10000 + rand(50000)
+	restaurants.push(Restaurant.create({user_id: guest.id, cuisine_id: cuisines.shuffle.first.id, title: "Seed#{i}", city_id: cities[2].id, blurb: "Seed Seed Seed !!!", target: target, expiration: Date.parse("2016/09/16"), published: true, featured: true}))
+end
+
 Contribution.delete_all
 
 4000.times do |i|
@@ -58,5 +69,13 @@ Contribution.delete_all
 	val = 200 + rand(3000)
  	Contribution.create(
 		{user_id: user.id, restaurant_id: restaurants[x].id, value: val }
+	)
+end
+
+5.times do |i|
+	x = rand(400)
+	val = 200 + rand(3000)
+ 	Contribution.create(
+		{user_id: guest.id, restaurant_id: restaurants[x].id, value: val }
 	)
 end

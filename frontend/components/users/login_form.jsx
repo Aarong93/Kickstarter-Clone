@@ -29,6 +29,11 @@ var LoginForm = React.createClass({
 		this.setState({showError: true});
 	},
 
+	_loginGuest: function (e) {
+		this.setState({email: "guest@gmail.com", password: 'password'});
+		setTimeout(this.handleSubmit.bind(this, e), 250);
+	},
+
   render: function () {
     return (
       <div className="login-page">
@@ -44,6 +49,9 @@ var LoginForm = React.createClass({
 	          <button id="log-in-button" className="submit-new-restaurant">
 							Log me in!
 						</button>
+						<div id="log-in-button-guest" className="submit-new-restaurant" onClick={this._loginGuest}>
+							Log in as guest!
+						</div>
 	        </form>
 				</div>
       </div>

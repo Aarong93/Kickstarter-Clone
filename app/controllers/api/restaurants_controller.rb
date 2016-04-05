@@ -32,7 +32,7 @@ class Api::RestaurantsController < ApplicationController
 	def index
 
 		if params[:cuisine_id] && params[:featured]
-			@restaurants = Restaurant.includes(:city, :user).with_total.where(featured: true).where(published: true).where(cuisine_id: params[:cuisine_id])
+			@restaurants = Restaurant.includes(:city, :user).with_total.where(featured: true).where(published: true).where(cuisine_id: params[:cuisine_id]).order(title: :asc)
 			if @restaurants
 				render :index
 			else
@@ -41,16 +41,16 @@ class Api::RestaurantsController < ApplicationController
 		elsif params[:str]
 			str = params[:str]
 			str = str.split.map(&:capitalize).join(' ')
-			@restaurants = Restaurant.includes(:city, :user).with_total.where("title LIKE ?", "%#{str}%").where(published: true).where("expiration > NOW()").limit(3)
+			@restaurants = Restaurant.includes(:city, :user).with_total.where("title LIKE ?", "%#{str}%").where(published: true).where("expiration > NOW()").limit(3).order(title: :asc)
 		elsif params[:cuisine_id]
 			cuisine_id = params[:cuisine_id].to_i
-			@restaurants = Restaurant.includes(:city, :user).with_total.where(cuisine_id: cuisine_id).where(published: true).where("expiration > NOW()")
+			@restaurants = Restaurant.includes(:city, :user).with_total.where(cuisine_id: cuisine_id).where(published: true).where("expiration > NOW()").order(title: :asc)
 		elsif params[:featured]
-			@restaurants = Restaurant.includes(:city, :user).with_total.where(featured: true).where(published: true).where("expiration > NOW()")
+			@restaurants = Restaurant.includes(:city, :user).with_total.where(featured: true).where(published: true).where("expiration > NOW()").order(title: :asc)
 			@restaurant = @restaurants.shuffle.first;
 			render :show
 		else
-			@restaurants = Restaurant.includes(:city, :user).with_total.where(published: true)
+			@restaurants = Restaurant.includes(:city, :user).with_total.where(published: true).order(title: :asc)
 			@restaurant = @restaurants.shuffle.first;
 			render :show
 		end

@@ -12,7 +12,7 @@ var _newRestaurants = function (restaurants) {
   if (restaurants.length === 0) {
     _restaurants = ["none"];
   } else {
-    _restaurants = HelperUtil.sortObjectArrayAlphabetical(restaurants, "title");
+    _restaurants = restaurants;
   }
 };
 

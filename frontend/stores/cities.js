@@ -24,7 +24,7 @@ CityStore.find = function (str) {
 CityStore.__onDispatch = function (payload) {
 	switch (payload.actionType) {
 		case CityConstants.CITIES_RECEIVED:
-			_cities = HelperUtil.sortObjectArrayAlphabetical(payload.cities, "name");
+			_cities = payload.cities;
 			CityStore.__emitChange();
 	}
 };
