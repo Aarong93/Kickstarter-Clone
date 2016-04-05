@@ -71,6 +71,18 @@ var ApiUtil = {
 		});
 	},
 
+	fetchRestaurantByParamsIndexStore: function (params) {
+		$.ajax({
+			type: "GET",
+			url: "/api/restaurants",
+			dataType: "json",
+			data: params,
+			success: function (restaurants) {
+				RestaurantActions.receiveIndexRestaurants(restaurants);
+			}
+		});
+	},
+
 	fetchRestaurantByNameContain: function (str) {
 		$.ajax({
 			type: "GET",

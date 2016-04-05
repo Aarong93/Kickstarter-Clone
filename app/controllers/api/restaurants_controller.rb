@@ -30,14 +30,21 @@ class Api::RestaurantsController < ApplicationController
   end
 
 	def index
-		if params[:str]
+		if params[:cuisine_id] && params[:featured]
+			@restaurants = Restaurant.includes(:city, :user).with_total.where(featured: true).where(published: true).where(cuisine_id: params[:cuisine_id])
+			if @restaurants
+				render :index
+			else
+				render text: "nothing here"
+			end
+		elsif params[:str]
 			str = params[:str]
 			str = str.split.map(&:capitalize).join(' ')
 			@restaurants = Restaurant.includes(:city, :user).with_total.where("title LIKE ?", "%#{str}%").where(published: true)
 		elsif params[:cuisine_id]
 			cuisine_id = params[:cuisine_id].to_i
 			@restaurants = Restaurant.includes(:city, :user).with_total.where(cuisine_id: cuisine_id).where(published: true)
-		elsif
+		else
 			@restaurants = Restaurant.includes(:city, :user).with_total.where(featured: true).where(published: true)
 			@restaurant = @restaurants.shuffle.first;
 			render :show

@@ -25199,6 +25199,18 @@
 			});
 		},
 	
+		fetchRestaurantByParamsIndexStore: function (params) {
+			$.ajax({
+				type: "GET",
+				url: "/api/restaurants",
+				dataType: "json",
+				data: params,
+				success: function (restaurants) {
+					RestaurantActions.receiveIndexRestaurants(restaurants);
+				}
+			});
+		},
+	
 		fetchRestaurantByNameContain: function (str) {
 			$.ajax({
 				type: "GET",
@@ -36244,9 +36256,11 @@
 
 	var React = __webpack_require__(1);
 	var RestaurantStore = __webpack_require__(260);
+	var RestaurantIndexStore = __webpack_require__(267);
 	var CuisineStore = __webpack_require__(266);
 	var ApiUtil = __webpack_require__(219);
 	var CityStore = __webpack_require__(271);
+	var IndexItem = __webpack_require__(263);
 	
 	var Home = React.createClass({
 	  displayName: 'Home',
@@ -36258,6 +36272,8 @@
 	    return {
 	      restaurant: {},
 	      imageClass: "hide-image",
+	      selected: { id: 0 },
+	      indexRestaurants: [],
 	      cuisines: []
 	    };
 	  },
@@ -36265,8 +36281,13 @@
 	  componentDidMount: function () {
 	    this.cTokenListener = CuisineStore.addListener(this._cuisineChange);
 	    this.rTokenListener = RestaurantStore.addListener(this._onChange);
+	    this.rcTokenListener = RestaurantIndexStore.addListener(this._onSelectedChange);
 	    ApiUtil.fetchRestaurantByParams({ featured: true });
 	    ApiUtil.fetchCuisines();
+	  },
+	
+	  _onSelectedChange: function () {
+	    this.setState({ indexRestaurants: [RestaurantIndexStore.all()[0], RestaurantIndexStore.all()[1]] });
 	  },
 	
 	  _onChange: function () {
@@ -36274,17 +36295,25 @@
 	  },
 	
 	  _cuisineChange: function () {
-	    this.setState({ cuisines: CuisineStore.all() });
-	    this.setState({ selected: CuisineStore.all()[0] });
+	    var cuisines = CuisineStore.all();
+	    this.setState({ cuisines: cuisines });
+	    this.setState({ selected: cuisines[0] });
+	    ApiUtil.fetchRestaurantByParamsIndexStore({ cuisine_id: cuisines[0].id, featured: true });
 	  },
 	
 	  componentWillUnmount: function () {
 	    this.cTokenListener.remove();
 	    this.rTokenListener.remove();
+	    this.rcTokenListener.remove();
 	  },
 	
 	  _imageReady: function () {
 	    this.setState({ imageClass: "show-image" });
+	  },
+	
+	  _selectCuisine: function (cuisine) {
+	    this.setState({ selected: cuisine });
+	    ApiUtil.fetchRestaurantByParamsIndexStore({ cuisine_id: cuisine.id, featured: true });
 	  },
 	
 	  render: function () {
@@ -36293,13 +36322,30 @@
 	      return React.createElement('div', { id: 'home-page' });
 	    }
 	    if (this.state.cuisines.length > 0) {
+	      var klass = "";
 	      cuisines = this.state.cuisines.map(function (cuisine) {
-	        React.createElement(
+	        klass = "";
+	        if (this.state.selected.id === cuisine.id) {
+	          klass = "selected-cuisine-home";
+	        }
+	        return React.createElement(
 	          'li',
-	          null,
-	          'cuisine.food'
+	          { className: klass, onClick: this._selectCuisine.bind(this, cuisine), key: cuisine.id },
+	          cuisine.food
 	        );
 	      }.bind(this));
+	    }
+	    var indexRestaurants = React.createElement('div', null);
+	    if (this.state.indexRestaurants[1]) {
+	      indexRestaurants = [React.createElement(
+	        'div',
+	        { key: '1', id: 'home-page-index-item-wrapper', className: 'index-item-wrapper-small' },
+	        React.createElement(IndexItem, { restaurant: this.state.indexRestaurants[0] })
+	      ), React.createElement(
+	        'div',
+	        { key: '2', id: 'home-page-index-item-wrapper', className: 'index-item-wrapper-small' },
+	        React.createElement(IndexItem, { restaurant: this.state.indexRestaurants[1] })
+	      )];
 	    }
 	    var style = { backgroundImage: 'url(' + this.state.restaurant.image_url + ')' };
 	    return React.createElement(
@@ -36314,7 +36360,18 @@
 	      React.createElement(
 	        'div',
 	        { className: 'home-page-index-area group' },
-	        React.createElement('div', { className: 'project-index-item-area' }),
+	        React.createElement(
+	          'div',
+	          { className: 'project-index-item-area group' },
+	          React.createElement(
+	            'h3',
+	            null,
+	            'Featured ',
+	            this.state.selected.food,
+	            ' Restaurants'
+	          ),
+	          indexRestaurants
+	        ),
 	        React.createElement(
 	          'div',
 	          { className: 'cuisine-selector-area' },
