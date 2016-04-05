@@ -36316,6 +36316,10 @@
 	    ApiUtil.fetchRestaurantByParamsIndexStore({ cuisine_id: cuisine.id, featured: true });
 	  },
 	
+	  _bannerButton: function () {
+	    this.context.router.push("/restaurants/" + this.state.restaurant.id);
+	  },
+	
 	  render: function () {
 	    var cuisines = React.createElement('div', null);
 	    if (!this.state.restaurant.image_url) {
@@ -36354,7 +36358,25 @@
 	      React.createElement(
 	        'div',
 	        { className: 'home-page-image-wrapper' },
-	        React.createElement('div', { className: this.state.imageClass, style: style })
+	        React.createElement(
+	          'div',
+	          { className: this.state.imageClass, style: style },
+	          React.createElement(
+	            'h1',
+	            { className: 'home-page-title' },
+	            this.state.restaurant.title
+	          ),
+	          React.createElement(
+	            'h2',
+	            { className: 'home-page-description' },
+	            this.state.restaurant.blurb
+	          ),
+	          React.createElement(
+	            'div',
+	            { id: 'home-page-button', className: 'submit-new-restaurant', onClick: this._bannerButton },
+	            'Learn More'
+	          )
+	        )
 	      ),
 	      React.createElement('img', { id: 'img-timer', onLoad: this._imageReady, src: this.state.restaurant.image_url }),
 	      React.createElement(

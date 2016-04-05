@@ -7,6 +7,25 @@
   height: 500px;
 }
 
+#home-page-button {
+  width: 120px;
+  margin: auto;
+}
+
+.home-page-title {
+  font-weight: bold;
+  color: white;
+  font-size: 52px;
+  padding-top: 100px;
+}
+
+.home-page-description {
+  padding: 50px;
+  color: white;
+  font-size: 32px;
+  color: white;
+}
+
 .home-page-image-wrapper > div {
   text-align: center;
   width: 100%;
@@ -37,12 +56,10 @@
 .cuisine-selector-area > ul {
   font-weight: bold;
   font-size: 14px;
-  padding-top: 80px;
-  padding-bottom: 80px;
 }
 
 .cuisine-selector-area > ul > li {
-  padding: 10px;
+  padding: 15px;
 }
 
 .cuisine-selector-area > ul > li:hover {

@@ -45,16 +45,16 @@ Restaurant.delete_all
 restaurants = []
 
 400.times do |i|
-	restaurants.push(Restaurant.create({user_id: user.id, cuisine_id: cuisines.shuffle.first.id, title: "Aaron's Test#{i}", city_id: cities[1].id, blurb: "Test Test Test !!!", target: 10000, expiration: Date.parse("2016/09/16"), published: true, featured: true, image_url: "http://burgerdays.com/wp-content/uploads/2011/03/jackson20burgerfullSMALL.jpg" },))
+	target = 10000 + rand(50000)
+	restaurants.push(Restaurant.create({user_id: user.id, cuisine_id: cuisines.shuffle.first.id, title: "Seed#{i}", city_id: cities[1].id, blurb: "Seed Seed Seed !!!", target: target, expiration: Date.parse("2016/09/16"), published: true, featured: true, image_url: "http://burgerdays.com/wp-content/uploads/2011/03/jackson20burgerfullSMALL.jpg" },))
 end
 
 Contribution.delete_all
 
-contribution = Contribution.create([
-	{user_id: user.id, restaurant_id: restaurants.first.id, value: 1000 },
-	{user_id: user.id, restaurant_id: restaurants.second.id, value: 5940 },
-	{user_id: user.id, restaurant_id: restaurants.third.id, value: 8701 },
-	{user_id: user.id, restaurant_id: restaurants.first.id, value: 25 },
-	{user_id: user.id, restaurant_id: restaurants.first.id, value: 30 },
-	{user_id: user.id, restaurant_id: restaurants.first.id, value: 25 },
-	])
+4000.times do |i|
+	x = rand(400)
+	val = 200 + rand(3000)
+ 	Contribution.create(
+		{user_id: user.id, restaurant_id: restaurants[x].id, value: val }
+	)
+end
