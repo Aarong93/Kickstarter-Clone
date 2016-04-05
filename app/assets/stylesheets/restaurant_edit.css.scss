@@ -74,21 +74,21 @@
   margin-top: 50px;
   border: 1px solid #d9d9de;
   background-color: #fff;
-  padding: 25px;
+  padding: 10px;
 
 }
 
 .edit-form > label {
   display: block;
-  padding: 20px;
+  padding: 15px;
   font-size: 14px;
   margin: 5px;
+	margin-left: 11px;
   width: 500px;
   float: left;
   background-color: #f7fafa;
   font-weight: bold;
-  border: 1px solid #d9d9de;
-  border-radius: 5px;
+  border-radius: 3px;
 }
 
 #file-input {
@@ -136,7 +136,7 @@
   background-color: #2BDE73;
   border-radius: 5px;
   color: #fff;
-  margin-right: 4px;
+  margin-right: 10px;
 }
 
 .save-button:hover {
