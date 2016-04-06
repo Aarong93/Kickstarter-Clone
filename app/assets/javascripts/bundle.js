@@ -33125,6 +33125,7 @@
 	var React = __webpack_require__(1);
 	var SessionStore = __webpack_require__(257);
 	var Modal = __webpack_require__(276);
+	var ContributionForm = __webpack_require__(298);
 	
 	$(function () {
 		var appElement = $('#root')[0];
@@ -33185,7 +33186,8 @@
 					'h2',
 					{ id: 'modal-header' },
 					'Make a contribution'
-				)
+				),
+				React.createElement(ContributionForm, { restaurant: this.props.restaurant })
 			);
 	
 			return React.createElement(
@@ -36728,6 +36730,36 @@
 	});
 	
 	module.exports = RewardsIndex;
+
+/***/ },
+/* 298 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var PropTypes = React.PropTypes;
+	var LinkedStateMixin = __webpack_require__(234);
+	
+	var NewContribution = React.createClass({
+	  displayName: 'NewContribution',
+	
+	
+	  mixins: [LinkedStateMixin],
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'new-contribution-form' },
+	      React.createElement(
+	        'form',
+	        null,
+	        React.createElement('input', { type: 'text', placeholder: 'amount...' })
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = NewContribution;
 
 /***/ }
 /******/ ]);

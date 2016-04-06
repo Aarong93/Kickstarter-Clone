@@ -1,6 +1,7 @@
 var React = require('react');
 var SessionStore = require('../../stores/session_store');
 var Modal = require('react-modal');
+var ContributionForm = require('../contributions/new_contribution');
 
 $(function(){
   var appElement = $('#root')[0];
@@ -56,6 +57,7 @@ var ImageSideBar = React.createClass({
         style={modalStyles} >
         <div id="modal-x" className="search-exit-button fa fa-times" onClick={this.closeModal} />
         <h2 id="modal-header">Make a contribution</h2>
+        <ContributionForm restaurant={this.props.restaurant}/>
       </Modal>
     );
 

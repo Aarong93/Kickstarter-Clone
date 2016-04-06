@@ -19,7 +19,7 @@ var BasicForm = React.createClass({
       expiration: this.props.restaurant.expiration || "",
       target: this.props.restaurant.target || "",
 			imageClass: "hide-image"
-    }
+    };
   },
 
 	_imageReady: function () {
