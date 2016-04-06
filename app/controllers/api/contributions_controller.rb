@@ -8,7 +8,8 @@ class Api::ContributionsController < ApplicationController
       @contribution.reward_id = params[:contribution][:reward_id]
     end
 
-    reward_min
+    return if reward_min?
+
 		@contribution.save!
 	end
 
@@ -18,7 +19,7 @@ class Api::ContributionsController < ApplicationController
 		params.require(:contribution).permit(:value, :restaurant_id)
 	end
 
-  def reward_min
+  def reward_min?
     min_val = 1
     unless @contribution.reward_id.nil?
       reward = Reward.find(@contribution.reward_id)
@@ -26,9 +27,11 @@ class Api::ContributionsController < ApplicationController
     end
 
     unless @contribution.value >= min_val
-      render text: "Contribution amount to low for reward", status: 401
-      return
+      render text: "Contribution amount to low for reward", status: 400
+      return true
     end
+
+    false
   end
 
 end
