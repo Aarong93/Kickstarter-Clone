@@ -70,7 +70,7 @@ var NewRestaurant = React.createClass({
     var cuisines = <option></option>;
     var disabled = "disabled";
     var cities = this.state.cities.map(function (city) {
-      return <option key={city.id} value={city.id}>{city.name}</option>
+      return <option key={city.id} value={city.id}>{city.name}</option>;
     });
     if (this.state.title) { disabled = ""; }
     var an = "a";

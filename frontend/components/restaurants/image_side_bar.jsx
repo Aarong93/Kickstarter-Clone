@@ -55,9 +55,11 @@ var ImageSideBar = React.createClass({
         isOpen={this.state.modalIsOpen}
         onRequestClose={this.closeModal}
         style={modalStyles} >
-        <div id="modal-x" className="search-exit-button fa fa-times" onClick={this.closeModal} />
-        <h2 id="modal-header">Make a contribution</h2>
-        <ContributionForm restaurant={this.props.restaurant}/>
+        <div className="modal-wrapper">
+          <div id="modal-x" className="search-exit-button fa fa-times" onClick={this.closeModal} />
+          <h2 id="modal-header">Make a contribution</h2>
+          <ContributionForm close={this.closeModal} restaurant={this.props.restaurant}/>
+        </div>
       </Modal>
     );
 

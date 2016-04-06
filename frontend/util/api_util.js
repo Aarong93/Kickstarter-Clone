@@ -201,7 +201,19 @@ var ApiUtil = {
 				CityActions.receiveCities(cities);
 			}
 		});
-	}
+	},
+
+  createContribution: function(params) {
+    $.ajax({
+      type: "POST",
+      url: "/api/contributions",
+      dataType: "json",
+      data: {contribution: params},
+      success: function (contribution) {
+        ApiUtil.fetchRestaurant(contribution.restaurant_id);
+      }
+    });
+  }
 
 };
 

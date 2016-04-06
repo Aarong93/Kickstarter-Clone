@@ -161,11 +161,13 @@ var EditRestaurant = React.createClass({
         isOpen={this.state.modalIsOpen}
         onRequestClose={this.closeModal}
         style={modalStyles} >
-        <h2 id="modal-header">You have unsaved changes</h2>
-        <div id="modal-x" className="search-exit-button fa fa-times" onClick={this.closeModal} />
-        <div className="save-button" onClick={this._saveModal}>Save Changes</div>
-        <div className="discard-button" onClick={this._discardModal}>Discard Changes</div>
-      </Modal>
+        <div className="modal-wrapper">
+          <h2 id="modal-header">You have unsaved changes</h2>
+          <div id="modal-x" className="search-exit-button fa fa-times" onClick={this.closeModal} />
+          <div className="save-button" onClick={this._saveModal}>Save Changes</div>
+          <div className="discard-button" onClick={this._discardModal}>Discard Changes</div>
+        </div>
+    </Modal>
     );
 
     var launch = <div id="disabled-launch" className="launch-button">Launch!</div>;

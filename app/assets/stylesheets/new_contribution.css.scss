@@ -1,0 +1,33 @@
+.new-contribution-form > form > input{
+  padding: 5px;
+  margin-top: 10px;
+}
+
+.new-contribution-form > form > label{
+  font-size: 14px;
+  margin-left: 15px;
+  margin-top: 10px;
+  margin-right: 5px;
+}
+
+.min-contribution-text {
+  color: #aaa;
+  font-size: 10px;
+  margin-top: 5px;
+}
+
+#contribute-button {
+  font-size: 16px;
+  padding: 10px;
+  outline: none;
+  border: none;
+}
+
+#contribute-button:disabled {
+  opacity: .33;
+}
+
+#contribute-button:disabled:hover {
+  background-color: #2BDE73;
+  cursor: default;
+}
