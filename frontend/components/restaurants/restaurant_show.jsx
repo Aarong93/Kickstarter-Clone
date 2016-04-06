@@ -2,6 +2,7 @@ var React = require('react');
 var RestaurantStore = require('../../stores/restaurants');
 var ApiUtil = require('../../util/api_util');
 var ImageSideBar = require('./image_side_bar');
+var RewardsIndex = require('../rewards/reward_index');
 
 var RestaurantShow = React.createClass({
 
@@ -50,11 +51,37 @@ var RestaurantShow = React.createClass({
 							onLoad={this._imageReady}
 							className={this.state.imageClass}
 						/>
+            <div className="group city-cuisine-show">
+              <p>
+                <i className="fa fa-map-marker" />   {this.state.restaurant.city.name}
+              </p>
+              <p>
+                {this.state.restaurant.cuisine.food}
+              </p>
+            </div>
+            <p className="blurb-show">
+              {this.state.restaurant.blurb}
+            </p>
 					</div>
 					<ImageSideBar restaurant={this.state.restaurant}/>
 				</div>
 		);
 	},
+
+  _descriptionArea: function () {
+    return (
+      <div className="restaurant-description-content">
+        <div className="restaurant-description">
+          <h2>About this project</h2>
+          {this.state.restaurant.description}
+        </div>
+        <div className="restaurant-rewards-show group">
+          <h2>Rewards</h2>
+          <RewardsIndex rewards={this.state.restaurant.rewards}/>
+        </div>
+      </div>
+    );
+  },
 
 	render: function () {
 		if (!this.state.restaurant.id) {
@@ -71,6 +98,7 @@ var RestaurantShow = React.createClass({
 						</span>
 					</h4>
 					{this._mainShow()}
+          {this._descriptionArea()}
 				</div>
 			</div>
 		);

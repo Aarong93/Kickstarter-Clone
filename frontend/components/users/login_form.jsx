@@ -30,7 +30,7 @@ var LoginForm = React.createClass({
 	},
 
 	_loginGuest: function (e) {
-		this.setState({email: "guest@gmail.com", password: 'password'}, this.handleSubmit.bind(this, e));
+		this.setState({email: "guest@gmail.com", password: 'password'}, this.handleSubmit);
 	},
 
   render: function () {
@@ -58,7 +58,9 @@ var LoginForm = React.createClass({
   },
 
   handleSubmit: function(e) {
-    e.preventDefault();
+    if (e) {
+      e.preventDefault();
+    }
 		this.setState({showError: false});
     var nextRoute = this.props.location.query.nextRoute;
     if (nextRoute) {

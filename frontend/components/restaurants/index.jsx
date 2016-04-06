@@ -53,7 +53,7 @@ var RestaurantIndex = React.createClass({
 		return (
 			<div className="restaurant-index-page group">
 				<div className="restaurant-index group">
-					<CuisineSelector selected={this.props.selected}/>
+					<CuisineSelector selected={this.props.location.query.selected}/>
 	        <div className="restaurant-index-holder group">
 					  {restaurants}
 	        </div>

@@ -13,7 +13,7 @@ var SessionStore = require('../../stores/session_store');
 $(function(){
   var appElement = $('#root')[0];
   Modal.setAppElement(appElement);
-})
+});
 
 var modalStyles = {
   content : {
@@ -78,7 +78,7 @@ var EditRestaurant = React.createClass({
 
   _save: function () {
 		if (this.state.active === 0) {
-			ApiUtil.patchRestaurantWithImage(this.state.restaurant.id, this.refs.curForm.data())
+			ApiUtil.patchRestaurantWithImage(this.state.restaurant.id, this.refs.curForm.data());
 		}
 		else {
 	    ApiUtil.patchRestaurant(this.state.restaurant.id, this.refs.curForm.data());
@@ -104,7 +104,7 @@ var EditRestaurant = React.createClass({
     for (var i = 0; i < 3; i++) {
       selected = "";
       if (this.state.active === i) {
-        selected = "selected-tab"
+        selected = "selected-tab";
       }
       lis.push(
         <li key={i} id={selected} onClick={this._selectTab} value={i}>
@@ -120,7 +120,7 @@ var EditRestaurant = React.createClass({
   },
 
   _saveModal: function () {
-		this._save()
+		this._save();
     this.closeModal();
     this.setState({active: this.state.clickedTab});
   },
@@ -144,27 +144,29 @@ var EditRestaurant = React.createClass({
             cities={this.state.cities}
             cuisinies={this.state.cuisines}
             save={this._save}
-          />
+          />;
       } else if (this.state.active === 1) {
-        form = <div>Coming Soon</div>
+        form = <div>Coming Soon</div>;
       } else if (this.state.active === 2) {
         form = <DescriptionForm ref="curForm"
           restaurant={this.state.restaurant}
           save={this._save}
-          />
+          />;
       }
     }
 
 
-    var modal = <Modal
-            isOpen={this.state.modalIsOpen}
-            onRequestClose={this.closeModal}
-            style={modalStyles} >
-            <h2 id="modal-header">You have unsaved changes</h2>
-            <div id="modal-x" className="search-exit-button fa fa-times" onClick={this.closeModal} />
-            <div className="save-button" onClick={this._saveModal}>Save Changes</div>
-            <div className="discard-button" onClick={this._discardModal}>Discard Changes</div>
-            </Modal>
+    var modal = (
+      <Modal
+        isOpen={this.state.modalIsOpen}
+        onRequestClose={this.closeModal}
+        style={modalStyles} >
+        <h2 id="modal-header">You have unsaved changes</h2>
+        <div id="modal-x" className="search-exit-button fa fa-times" onClick={this.closeModal} />
+        <div className="save-button" onClick={this._saveModal}>Save Changes</div>
+        <div className="discard-button" onClick={this._discardModal}>Discard Changes</div>
+      </Modal>
+    );
 
     var launch = <div id="disabled-launch" className="launch-button">Launch!</div>;
 

@@ -15,7 +15,7 @@
   padding-top: 25px;
 	margin-top: 25px;
 	padding-bottom: 50px;
-	border-top: 1px solid #D9D9DE;
+
 }
 
 .cuisine-selection-item {
@@ -41,6 +41,11 @@
 
 }
 
+.cuisine-options {
+  border-bottom: 1px solid #D9D9DE;
+  padding-bottom: 50px;
+}
+
 .selected:hover {
 	cursor: default;
 	background-color: #CCD5FF;
@@ -63,6 +68,7 @@
 
 .load-more-button:hover {
 	cursor: pointer;
+  background: #F1F1F1;
 }
 
 .disabled {

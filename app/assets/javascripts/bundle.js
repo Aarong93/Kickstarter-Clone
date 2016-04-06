@@ -32941,6 +32941,7 @@
 	var RestaurantStore = __webpack_require__(260);
 	var ApiUtil = __webpack_require__(219);
 	var ImageSideBar = __webpack_require__(261);
+	var RewardsIndex = __webpack_require__(297);
 	
 	var RestaurantShow = React.createClass({
 		displayName: 'RestaurantShow',
@@ -32993,9 +32994,57 @@
 						src: this.state.restaurant.image_url,
 						onLoad: this._imageReady,
 						className: this.state.imageClass
-					})
+					}),
+					React.createElement(
+						'div',
+						{ className: 'group city-cuisine-show' },
+						React.createElement(
+							'p',
+							null,
+							React.createElement('i', { className: 'fa fa-map-marker' }),
+							'   ',
+							this.state.restaurant.city.name
+						),
+						React.createElement(
+							'p',
+							null,
+							this.state.restaurant.cuisine.food
+						)
+					),
+					React.createElement(
+						'p',
+						{ className: 'blurb-show' },
+						this.state.restaurant.blurb
+					)
 				),
 				React.createElement(ImageSideBar, { restaurant: this.state.restaurant })
+			);
+		},
+	
+		_descriptionArea: function () {
+			return React.createElement(
+				'div',
+				{ className: 'restaurant-description-content' },
+				React.createElement(
+					'div',
+					{ className: 'restaurant-description' },
+					React.createElement(
+						'h2',
+						null,
+						'About this project'
+					),
+					this.state.restaurant.description
+				),
+				React.createElement(
+					'div',
+					{ className: 'restaurant-rewards-show group' },
+					React.createElement(
+						'h2',
+						null,
+						'Rewards'
+					),
+					React.createElement(RewardsIndex, { rewards: this.state.restaurant.rewards })
+				)
 			);
 		},
 	
@@ -33024,7 +33073,8 @@
 							this.state.restaurant.user.name
 						)
 					),
-					this._mainShow()
+					this._mainShow(),
+					this._descriptionArea()
 				)
 			);
 		}
@@ -33073,84 +33123,137 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var SessionStore = __webpack_require__(257);
+	var Modal = __webpack_require__(276);
+	
+	$(function () {
+		var appElement = $('#root')[0];
+		Modal.setAppElement(appElement);
+	});
+	
+	var modalStyles = {
+		content: {
+			top: '30%',
+			left: '50%',
+			right: 'auto',
+			bottom: 'auto',
+			marginRight: '-50%',
+			transform: 'translate(-50%, -50%)',
+			width: '330px'
+		}
+	};
 	
 	var ImageSideBar = React.createClass({
-		displayName: "ImageSideBar",
+		displayName: 'ImageSideBar',
 	
+	
+		contextTypes: { router: React.PropTypes.object.isRequired },
+	
+		getInitialState: function () {
+			return { modalIsOpen: false };
+		},
 	
 		_clickHandler: function (e) {
 			e.preventDefault();
+			if (!SessionStore.isLoggedIn()) {
+				this.context.router.push('/session/new');
+			} else {
+				this.openModal();
+			}
+		},
+	
+		openModal: function () {
+			this.setState({ modalIsOpen: true });
+		},
+	
+		closeModal: function () {
+			this.setState({ modalIsOpen: false });
 		},
 	
 		render: function () {
 			var expires = new Date(this.props.restaurant.expiration);
 			var today = new Date();
 	
-			return React.createElement(
-				"div",
-				{ className: "show-image-side-bar" },
+			var modal = React.createElement(
+				Modal,
+				{
+					isOpen: this.state.modalIsOpen,
+					onRequestClose: this.closeModal,
+					style: modalStyles },
+				React.createElement('div', { id: 'modal-x', className: 'search-exit-button fa fa-times', onClick: this.closeModal }),
 				React.createElement(
-					"ul",
-					{ className: "show-image-side-bar-list" },
+					'h2',
+					{ id: 'modal-header' },
+					'Make a contribution'
+				)
+			);
+	
+			return React.createElement(
+				'div',
+				{ className: 'show-image-side-bar' },
+				modal,
+				React.createElement(
+					'ul',
+					{ className: 'show-image-side-bar-list' },
 					React.createElement(
-						"li",
+						'li',
 						null,
 						React.createElement(
-							"h5",
+							'h5',
 							null,
 							this.props.restaurant.number_contributions
 						)
 					),
 					React.createElement(
-						"li",
+						'li',
 						null,
 						React.createElement(
-							"p",
+							'p',
 							null,
-							"contributions"
+							'contributions'
 						)
 					),
 					React.createElement(
-						"li",
+						'li',
 						null,
 						React.createElement(
-							"h5",
+							'h5',
 							null,
 							"$" + this.props.restaurant.total
 						)
 					),
 					React.createElement(
-						"li",
+						'li',
 						null,
 						React.createElement(
-							"p",
+							'p',
 							null,
 							"pledged of $" + this.props.restaurant.target + " goal"
 						)
 					),
 					React.createElement(
-						"li",
+						'li',
 						null,
 						React.createElement(
-							"h5",
+							'h5',
 							null,
 							Math.round((expires - today) / (1000 * 60 * 60 * 24))
 						)
 					),
 					React.createElement(
-						"li",
+						'li',
 						null,
 						React.createElement(
-							"p",
+							'p',
 							null,
-							"days to go"
+							'days to go'
 						)
 					)
 				),
 				React.createElement(
-					"div",
-					{ onClick: this._clickHandler, className: "show-back-this-button" },
-					"Back This Restaurant"
+					'div',
+					{ onClick: this._clickHandler, className: 'show-back-this-button' },
+					'Back This Restaurant'
 				)
 			);
 		}
@@ -33423,7 +33526,7 @@
 				React.createElement(
 					'div',
 					{ className: 'restaurant-index group' },
-					React.createElement(CuisineSelector, { selected: this.props.selected }),
+					React.createElement(CuisineSelector, { selected: this.props.location.query.selected }),
 					React.createElement(
 						'div',
 						{ className: 'restaurant-index-holder group' },
@@ -33619,7 +33722,7 @@
 			},
 	
 			_loginGuest: function (e) {
-					this.setState({ email: "guest@gmail.com", password: 'password' }, this.handleSubmit.bind(this, e));
+					this.setState({ email: "guest@gmail.com", password: 'password' }, this.handleSubmit);
 			},
 	
 			render: function () {
@@ -33658,7 +33761,9 @@
 			},
 	
 			handleSubmit: function (e) {
-					e.preventDefault();
+					if (e) {
+							e.preventDefault();
+					}
 					this.setState({ showError: false });
 					var nextRoute = this.props.location.query.nextRoute;
 					if (nextRoute) {
@@ -36550,6 +36655,79 @@
 	});
 	
 	module.exports = Home;
+
+/***/ },
+/* 297 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var PropTypes = React.PropTypes;
+	
+	var RewardsIndex = React.createClass({
+	  displayName: "RewardsIndex",
+	
+	
+	  getInitialState: function () {
+	    return { rewards: [] };
+	  },
+	
+	  _onClick: function (e) {
+	    e.preventDefault();
+	  },
+	
+	  componentWillReceiveProps: function (newProps) {
+	    this.setState({ rewards: newProps.rewards });
+	  },
+	
+	  render: function () {
+	    if (!this.props.rewards) {
+	      return React.createElement("div", null);
+	    }
+	
+	    var onClick = this._onClick;
+	    var klass = "";
+	    if (this.props.onClick) {
+	      onClick = this.props.onClick.bind(null, reward);
+	      klass = "hover-rewards-index";
+	    }
+	
+	    var rewards = this.state.rewards.map(function (reward) {
+	      return React.createElement(
+	        "li",
+	        { className: klass, key: reward.id, onClick: onClick },
+	        React.createElement(
+	          "h2",
+	          null,
+	          "Pledge $",
+	          reward.min_dollar_amount,
+	          " or more"
+	        ),
+	        React.createElement(
+	          "h3",
+	          null,
+	          reward.name
+	        ),
+	        React.createElement(
+	          "p",
+	          null,
+	          reward.description
+	        )
+	      );
+	    });
+	    return React.createElement(
+	      "div",
+	      { className: "rewards-index group" },
+	      React.createElement(
+	        "ul",
+	        { className: "rewards-list" },
+	        rewards
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = RewardsIndex;
 
 /***/ }
 /******/ ]);

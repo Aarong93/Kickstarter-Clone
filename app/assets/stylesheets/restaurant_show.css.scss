@@ -1,6 +1,7 @@
 .restaurant-show-page {
 	background-color: #f7fafa;
 	min-height: 600px;
+  padding-bottom: 40px;
 }
 
 .restaurant-show-page-content {
@@ -76,4 +77,46 @@
 .show-back-this-button:hover {
 	cursor: pointer;
 	background-color: #1db95c;
+}
+
+.city-cuisine-show > p {
+  margin-top: 20px;
+  margin-right: 20px;
+  float: left;
+  color: #828587;
+  padding: 1px;
+  font-size: 14px;
+}
+
+.blurb-show {
+  margin-top: 20px;
+  font-size: 22px;
+}
+
+.restaurant-description {
+  width: 570px;
+  float: left;
+  display: block;
+  line-height: 24px;
+}
+
+.restaurant-description-content {
+  min-height: 300px;
+  margin-top: 40px;
+  padding-bottom: 40px;
+  margin-left: 10px;
+}
+
+
+
+.restaurant-rewards-show {
+  float: right;
+  width: 300px;
+}
+
+.restaurant-description > h2, .restaurant-rewards-show > h2 {
+  margin-bottom: 40px;
+  line-height: 24px;
+  font-size: 22px;
+  display: block;
 }
