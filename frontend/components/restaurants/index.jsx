@@ -50,10 +50,11 @@ var RestaurantIndex = React.createClass({
 		if (RestaurantIndexStore.all().length >= RestaurantIndexStore.meta().total_count) {
 			loadMoreClass = "disabled";
 		}
+
 		return (
 			<div className="restaurant-index-page group">
 				<div className="restaurant-index group">
-					<CuisineSelector selected={this.props.location.query.selected}/>
+					<CuisineSelector selected={{id: this.props.location.query.selected}} />
 	        <div className="restaurant-index-holder group">
 					  {restaurants}
 	        </div>

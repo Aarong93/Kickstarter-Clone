@@ -11,6 +11,7 @@ var RestaurantIndexPageStore = new Store(AppDispatcher);
 
 RestaurantIndexPageStore.all = function () {
   return _restaurants.slice(0);
+
 };
 
 RestaurantIndexPageStore.find = function (id) {

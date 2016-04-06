@@ -12,7 +12,13 @@ var CuisineSelector = React.createClass({
 
 	handleChange: function () {
 		var selected = this.props.selected;
-		selected = selected || CuisineStore.all()[0];
+    if (selected.id) {
+      selected = {id: parseInt(selected.id)};
+    } else {
+      selected = CuisineStore.all()[0];
+    }
+
+
 		this.setState({cuisines: CuisineStore.all()}, this.select(selected));
 	},
 

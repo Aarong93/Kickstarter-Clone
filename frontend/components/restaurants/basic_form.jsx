@@ -45,7 +45,7 @@ var BasicForm = React.createClass({
   },
 
   _discardChanges: function () {
-    this.setState(this.getInitialState());
+    this.setState(this.getInitialState(), this.setState.bind(this, {imageClass: "show-image"}));
   },
 
 	handleFileChange: function (e) {
@@ -62,10 +62,10 @@ var BasicForm = React.createClass({
 
   render: function() {
     var saveButton = <div id="disabled-save-button" className="save-button">Save Changes</div>;
-    var discardChanges = <div id="disabled-discard-button" className="discard-button">Discard Changes</div>
+    var discardChanges = <div id="disabled-discard-button" className="discard-button">Discard Changes</div>;
     if (this.state.changed) {
       saveButton = <div className="save-button" onClick={this.props.save}>Save Changes</div>;
-      discardChanges = <div className="discard-button" onClick={this._discardChanges}>Discard Changes</div>
+      discardChanges = <div className="discard-button" onClick={this._discardChanges}>Discard Changes</div>;
     }
 
     return (
@@ -73,12 +73,13 @@ var BasicForm = React.createClass({
         <label>Title
           <input type="text" onInput={this._setChanged} valueLink={this.linkState('title')} />
         </label>
-        <label>Image
+        <label>Upload a New Image
 					<input id="file-input"
 						type="file"
 						onChange={this.handleFileChange}
 						/>
-					<h3 id="current-image-label">Current Image</h3>
+        </label>
+        <label>Current Image
 					<img onLoad={this._imageReady}
 						className={this.state.imageClass}
 						src={this.state.imageUrl} />

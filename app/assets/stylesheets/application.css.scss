@@ -364,9 +364,6 @@ header {
 	height: 400px;
 }*/
 
-.filler {
-	height: 600px;
-}
 	/*end anchor*/
 
 footer {
@@ -377,6 +374,11 @@ footer {
 	padding-bottom: 100px;
 }
 
+footer li:hover {
+  color: #fff;
+  cursor: pointer;
+}
+
 .footer-content {
 	width: 800px;
 	margin: auto;
@@ -384,24 +386,33 @@ footer {
 	border-bottom: 1px solid #fff;
 }
 
+#footer-col-1 {
+  float: left;
+}
+
+#footer-col-2 {
+  float: left;
+  margin-left: 150px;
+}
+
+#footer-col-3 {
+  float: left;
+  margin-left: 150px;
+}
+
 .footer-about-us, .footer-discover, .footer-contact {
-	float: left;
 	color: #fff;
 	font-weight: bold;
 	padding-top: 40px;
-	padding-bottom: 5px;
+  margin: 5px;
 }
 
 .footer-about-us {
 	padding-left: 60px;
 }
 
-.footer-discover, .footer-contact {
-	padding-left: 200px;
-}
-.footer-discover-list {
-	display: block;
-	padding: 5px;
+.footer-about-us-list {
+    margin-left: 5px;
 }
 
 .footer-about-us-list > li {
@@ -411,37 +422,35 @@ footer {
 	margin-top: 10px;
 }
 
-.footer-about-us-list > li > a {
-	display: block;
-}
-
 .footer-discover-list {
 	display: block;
-	float: left;
-	padding-left: 114px;
+	padding: 5px;
+  float: left;
+  margin-top: 5px;
 }
 
 .footer-discover-list > li {
-	margin-top: 5px;
+  margin-bottom: 4px;
 }
 
-.footer-about-us-list > li > a {
+.footer-contact {
+  display: block;
+  margin-left: 0px;
 }
 
 .footer-my-info {
 	display: block;
-	float: left;
-	padding-left: 202px;
-	margin-top: 8px;
+  float: left;
+  margin-top: 10px;
 }
 
 .footer-my-info > li {
-	margin-top: 5px;
+  margin-bottom: 4px;
 }
 
-.footer-my-info > li:first-child {
-	margin-top: 0px;
-}
+
+
+
 
 
 

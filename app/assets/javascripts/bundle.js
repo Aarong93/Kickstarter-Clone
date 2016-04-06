@@ -32818,129 +32818,116 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var CuisineStore = __webpack_require__(266);
+	var ApiUtil = __webpack_require__(219);
 	
 	var FooterBar = React.createClass({
-		displayName: "FooterBar",
+	  displayName: 'FooterBar',
 	
 	
-		render: function () {
-			return React.createElement(
-				"footer",
-				{ className: "group" },
-				React.createElement(
-					"div",
-					{ className: "footer-content group" },
-					React.createElement(
-						"h3",
-						{ className: "footer-about-us group" },
-						"About us"
-					),
-					React.createElement(
-						"h3",
-						{ className: "footer-discover" },
-						"Discover"
-					),
-					React.createElement(
-						"h3",
-						{ className: "footer-contact" },
-						"Contact me"
-					),
-					React.createElement(
-						"ul",
-						{ className: "footer-about-us-list" },
-						React.createElement(
-							"li",
-							null,
-							React.createElement(
-								"a",
-								{ href: "#" },
-								"What is KitchenStarter?"
-							)
-						)
-					),
-					React.createElement(
-						"ul",
-						{ className: "footer-discover-list" },
-						React.createElement(
-							"li",
-							null,
-							React.createElement(
-								"a",
-								{ href: "#" },
-								"Italian"
-							)
-						),
-						React.createElement(
-							"li",
-							null,
-							React.createElement(
-								"a",
-								{ href: "#" },
-								"French"
-							)
-						),
-						React.createElement(
-							"li",
-							null,
-							React.createElement(
-								"a",
-								{ href: "#" },
-								"Indian"
-							)
-						),
-						React.createElement(
-							"li",
-							null,
-							React.createElement(
-								"a",
-								{ href: "#" },
-								"Tapas"
-							)
-						),
-						React.createElement(
-							"li",
-							null,
-							React.createElement(
-								"a",
-								{ href: "#" },
-								"Mexican"
-							)
-						)
-					),
-					React.createElement(
-						"ul",
-						{ className: "footer-my-info" },
-						React.createElement(
-							"li",
-							null,
-							React.createElement(
-								"a",
-								{ href: "#" },
-								"Aaron.r.grau@gmail.com"
-							)
-						),
-						React.createElement(
-							"li",
-							null,
-							React.createElement(
-								"a",
-								{ href: "#" },
-								"LinkedIn"
-							)
-						),
-						React.createElement(
-							"li",
-							null,
-							React.createElement(
-								"a",
-								{ href: "#" },
-								"Github"
-							)
-						)
-					)
-				)
-			);
-		}
+	  contextTypes: { router: React.PropTypes.object.isRequired },
+	
+	  getInitialState: function () {
+	    return { cuisines: [] };
+	  },
+	
+	  componentDidMount: function () {
+	    CuisineStore.addListener(this._onChange);
+	    ApiUtil.fetchCuisines();
+	  },
+	
+	  _onChange: function () {
+	    this.setState({ cuisines: CuisineStore.all() });
+	  },
+	
+	  _indexLink: function (cuisine, e) {
+	    e.preventDefault();
+	    var query = $.param({ selected: cuisine.id });
+	    this.context.router.push('/restaurants/?' + query);
+	  },
+	
+	  render: function () {
+	    var cuisines = React.createElement('div', null);
+	
+	    if (this.state.cuisines.length > 0) {
+	      cuisines = this.state.cuisines.map(function (cuisine) {
+	        return React.createElement(
+	          'li',
+	          { key: cuisine.id, onClick: this._indexLink.bind(this, cuisine) },
+	          cuisine.food
+	        );
+	      }.bind(this));
+	    }
+	
+	    return React.createElement(
+	      'footer',
+	      { className: 'group' },
+	      React.createElement(
+	        'div',
+	        { className: 'footer-content group' },
+	        React.createElement(
+	          'div',
+	          { id: 'footer-col-1' },
+	          React.createElement(
+	            'h3',
+	            { className: 'footer-about-us group' },
+	            'About us'
+	          ),
+	          React.createElement(
+	            'ul',
+	            { className: 'footer-about-us-list' },
+	            React.createElement(
+	              'li',
+	              null,
+	              'What is KitchenStarter?'
+	            )
+	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          { id: 'footer-col-2' },
+	          React.createElement(
+	            'h3',
+	            { className: 'footer-discover' },
+	            'Discover'
+	          ),
+	          React.createElement(
+	            'ul',
+	            { className: 'footer-discover-list' },
+	            cuisines
+	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          { id: 'footer-col-3', className: 'group' },
+	          React.createElement(
+	            'h3',
+	            { className: 'footer-contact' },
+	            'Contact me'
+	          ),
+	          React.createElement(
+	            'ul',
+	            { className: 'footer-my-info' },
+	            React.createElement(
+	              'li',
+	              null,
+	              'Aaron.r.grau@gmail.com'
+	            ),
+	            React.createElement(
+	              'li',
+	              null,
+	              'LinkedIn'
+	            ),
+	            React.createElement(
+	              'li',
+	              null,
+	              'Github'
+	            )
+	          )
+	        )
+	      )
+	    );
+	  }
 	});
 	
 	module.exports = FooterBar;
@@ -33538,13 +33525,14 @@
 			if (RestaurantIndexStore.all().length >= RestaurantIndexStore.meta().total_count) {
 				loadMoreClass = "disabled";
 			}
+	
 			return React.createElement(
 				'div',
 				{ className: 'restaurant-index-page group' },
 				React.createElement(
 					'div',
 					{ className: 'restaurant-index group' },
-					React.createElement(CuisineSelector, { selected: this.props.location.query.selected }),
+					React.createElement(CuisineSelector, { selected: { id: this.props.location.query.selected } }),
 					React.createElement(
 						'div',
 						{ className: 'restaurant-index-holder group' },
@@ -33582,7 +33570,12 @@
 	
 		handleChange: function () {
 			var selected = this.props.selected;
-			selected = selected || CuisineStore.all()[0];
+			if (selected.id) {
+				selected = { id: parseInt(selected.id) };
+			} else {
+				selected = CuisineStore.all()[0];
+			}
+	
 			this.setState({ cuisines: CuisineStore.all() }, this.select(selected));
 		},
 	
@@ -34424,7 +34417,7 @@
 	  },
 	
 	  _discardChanges: function () {
-	    this.setState(this.getInitialState());
+	    this.setState(this.getInitialState(), this.setState.bind(this, { imageClass: "show-image" }));
 	  },
 	
 	  handleFileChange: function (e) {
@@ -34475,16 +34468,16 @@
 	      React.createElement(
 	        'label',
 	        null,
-	        'Image',
+	        'Upload a New Image',
 	        React.createElement('input', { id: 'file-input',
 	          type: 'file',
 	          onChange: this.handleFileChange
-	        }),
-	        React.createElement(
-	          'h3',
-	          { id: 'current-image-label' },
-	          'Current Image'
-	        ),
+	        })
+	      ),
+	      React.createElement(
+	        'label',
+	        null,
+	        'Current Image',
 	        React.createElement('img', { onLoad: this._imageReady,
 	          className: this.state.imageClass,
 	          src: this.state.imageUrl })
