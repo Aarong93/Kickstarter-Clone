@@ -36438,7 +36438,7 @@
 	    var cuisines = CuisineStore.all();
 	    this.setState({ cuisines: cuisines });
 	    this.setState({ selected: cuisines[0] });
-	    ApiUtil.fetchRestaurantByParamsIndexStore({ cuisine_id: cuisines[0].id, featured: true });
+	    ApiUtil.fetchRestaurantByParamsIndexStore({ cuisine_id: cuisines[0].id, featured: true, per: 2 });
 	  },
 	
 	  componentWillUnmount: function () {
@@ -36453,7 +36453,7 @@
 	
 	  _selectCuisine: function (cuisine) {
 	    this.setState({ selected: cuisine });
-	    ApiUtil.fetchRestaurantByParamsIndexStore({ cuisine_id: cuisine.id, featured: true });
+	    ApiUtil.fetchRestaurantByParamsIndexStore({ cuisine_id: cuisine.id, featured: true, per: 2 });
 	  },
 	
 	  _bannerButton: function () {

@@ -23,7 +23,7 @@ var Home = React.createClass({
 	componentDidMount: function () {
     this.cTokenListener = CuisineStore.addListener(this._cuisineChange);
     this.rTokenListener = RestaurantStore.addListener(this._onChange);
-    this.rcTokenListener = RestaurantIndexStore.addListener(this._onSelectedChange)
+    this.rcTokenListener = RestaurantIndexStore.addListener(this._onSelectedChange);
 		ApiUtil.fetchRestaurantByParams({featured: true});
     ApiUtil.fetchCuisines();
 	},
@@ -40,7 +40,7 @@ var Home = React.createClass({
     var cuisines = CuisineStore.all();
     this.setState({cuisines: cuisines});
     this.setState({selected: cuisines[0]});
-    ApiUtil.fetchRestaurantByParamsIndexStore({cuisine_id: cuisines[0].id, featured: true});
+    ApiUtil.fetchRestaurantByParamsIndexStore({cuisine_id: cuisines[0].id, featured: true, per: 2});
   },
 
 	componentWillUnmount: function () {
@@ -55,7 +55,7 @@ var Home = React.createClass({
 
   _selectCuisine: function(cuisine) {
     this.setState({selected: cuisine});
-    ApiUtil.fetchRestaurantByParamsIndexStore({cuisine_id: cuisine.id, featured: true});
+    ApiUtil.fetchRestaurantByParamsIndexStore({cuisine_id: cuisine.id, featured: true, per: 2});
   },
 
   _bannerButton: function () {

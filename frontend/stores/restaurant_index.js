@@ -19,7 +19,7 @@ RestaurantIndexPageStore.find = function (id) {
 
 RestaurantIndexPageStore.meta = function (id) {
 	return $.extend(true, {}, _meta);
-}
+};
 
 RestaurantIndexPageStore.__onDispatch = function (payload) {
 	switch (payload.actionType) {

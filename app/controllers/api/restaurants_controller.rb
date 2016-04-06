@@ -32,9 +32,9 @@ class Api::RestaurantsController < ApplicationController
 	def index
 
 		if params[:cuisine_id] && params[:featured]
-			@restaurants = Restaurant.includes(:city, :user).with_total.where(featured: true).where(published: true).where(cuisine_id: params[:cuisine_id]).order(title: :asc)
+			@restaurants = Restaurant.includes(:city, :user).where(featured: true).where(published: true).where(cuisine_id: params[:cuisine_id]).order(title: :asc).page(1).per(params[:per])
 			if @restaurants
-				render :index
+				render :search_result
 			else
 				render text: "nothing here"
 			end
@@ -44,8 +44,7 @@ class Api::RestaurantsController < ApplicationController
 			@restaurants = Restaurant.includes(:city, :user).with_total.where("title LIKE ?", "%#{str}%").where(published: true).where("expiration > NOW()").limit(3).order(title: :asc)
 		elsif params[:cuisine_id]
 			per = params[:per] || 9
-			cuisine_id = params[:cuisine_id].to_i
-			@restaurants = Restaurant.includes(:city, :user).where(cuisine_id: cuisine_id).where(published: true).where("expiration > NOW()").order(title: :asc).page(1).per(per)
+			@restaurants = Restaurant.includes(:city, :user).where(cuisine_id: params[:cuisine_id]).where(published: true).where("expiration > NOW()").order(title: :asc).page(1).per(per)
 
 			render :search_result
 		elsif params[:featured]
