@@ -3,5 +3,4 @@ json.array! @restaurants do |restaurant|
   json.extract! restaurant, :id, :user, :title, :city, :blurb, :description, :total, :target, :expiration, :published, :featured, :number_contributions
 
 	json.image_url asset_path(restaurant.image.url(:original))
-
 end

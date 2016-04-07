@@ -2,6 +2,7 @@
   min-height: 600px;
   background-color: #f7f7f7;
   position: relative;
+  font-size: 12px;
 }
 
 #edit-restaurant-page-content {
@@ -42,6 +43,7 @@
   padding: 19px;
   border-radius: 5px;
   border: 1px solid #d9d9de;
+  font-size: 16px;
 }
 
 .launch-button:hover {
@@ -64,11 +66,11 @@
 }
 
 #selected-tab {
-  background-color: #F1F1F1
+  background-color: #CDCDCD;
 }
 
 .edit-restaurant-page-form-wrapper {
-  border-radius: 10px;
+  border-radius: 5px;
   margin: auto;
   width: 552px;
   margin-top: 50px;
@@ -81,7 +83,7 @@
 .edit-form > label {
   display: block;
   padding: 15px;
-  font-size: 14px;
+  font-size: 13px;
   margin: 5px;
 	margin-left: 11px;
   width: 500px;
@@ -110,6 +112,7 @@
   margin-left: 20px;
   width: 300px;
   float: right;
+  font-size: 12px;
 }
 
 #current-image-label {
@@ -119,12 +122,14 @@
 }
 
 .edit-form > label > textarea {
-  height: 120px;
+  height: 55px;
 }
 
 #description-textbox {
   height: 400px;
   width: 380px;
+  font-size: 12px;
+
 }
 
 .save-button {
@@ -134,6 +139,7 @@
   background-color: #2BDE73;
   border-radius: 5px;
   color: #fff;
+  font-size: 14px;
   margin-right: 10px;
 }
 
@@ -160,6 +166,7 @@
   background-color: #fd003b;
   border-radius: 5px;
   color: #fff;
+  font-size: 14px;
   margin-right: 10px;
 }
 
@@ -188,4 +195,41 @@
 #modal-header {
   text-align: center;
   font-weight: bold;
+}
+
+.new-rewards-form > h3 {
+  font-size: 16px;
+  padding: 20px;
+  font-weight: bold;
+}
+
+#existing-rewards {
+  padding-top: 20px;
+}
+
+.add-reward-button {
+  border: none;
+  color: #fff;
+  outline: none;
+  float: right;
+  padding: 20px;
+  border-radius: 3px;
+  margin-right: 11px;
+  margin-top: 5px;
+  font-size: 14px;
+  background-color: #2BDE73;
+}
+
+.add-reward-button:hover {
+  background-color: #1db95c;
+  cursor: pointer;
+}
+
+.add-reward-button:disabled:hover {
+  background-color: #2BDE73;
+  cursor: default;
+}
+
+#new-reward-description {
+  height: 60px;
 }

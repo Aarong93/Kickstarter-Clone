@@ -19,7 +19,7 @@ var ApiUtil = {
 		});
 	},
 
-  createRestaurant: function (params, callback) {
+  createRestaurant: function (params, callback, failCallback) {
     $.ajax({
       type: "POST",
       url: "/api/restaurants",
@@ -28,6 +28,9 @@ var ApiUtil = {
       success: function (restaurant) {
         RestaurantActions.receiveCreatedRestaurant(restaurant);
 				callback && callback("/restaurants/edit/" + restaurant.id);
+      },
+      error: function (errors) {
+        failCallback && failCallback(errors);
       }
     });
   },
@@ -67,9 +70,9 @@ var ApiUtil = {
       success: function (restaurant) {
         RestaurantActions.receiveCreatedRestaurant(restaurant);
       },
-			error: function () {
-				callback && callback();
-			}
+      error: function () {
+        callback && callback();
+      }
     });
   },
 
@@ -92,6 +95,9 @@ var ApiUtil = {
 			dataType: "json",
 			data: params,
 			success: function (restaurants) {
+        if (restaurants[0]) {
+          restaurants = {meta: {}, search_results: restaurants };
+        }
 				RestaurantActions.receiveIndexRestaurants(restaurants);
 			}
 		});
@@ -211,6 +217,18 @@ var ApiUtil = {
       data: {contribution: params},
       success: function (contribution) {
         ApiUtil.fetchRestaurant(contribution.restaurant_id);
+      }
+    });
+  },
+
+  createReward: function(params) {
+    $.ajax({
+      type: "POST",
+      url: "/api/rewards",
+      dataType: "json",
+      data: {reward: params},
+      success: function (reward) {
+        ApiUtil.fetchCreatedRestaurant(reward.restaurant_id);
       }
     });
   }

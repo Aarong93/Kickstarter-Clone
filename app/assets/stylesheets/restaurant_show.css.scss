@@ -1,5 +1,5 @@
 .restaurant-show-page {
-	background-color: #f7fafa;
+	background-color: #fff;
 	min-height: 600px;
   padding-bottom: 40px;
 }
@@ -119,4 +119,13 @@
   line-height: 24px;
   font-size: 22px;
   display: block;
+}
+
+.disabled-contribute {
+  opacity: .33;
+}
+
+.disabled-contribute:hover {
+  background-color: #2BDE73;
+  cursor: default;
 }

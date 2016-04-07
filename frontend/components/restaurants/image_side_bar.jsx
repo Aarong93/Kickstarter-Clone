@@ -32,7 +32,7 @@ var ImageSideBar = React.createClass({
 		e.preventDefault();
     if (!SessionStore.isLoggedIn()) {
       this.context.router.push('/session/new');
-    } else {
+    } else if (SessionStore.currentUser().id !== this.props.restaurant.user.id) {
       this.openModal();
     }
 	},
@@ -48,6 +48,9 @@ var ImageSideBar = React.createClass({
 
 	render: function() {
 		var expires = new Date(this.props.restaurant.expiration);
+    if (expires <= 0) {
+      expires = "Finished";
+    }
 		var today = new Date();
 
     var modal = (
@@ -62,6 +65,12 @@ var ImageSideBar = React.createClass({
         </div>
       </Modal>
     );
+
+    var disabled = "";
+
+    if (SessionStore.currentUser().id === this.props.restaurant.user.id) {
+      disabled = "disabled-contribute";
+    }
 
 		return (
 			<div className="show-image-side-bar">
@@ -102,7 +111,7 @@ var ImageSideBar = React.createClass({
 						</p>
 					</li>
 				</ul>
-				<div onClick={this._clickHandler} className="show-back-this-button">
+				<div onClick={this._clickHandler} className={"show-back-this-button " + disabled}>
 					Back This Restaurant
 				</div>
 			</div>

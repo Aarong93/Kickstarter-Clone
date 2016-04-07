@@ -76,7 +76,8 @@ var BasicForm = React.createClass({
         <label>Upload a New Image
 					<input id="file-input"
 						type="file"
-						onChange={this.handleFileChange}
+
+        		onChange={this.handleFileChange}
 						/>
         </label>
         <label>Current Image
@@ -85,13 +86,13 @@ var BasicForm = React.createClass({
 						src={this.state.imageUrl} />
         </label>
         <label>Blurb
-          <textarea onInput={this._setChanged} valueLink={this.linkState('blurb')} />
+          <textarea placeholder="Describe your restaurant in one sentence..." onInput={this._setChanged} valueLink={this.linkState('blurb')} />
         </label>
         <label>End Date
           <input type="date" onInput={this._setChanged} valueLink={this.linkState('expiration')} />
         </label>
         <label>Funding Goal
-          <input placeholder="$0" type="text" onInput={this._setChanged} valueLink={this.linkState('target')} />
+          <input placeholder="$0..." type="text" onInput={this._setChanged} valueLink={this.linkState('target')} />
         </label>
         {saveButton}
         {discardChanges}

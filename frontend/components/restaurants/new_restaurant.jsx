@@ -4,6 +4,7 @@ var ApiUtil = require('../../util/api_util');
 var LinkedStateMixin = require('react-addons-linked-state-mixin');
 var CuisineStore = require('../../stores/cuisines');
 var CityStore = require('../../stores/cities');
+var HelperUtil = require('../../util/helper_util');
 
 var NewRestaurant = React.createClass({
 
@@ -11,13 +12,41 @@ var NewRestaurant = React.createClass({
 
   contextTypes: {router: React.PropTypes.object.isRequired},
 
-  contextTypes: {
-    router: React.PropTypes.object.isRequired
+  getInitialState: function () {
+    return {
+      selected: {food: ""},
+      title: "", cuisines: [],
+      showDropdown: false,
+      cities: [],
+      selectedCity: {name: ""},
+      errorMessage: "",
+      showError: false
+     };
   },
 
-  getInitialState: function () {
-    return {selected: {food: ""}, title: "", cuisines: [], showDropdown: false, cities: [], selectedCity: {name: ""}};
+  _error: function () {
+    if (!this.state.showError){
+      return (<div></div>);
+    }
+    var messages =
+      this.state.errorMessage.map(function (message) {
+        return (<div key={message}><p>{message}</p><br /></div>);
+      });
+
+    return (
+      <div  className="errors" id="create-restaurant-errors">
+        {messages}
+      </div>
+    );
   },
+
+  _showError: function (errorMessage) {
+    this.setState({
+      showError: true,
+      errorMessage: errorMessage.responseJSON
+    });
+  },
+
 
   _cuisineChange: function () {
     this.setState({cuisines: CuisineStore.all()});
@@ -43,9 +72,11 @@ var NewRestaurant = React.createClass({
 
   _submit: function (e) {
     e.preventDefault();
+    var title = HelperUtil.toTitleCase(this.state.title);
     ApiUtil.createRestaurant(
-      {cuisine_id: this.state.selected.id, title: this.state.title, city_id: this.state.selectedCity},
-      this.context.router.push.bind(this)
+      {cuisine_id: this.state.selected.id, title: title, city_id: this.state.selectedCity},
+      this.context.router.push.bind(this),
+      this._showError
     );
   },
 
@@ -54,6 +85,10 @@ var NewRestaurant = React.createClass({
     e.stopPropagation();
     this.setState({showDropdown: true});
     window.addEventListener('click', this._handleClose);
+  },
+
+  _clearError: function () {
+    this.setState({showError: false});
   },
 
   _handleClose: function (e) {
@@ -100,7 +135,7 @@ var NewRestaurant = React.createClass({
             <ul className= {"cuisine-choices " + hidden}>
               {cuisines}
             </ul>
-            <input type="text" placeholder="name..." valueLink={this.linkState('title')} className="restaurant-name-input" />
+            <input type="text" onInput={this._clearError} placeholder="name..." valueLink={this.linkState('title')} className="restaurant-name-input" />
             <div className="city-selector-holder group">
               <p>Pick a city</p>
               <select id="city-selector" valueLink={this.linkState('selectedCity')} >
@@ -108,6 +143,7 @@ var NewRestaurant = React.createClass({
               </select>
             </div>
             <input type="submit" className="submit-new-restaurant" disabled={disabled} value="Create Your Restaurant!" />
+            {this._error()}
           </form>
         </div>
       </div>

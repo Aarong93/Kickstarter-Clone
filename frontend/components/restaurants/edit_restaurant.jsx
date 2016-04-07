@@ -9,6 +9,7 @@ var BasicsForm = require('./basic_form');
 var DescriptionForm = require('./description_form.jsx');
 var Modal = require('react-modal');
 var SessionStore = require('../../stores/session_store');
+var NewRewardsForm = require('../rewards/new_reward');
 
 $(function(){
   var appElement = $('#root')[0];
@@ -146,7 +147,11 @@ var EditRestaurant = React.createClass({
             save={this._save}
           />;
       } else if (this.state.active === 1) {
-        form = <div>Coming Soon</div>;
+        form =
+          <NewRewardsForm
+            ref="curForm"
+            restaurant={this.state.restaurant}
+            />;
       } else if (this.state.active === 2) {
         form = <DescriptionForm ref="curForm"
           restaurant={this.state.restaurant}
@@ -179,7 +184,8 @@ var EditRestaurant = React.createClass({
       this.state.restaurant.expiration &&
       this.state.restaurant.description &&
       this.state.restaurant.image_url &&
-      !this.state.restaurant.published
+      !this.state.restaurant.published &&
+      new Date(this.state.restaurant.expiration) > new Date()
     ) {
       launch = <div onClick={this._launch} className="launch-button">Launch!</div>;
     }

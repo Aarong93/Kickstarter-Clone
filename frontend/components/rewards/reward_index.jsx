@@ -4,7 +4,7 @@ var PropTypes = React.PropTypes;
 var RewardsIndex = React.createClass({
 
   getInitialState: function () {
-    return ({rewards: []});
+    return ({rewards: this.props.rewards});
   },
 
   _onClick: function (e) {
@@ -37,6 +37,10 @@ var RewardsIndex = React.createClass({
           </li>
         );
       });
+
+    if (this.state.rewards.length < 1) {
+      rewards = <div>No Rewards</div>;
+    }
     return (
       <div className="rewards-index group">
         <ul className="rewards-list">

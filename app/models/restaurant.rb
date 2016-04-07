@@ -9,7 +9,7 @@ class Restaurant < ActiveRecord::Base
 	validates_attachment_content_type :image, content_type: /\Aimage\/.*\Z/
 
 	validates :user_id, :cuisine_id, :title, :city_id, presence: true
-	validates :title, uniqueness: true
+	validates :title, uniqueness: { case_sensitive: false }
 
 	def self.with_total()
 		restaurants = Restaurant.joins("LEFT OUTER JOIN contributions ON contributions.restaurant_id = restaurants.id").

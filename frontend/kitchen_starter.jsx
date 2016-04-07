@@ -6,6 +6,8 @@ var Route = ReactRouter.Route;
 var IndexRoute = ReactRouter.IndexRoute;
 var browserHistory = ReactRouter.browserHistory;
 
+var BackedProjects = require('./components/profiles/backed_projects');
+var CreatedProjects = require('./components/profiles/created_projects');
 var NavBar = require('./components/nav/nav_bar');
 var Footer = require('./components/nav/footer_bar');
 var RestaurantShow = require('./components/restaurants/restaurant_show');
@@ -45,6 +47,8 @@ var router = (
      <Route path="/restaurants/new" component={RestaurantNew} onEnter={_requireLoggedIn} />
      <Route path="/restaurants/edit/:id" component={RestaurantEdit} onEnter={_requireLoggedIn} />
 		 <Route path="/restaurants/:id" component={RestaurantShow} />
+     <Route path="/profile/projects" component={CreatedProjects} onEnter={_requireLoggedIn}/>
+     <Route path="/profile/backed" component={BackedProjects} onEnter={_requireLoggedIn}/>
    </Route>
  </Router>
 );

@@ -55,9 +55,9 @@ var FooterBar = React.createClass({
           <div id="footer-col-3" className="group">
             <h3 className="footer-contact">Contact me</h3>
   					<ul className="footer-my-info">
-  						<li>Aaron.r.grau@gmail.com</li>
-  						<li>LinkedIn</li>
-  						<li>Github</li>
+  						<li><a href="mailto:aaron.r.grau@gmail.com">Aaron.r.grau@gmail.com</a></li>
+  						<li><a href="https://www.linkedin.com/in/aaronrgrau">LinkedIn</a></li>
+  						<li><a href="https://github.com/Aarong93/KitchenStarter-A-Kick-Starter-Clone">Github</a></li>
   					</ul>
           </div>
 				</div>

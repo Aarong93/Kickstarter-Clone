@@ -9,6 +9,7 @@ class Api::ContributionsController < ApplicationController
     end
 
     return if reward_min?
+    return if own_project?
 
 		@contribution.save!
 	end
@@ -32,6 +33,10 @@ class Api::ContributionsController < ApplicationController
     end
 
     false
+  end
+
+  def own_project?
+    @contribution.user_id == @contribution.restaurant_id
   end
 
 end

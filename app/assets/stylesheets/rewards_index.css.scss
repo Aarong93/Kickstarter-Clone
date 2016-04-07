@@ -1,17 +1,27 @@
 .rewards-index {
   float: left;
-  padding: 20px;
-  background-color: #F1F5F7;
+  background-color: #f7fafa;
   border-radius: 3px;
+  width: 96%;
+  box-sizing: border-box;
 }
 
 .rewards-list > li {
   background-color: #fff;
-  border-radius: 5px;
   padding: 5px;
+  padding-bottom: 10px;
   margin: 5px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   font-size: 14px;
+}
+
+.rewards-list > li:first-of-type {
+  margin-top: 0px;
+  padding-top: 0px;
+}
+
+.rewards-list > li > p {
+  padding-bottom: 1px;
 }
 
 .rewards-list > li > h2 {

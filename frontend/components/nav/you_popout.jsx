@@ -17,14 +17,24 @@ var YouPopout = React.createClass({
 		this.props.handleExitClick();
   },
 
+  _backedRestaurants: function () {
+    this.props.closeCB();
+    this.context.router.push('/profile/backed');
+  },
+
+  _createdRestaurants: function () {
+    this.props.closeCB();
+    this.context.router.push('/profile/projects');
+  },
+
 	render: function() {
 		return (
 			<div id="you-popout">
 				<div className="you-popout-col group">
 					<h3>Your Links</h3>
 					<ul>
-						<li>Backed Restaurants</li>
-						<li>Your Restaurants</li>
+						<li onClick={this._createdRestaurants}>Created Restaurants</li>
+            <li onClick={this._backedRestaurants}>Backed Restaurants</li>
 					</ul>
 					<p>Signed in as<br /> <span id="logged-in-name">{this.props.name}</span></p>
 					<a href="#" onClick={this._signOut}>Sign Out</a>

@@ -26,11 +26,13 @@ class Api::RestaurantsController < ApplicationController
     @restaurant.published = false
 		@restaurant.city_id = @restaurant.city_id.to_i
     @restaurant.user_id = current_user.id
-    @restaurant.save
+
+    unless @restaurant.save
+      render text: @restaurant.errors.full_messages, status: 400
+    end
   end
 
 	def index
-
 		if params[:cuisine_id] && params[:featured]
 			@restaurants = Restaurant.includes(:city, :user).where(featured: true).where(published: true).where(cuisine_id: params[:cuisine_id]).order(title: :asc).page(1).per(params[:per])
 			if @restaurants
@@ -51,6 +53,24 @@ class Api::RestaurantsController < ApplicationController
 			@restaurants = Restaurant.includes(:city, :user).with_total.where(featured: true).where(published: true).where("expiration > NOW()").order(title: :asc)
 			@restaurant = @restaurants.shuffle.first;
 			render :show
+    elsif params[:user_id]
+      @restaurants = Restaurant.includes(:city, :user).where(user_id: current_user.id).page(1).per(100)
+      if @restaurants
+        render :search_result
+      else
+        render text: "nothing here"
+      end
+    elsif params[:reward_user_id]
+      @restaurants =
+        Restaurant.includes(:city, :user)
+        .joins(:contributions)
+        .where(contributions: { user_id: params[:reward_user_id]})
+        .uniq
+      if @restaurants
+        render :backed_index
+      else
+        render text: "nothing here"
+      end
 		else
 			@restaurants = Restaurant.includes(:city, :user).with_total.where(published: true).order(title: :asc)
 			@restaurant = @restaurants.shuffle.first;

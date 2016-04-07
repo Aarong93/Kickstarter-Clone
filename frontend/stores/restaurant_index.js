@@ -10,6 +10,9 @@ var RestaurantIndexPageStore = new Store(AppDispatcher);
 
 
 RestaurantIndexPageStore.all = function () {
+  if (_restaurants.length === 0) {
+    return [];
+  }
   return _restaurants.slice(0);
 
 };

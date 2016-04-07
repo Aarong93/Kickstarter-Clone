@@ -2,7 +2,8 @@ class Api::RewardsController < ApplicationController
 
 
   def create
-
+    @reward = Reward.new(reward_params)
+    render json: @reward if @reward.save
   end
 
   def index
@@ -23,8 +24,8 @@ class Api::RewardsController < ApplicationController
 
   private
 
-  def rewards_params
-    params.require(:rewards).permit(:name, :restaurant_id, :description, :maximum, :min_dollar_amount)
+  def reward_params
+    params.require(:reward).permit(:name, :restaurant_id, :description, :min_dollar_amount)
   end
 
 end
