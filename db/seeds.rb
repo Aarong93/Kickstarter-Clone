@@ -102,8 +102,6 @@ reward2 = {name: "reward 2", min_dollar_amount: 100, description: "Lorem ipsum d
 restaurants.each do |restaurant|
   restaurant.rewards.create!(reward1)
   restaurant.rewards.create!(reward2)
-  restaurant.rewards.create!(reward3)
-  restaurant.rewards.create!(reward4)
 end
 
 
