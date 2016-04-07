@@ -39,6 +39,14 @@ var SignUpForm = React.createClass({
 		});
 	},
 
+  _loginGuest: function (e) {
+    e.preventDefault();
+    ApiUtil.login(
+      {email: "guest@gmail.com", password: "password"},
+      this.context.router.goBack.bind(this)
+    );
+  },
+
   render: function() {
     return (
       <div className="login-page">
@@ -58,6 +66,9 @@ var SignUpForm = React.createClass({
 	          <button id="log-in-button" className="submit-new-restaurant">
 							Sign me up!
 						</button>
+            <div id="log-in-button-guest" className="submit-new-restaurant" onClick={this._loginGuest}>
+              Sign in as guest!
+            </div>
 	        </form>
 				</div>
 			</div>
