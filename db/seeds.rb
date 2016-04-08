@@ -60,12 +60,12 @@ cuisines = Cuisine.create([
 	{food: "Mexican"},
 	{food: "Chinese"},
 	{food: "Japanese"},
-	{food: "Burgers"},
+	{food: "Pizza"},
 	{food: "Americano"},
 	{food: "Barbecue"},
 	{food: "Indian"},
 	{food: "Thai"},
-	{food: "Bar"}
+	{food: "Turkish"}
 ])
 
 Restaurant.delete_all
@@ -77,9 +77,10 @@ description = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do 
 
 400.times do |i|
 	target = 10000 + rand(50000)
+  cuisine = cuisines.shuffle.first;
 	restaurants.push(Restaurant.create!({
-    user_id: user.id, cuisine_id: cuisines.shuffle.first.id, title: "Seed #{i}",
-     city_id: cities[rand(3)].id, blurb: "Seed Seed Seed !!!", target: target,
+    user_id: user.id, cuisine_id: cuisine.id, title: "Seed #{i}",
+     city_id: cities[rand(3)].id, blurb: "Best new #{cuisine.food} restaurant.", target: target,
      expiration: Date.parse(random_future_date),
      published: true, featured: true, description: description
   }))
