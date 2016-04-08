@@ -34,7 +34,7 @@ class Api::RestaurantsController < ApplicationController
 
 	def index
 		if params[:cuisine_id] && params[:featured]
-			@restaurants = Restaurant.includes(:city, :user).where(featured: true).where(published: true).where(cuisine_id: params[:cuisine_id]).order(title: :asc).page(1).per(params[:per])
+			@restaurants = Restaurant.includes(:city, :user).where(featured: true).where(published: true).where(cuisine_id: params[:cuisine_id]).order(id: :asc).page(1).per(params[:per])
 			if @restaurants
 				render :search_result
 			else
@@ -58,7 +58,7 @@ class Api::RestaurantsController < ApplicationController
 
 			render :search_result
 		elsif params[:featured]
-			@restaurants = Restaurant.includes(:city, :user).with_total.where(featured: true).where(published: true).where("expiration > NOW()").order(title: :asc)
+			@restaurants = Restaurant.includes(:city, :user).with_total.where(featured: true).where(published: true).where("expiration > NOW()").order(id: :asc)
 			@restaurant = @restaurants.shuffle.first;
 			render :show
     elsif params[:user_id]
@@ -80,7 +80,7 @@ class Api::RestaurantsController < ApplicationController
         render text: "nothing here"
       end
 		else
-			@restaurants = Restaurant.includes(:city, :user).with_total.where(published: true).order(title: :asc)
+			@restaurants = Restaurant.includes(:city, :user).with_total.where(published: true).order(id: :asc)
 			@restaurant = @restaurants.shuffle.first;
 			render :show
 		end
