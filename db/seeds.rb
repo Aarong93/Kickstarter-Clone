@@ -99,7 +99,7 @@ description = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do 
     user_id: users[user_num].id, cuisine_id: cuisine.id, title: word1 + " " + word2 + " " + word3,
      city_id: cities[rand(3)].id, blurb: Faker::Hipster.sentence, target: target,
      expiration: Date.parse(random_future_date),
-     published: true, featured: true, description: Faker::Hipster.paragraph
+     published: true, featured: true, description: Faker::Hipster.paragraph + Faker::Hipster.paragraph
   }))
 end
 
