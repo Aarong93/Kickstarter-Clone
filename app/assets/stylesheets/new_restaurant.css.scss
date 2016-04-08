@@ -4,6 +4,7 @@
   background-color: #F5F7F7;
   font-weight: 200;
   padding-top: 100px;
+  min-width: 1000px;
 }
 
 .new-restaurant-page-content {
@@ -145,9 +146,14 @@
 
 .city-selector-holder > p {
   float: left;
-  display: inline-block;
+  margin-left: 0px;
+  padding-left: 0px;
   margin-right: 5px;
+  margin-right: -10px;
   margin-top: 9px;
+  text-align: left;
+  display: inline-block;
+  width: 100px;
 }
 
 .city-selector-holder > select {

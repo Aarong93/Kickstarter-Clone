@@ -6,6 +6,7 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
+
 def rand_day
   day = rand(28) + 1
   if day < 10
@@ -38,11 +39,20 @@ cities = City.create([
 
 User.delete_all
 
-user = User.create({
+user = User.create([
+  {
 		name: 'Aaron Grau',
 		email: 'aaron.r.grau@gmail.com',
 		password: 'password12'
-	})
+	},
+])
+
+users = []
+
+20.times do
+  users << User.create({ name: Faker::Name.name,
+    email: Faker::Internet.email, password: "password"})
+end
 
 guest = User.create({
 		name: 'Guest',
@@ -72,14 +82,21 @@ Restaurant.delete_all
 
 restaurants = []
 
-file = File.open('app/assets/images/burger.jpg')
 description = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
 
+
+
+
 400.times do |i|
+  word1 = Faker::Hipster.word
+  word2 = Faker::Hipster.word
+  word3 = Faker::Hipster.word
+
 	target = 10000 + rand(50000)
   cuisine = cuisines.shuffle.first;
+  user_num = rand(20)
 	restaurants.push(Restaurant.create!({
-    user_id: user.id, cuisine_id: cuisine.id, title: "Seed #{i}",
+    user_id: users[user_num].id, cuisine_id: cuisine.id, title: word1 + " " + word2 + " " + word3,
      city_id: cities[rand(3)].id, blurb: "Best new #{cuisine.food} restaurant.", target: target,
      expiration: Date.parse(random_future_date),
      published: true, featured: true, description: description
@@ -87,18 +104,23 @@ description = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do 
 end
 
 3.times do |i|
+  word1 = Faker::Hipster.word
+  word2 = Faker::Hipster.word
+  word3 = Faker::Hipster.word
+
 	target = 10000 + rand(50000)
+  cuisine = cuisines.shuffle.first;
 	restaurants.push(Restaurant.create!({
-    user_id: guest.id, cuisine_id: cuisines.shuffle.first.id, title: "Seed #{i+401}",
-    city_id: cities[rand(3)].id, blurb: "Seed Seed Seed !!!", target: target,
+    user_id: guest.id, cuisine_id: cuisine.id, title: word1 + " " + word2 + " " + word3,
+    city_id: cities[rand(3)].id, blurb: Faker::Hipster.sentence, target: target,
     expiration: Date.parse(random_future_date), published: true,
-    featured: true, description: description}))
+    featured: true, description: Faker::Hipster.paragraph}))
 end
 
 Reward.delete_all
 
-reward1 = {name: "reward 1", min_dollar_amount: 10, description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."}
-reward2 = {name: "reward 2", min_dollar_amount: 100, description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."}
+reward1 = {name: "One Free Lunch", min_dollar_amount: 10, description: Faker::Hipster.sentence}
+reward2 = {name: "Three Free Dinners", min_dollar_amount: 100, description: Faker::Hipster.sentence}
 
 restaurants.each do |restaurant|
   restaurant.rewards.create!(reward1)
@@ -109,10 +131,11 @@ end
 Contribution.delete_all
 
 4000.times do |i|
+  user_num = rand(20)
 	x = rand(400)
 	val = 200 + rand(3000)
  	Contribution.create!(
-		{user_id: user.id, restaurant_id: restaurants[x].id, value: val }
+		{user_id: users[user_num].id, restaurant_id: restaurants[x].id, value: val }
 	)
 end
 

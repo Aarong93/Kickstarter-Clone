@@ -33515,7 +33515,7 @@
 			}
 			return React.createElement(
 				'div',
-				{ className: 'restaurant-show-page' },
+				{ className: 'restaurant-show-page group' },
 				React.createElement(
 					'div',
 					{ className: 'restaurant-show-page-content group' },

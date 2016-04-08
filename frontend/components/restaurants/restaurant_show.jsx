@@ -88,7 +88,7 @@ var RestaurantShow = React.createClass({
 			return <div className="restaurant-show-page"></div>;
 		}
 		return (
-			<div className="restaurant-show-page">
+			<div className="restaurant-show-page group">
 				<div className="restaurant-show-page-content group">
 					<h1>{this.state.restaurant.title}</h1>
 					<h4>

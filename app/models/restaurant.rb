@@ -19,7 +19,7 @@ class Restaurant < ActiveRecord::Base
       rewards: { name: 'D' }
     }
 
-	has_attached_file :image, default_url: "burger.jpg"
+	has_attached_file :image, default_url: :set_default_url_on_cuisine
 	validates_attachment_content_type :image, content_type: /\Aimage\/.*\Z/
 
 	validates :user_id, :cuisine_id, :title, :city_id, presence: true
@@ -32,5 +32,10 @@ class Restaurant < ActiveRecord::Base
 		restaurants
 	end
 
+  private
+
+  def set_default_url_on_cuisine
+    "Americano.jpg"
+  end
 
 end
