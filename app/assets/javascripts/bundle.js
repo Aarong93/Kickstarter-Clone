@@ -37516,9 +37516,9 @@
 	        React.createElement(
 	          "p",
 	          null,
-	          "Kitchen starter allows users to create projects to request funding for new restaurant ideas.",
+	          "Kitchen starter allows users to create projects in order to request funding for new restaurant ideas.",
 	          React.createElement("br", null),
-	          "Users can search for view and contribute to other users projects."
+	          "Users can search for, view, and contribute to other users projects."
 	        ),
 	        React.createElement(
 	          "h3",
