@@ -33660,7 +33660,7 @@
 	
 			var disabled = "";
 	
-			if (SessionStore.currentUser().id === this.props.restaurant.user.id) {
+			if (SessionStore.currentUser() && SessionStore.currentUser().id === this.props.restaurant.user.id) {
 				disabled = "disabled-contribute";
 			}
 	
