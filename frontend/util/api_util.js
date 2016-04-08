@@ -103,12 +103,15 @@ var ApiUtil = {
 		});
 	},
 
-	fetchRestaurantByNameContain: function (str) {
+	fetchRestaurantByNameContain: function (str, page) {
+    if (!page) {
+      page = 1;
+    }
 		$.ajax({
 			type: "GET",
 			url: "/api/restaurants",
 			dataType: "json",
-			data: {str: str},
+			data: {str: str, page: page},
 			success: function (restaurants) {
 				RestaurantActions.receiveRestaurants(restaurants);
 			}

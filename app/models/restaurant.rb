@@ -5,6 +5,20 @@ class Restaurant < ActiveRecord::Base
 	has_many :contributions
 	has_many :rewards
 
+  include PgSearch
+
+  pg_search_scope :restaurant_search,
+    against: {
+      title: 'A',
+      blurb: 'B',
+      description: 'C'
+    },
+    associated_against: {
+      user: { name: 'B' },
+      cuisine: { food: 'B'},
+      rewards: { name: 'D' }
+    }
+
 	has_attached_file :image, default_url: "burger.jpg"
 	validates_attachment_content_type :image, content_type: /\Aimage\/.*\Z/
 

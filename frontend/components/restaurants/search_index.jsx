@@ -3,6 +3,7 @@ var PropTypes = React.PropTypes;
 var RestaurantSearchStore = require('../../stores/restaurant_search_index');
 var IndexItem = require('./index_item');
 var RestaurantActions = require('../../actions/restaurant_actions');
+var ApiUtil = require('../../util/api_util');
 
 var SearchIndex = React.createClass({
 
@@ -18,6 +19,17 @@ var SearchIndex = React.createClass({
   componentDidMount: function () {
     this.listenToken =
       RestaurantSearchStore.addListener(this.onRestaurantSearchStoreChange);
+  },
+
+  _changePage: function (val) {
+    var meta = RestaurantSearchStore.meta();
+    var page = meta.page + val;
+    if (page > meta.total_pages) {
+      page = 1;
+    } else if (page === 0) {
+      page = meta.total_pages;
+    }
+    ApiUtil.fetchRestaurantByNameContain(meta.query, page);
   },
 
   componentWillUnmount: function () {
@@ -53,6 +65,12 @@ var SearchIndex = React.createClass({
 					<div
 						className="search-exit-button fa fa-times" onClick={RestaurantActions.clearSearchRestaurants}
 						 />
+           <div onClick={this._changePage.bind(this, -1)} id="left-angle-bracket">
+             <i className="fa fa-angle-left" />
+           </div>
+           <div onClick={this._changePage.bind(this, 1)} id="right-angle-bracket">
+             <i className="fa fa-angle-right" />
+           </div>
 					{restaurants}
 	      </div>
 			</div>

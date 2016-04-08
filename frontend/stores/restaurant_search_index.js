@@ -4,6 +4,7 @@ var RestaurantConstants = require('../constants/restaurant_constants');
 var HelperUtil = require('../util/helper_util');
 
 var _restaurants = [];
+var _meta = {};
 
 var RestaurantIndexStore = new Store(AppDispatcher);
 
@@ -20,6 +21,10 @@ RestaurantIndexStore.all = function () {
   return _restaurants.slice(0);
 };
 
+RestaurantIndexStore.meta = function () {
+  return $.extend(true, {}, _meta);
+};
+
 RestaurantIndexStore.find = function (id) {
 	return _restaurants[id];
 };
@@ -27,7 +32,8 @@ RestaurantIndexStore.find = function (id) {
 RestaurantIndexStore.__onDispatch = function (payload) {
 	switch (payload.actionType) {
 		case RestaurantConstants.RESTAURANTS_RECEIVED:
-			_newRestaurants(payload.restaurants);
+      _newRestaurants(payload.restaurants.search_results);
+      _meta = payload.restaurants.meta;
 			RestaurantIndexStore.__emitChange();
 			break;
     case RestaurantConstants.CLEAR_SEARCH_RESTAURANTS:

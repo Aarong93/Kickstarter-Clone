@@ -52,22 +52,22 @@
 	var IndexRoute = ReactRouter.IndexRoute;
 	var browserHistory = ReactRouter.browserHistory;
 	
-	var BackedProjects = __webpack_require__(304);
-	var CreatedProjects = __webpack_require__(301);
-	var NavBar = __webpack_require__(216);
-	var Footer = __webpack_require__(258);
-	var RestaurantShow = __webpack_require__(260);
-	var SearchIndex = __webpack_require__(285);
-	var RestaurantIndex = __webpack_require__(287);
-	var LoginForm = __webpack_require__(290);
-	var SignUpForm = __webpack_require__(291);
-	var RestaurantNew = __webpack_require__(292);
-	var RestaurantEdit = __webpack_require__(294);
-	var Home = __webpack_require__(298);
+	var BackedProjects = __webpack_require__(216);
+	var CreatedProjects = __webpack_require__(252);
+	var NavBar = __webpack_require__(253);
+	var Footer = __webpack_require__(263);
+	var RestaurantShow = __webpack_require__(265);
+	var SearchIndex = __webpack_require__(290);
+	var RestaurantIndex = __webpack_require__(292);
+	var LoginForm = __webpack_require__(294);
+	var SignUpForm = __webpack_require__(295);
+	var RestaurantNew = __webpack_require__(296);
+	var RestaurantEdit = __webpack_require__(298);
+	var Home = __webpack_require__(303);
 	
-	var SessionStore = __webpack_require__(257);
-	var ApiUtil = __webpack_require__(219);
-	var RestaurantActions = __webpack_require__(220);
+	var SessionStore = __webpack_require__(249);
+	var ApiUtil = __webpack_require__(241);
+	var RestaurantActions = __webpack_require__(242);
 	
 	var App = React.createClass({
 	  displayName: 'App',
@@ -24825,1531 +24825,146 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var YouPopout = __webpack_require__(217);
-	var SearchBar = __webpack_require__(233);
-	var SessionStore = __webpack_require__(257);
+	var PropTypes = React.PropTypes;
+	var RestaurantIndexStore = __webpack_require__(217);
+	var ApiUtil = __webpack_require__(241);
+	var SessionStore = __webpack_require__(249);
+	var ProfileNav = __webpack_require__(250);
+	var RestaurantProfilePageItem = __webpack_require__(251);
 	
-	var NavBar = React.createClass({
-		displayName: 'NavBar',
+	var BackProjects = React.createClass({
+	  displayName: 'BackProjects',
 	
 	
-		contextTypes: { router: React.PropTypes.object.isRequired },
+	  getInitialState: function () {
+	    return { restaurants: [] };
+	  },
 	
-		getInitialState: function () {
-			var name = "";
-			if (SessionStore.isLoggedIn()) {
-				name = SessionStore.currentUser().name;
-			}
-			return { expandYou: false, isLoggedIn: SessionStore.isLoggedIn(), name: name };
-		},
+	  componentDidMount: function () {
+	    this.token = RestaurantIndexStore.addListener(this._onChange);
+	    ApiUtil.fetchRestaurantByParamsIndexStore({
+	      reward_user_id: SessionStore.currentUser().id
+	    });
+	  },
 	
-		onChange: function () {
-			var name = "";
-			if (SessionStore.isLoggedIn()) {
-				name = SessionStore.currentUser().name;
-			}
-			this.setState({ isLoggedIn: SessionStore.isLoggedIn(), name: name });
-		},
+	  componentWillUnmount: function () {
+	    this.token.remove();
+	  },
 	
-		componentDidMount: function () {
-			this.listenToken = SessionStore.addListener(this.onChange);
-		},
+	  _onChange: function () {
+	    this.setState({ restaurants: RestaurantIndexStore.all() });
+	  },
 	
-		componentWillUnmount: function () {
-			this.listenToken.remove();
-		},
+	  render: function () {
+	    var Restaurants = [];
 	
-		_logoClick: function (e) {
-			e.preventDefault();
-			e.stopPropagation();
-			this.context.router.push("/");
-		},
+	    if (this.state.restaurants.length > 0) {
+	      this.state.restaurants.forEach(function (restaurant) {
+	        Restaurants.push(React.createElement(
+	          'li',
+	          { key: restaurant.id },
+	          React.createElement(RestaurantProfilePageItem, { restaurant: restaurant })
+	        ));
+	      });
+	    }
 	
-		_logo: function () {
-			return React.createElement(
-				'h2',
-				{ className: 'site-logo group' },
-				React.createElement(
-					'a',
-					{ onClick: this._logoClick },
-					React.createElement(
-						'span',
-						{ className: 'dark-green' },
-						'KITCHEN'
-					),
-					React.createElement(
-						'span',
-						{ className: 'green' },
-						'STARTER'
-					)
-				)
-			);
-		},
+	    return React.createElement(
+	      'div',
+	      { className: 'profile-page' },
+	      React.createElement(
+	        'div',
+	        { className: 'profile-page-content group' },
+	        React.createElement(
+	          'div',
+	          { className: 'group profile-page-header' },
+	          React.createElement(
+	            'h1',
+	            null,
+	            'Backed projects'
+	          ),
+	          React.createElement(ProfileNav, { selected: '1' })
+	        ),
+	        React.createElement(
+	          'h2',
+	          null,
+	          'A place to keep track of all your backed projects'
+	        ),
+	        React.createElement(
+	          'ul',
+	          { className: 'project-list group' },
+	          Restaurants
+	        )
+	      )
+	    );
+	  }
 	
-		_newRestaurant: function (e) {
-			e.preventDefault();
-			this.context.router.push('/restaurants/new');
-		},
-	
-		_nav: function () {
-			return React.createElement(
-				'ul',
-				{ className: 'global-nav' },
-				React.createElement(
-					'li',
-					null,
-					React.createElement(
-						'a',
-						{ href: '#', onClick: this._restaurantIndex },
-						'Discover'
-					)
-				),
-				React.createElement(
-					'li',
-					null,
-					React.createElement(
-						'a',
-						{ href: '#', onClick: this._newRestaurant },
-						'Start a Project'
-					)
-				),
-				React.createElement(
-					'li',
-					null,
-					React.createElement(
-						'a',
-						{ href: '#' },
-						'About Us'
-					)
-				)
-			);
-		},
-	
-		_restaurantIndex: function (e) {
-			e.preventDefault();
-			this.context.router.push('/restaurants');
-		},
-	
-		_handleYouPopoutExitClick: function () {
-			this.setState({ expandYou: false });
-		},
-	
-		_youModal: function () {
-			if (this.state.expandYou) {
-				return React.createElement(YouPopout, {
-					handleExitClick: this._handleYouPopoutExitClick,
-					disableOnClickOutside: true,
-					name: this.state.name,
-					closeCB: this._handleYouPopoutExitClick
-				});
-			} else {
-				return "";
-			}
-		},
-	
-		_youClick: function (e) {
-			this.setState({ expandYou: !this.state.expandYou });
-		},
-	
-		_signUp: function (e) {
-			e.preventDefault();
-			this.context.router.push('/users/new');
-		},
-	
-		_signIn: function (e) {
-			e.preventDefault();
-			this.context.router.push('/session/new');
-		},
-	
-		render: function () {
-			var accountTab;
-	
-			if (!this.state.isLoggedIn) {
-				//placeholder for logged in
-				accountTab = React.createElement(
-					'ul',
-					{ className: 'login-nav' },
-					React.createElement(
-						'li',
-						null,
-						React.createElement(
-							'a',
-							{ onClick: this._signUp },
-							'Sign up'
-						)
-					),
-					React.createElement(
-						'li',
-						null,
-						React.createElement(
-							'a',
-							{ onClick: this._signIn },
-							'Login'
-						)
-					)
-				);
-			} else {
-				accountTab = React.createElement(
-					'ul',
-					{ className: 'login-nav-me' },
-					React.createElement(
-						'li',
-						null,
-						React.createElement(
-							'div',
-							{ onClick: this._youClick },
-							'You ',
-							React.createElement('span', { className: 'my-arrow fa fa-sort-desc' })
-						),
-						this._youModal()
-					)
-				);
-			}
-			return React.createElement(
-				'header',
-				{ className: 'group' },
-				this._logo(),
-				this._nav(),
-				React.createElement(SearchBar, null),
-				accountTab
-			);
-		}
 	});
 	
-	module.exports = NavBar;
+	module.exports = BackProjects;
 
 /***/ },
 /* 217 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var React = __webpack_require__(1);
-	var enhanceWithClickOutside = __webpack_require__(218);
-	var ApiUtils = __webpack_require__(219);
+	var Store = __webpack_require__(218).Store;
+	var AppDispatcher = __webpack_require__(236);
+	var RestaurantConstants = __webpack_require__(239);
+	var HelperUtil = __webpack_require__(240);
 	
-	var YouPopout = React.createClass({
-		displayName: 'YouPopout',
+	var _restaurants = [];
+	var _meta = {};
 	
-		mixins: [__webpack_require__(232)],
+	var RestaurantIndexPageStore = new Store(AppDispatcher);
 	
-		contextTypes: { router: React.PropTypes.object.isRequired },
-	
-		_signOut: function (e) {
-			e.preventDefault();
-			this.props.closeCB();
-			ApiUtils.logout(this.context.router.push.bind(this, '/session/new'));
-		},
-	
-		handleClickOutside: function () {
-			this.props.handleExitClick();
-		},
-	
-		_backedRestaurants: function () {
-			this.props.closeCB();
-			this.context.router.push('/profile/backed');
-		},
-	
-		_createdRestaurants: function () {
-			this.props.closeCB();
-			this.context.router.push('/profile/projects');
-		},
-	
-		render: function () {
-			return React.createElement(
-				'div',
-				{ id: 'you-popout' },
-				React.createElement(
-					'div',
-					{ className: 'you-popout-col group' },
-					React.createElement(
-						'h3',
-						null,
-						'Your Links'
-					),
-					React.createElement(
-						'ul',
-						null,
-						React.createElement(
-							'li',
-							{ onClick: this._createdRestaurants },
-							'Created Restaurants'
-						),
-						React.createElement(
-							'li',
-							{ onClick: this._backedRestaurants },
-							'Backed Restaurants'
-						)
-					),
-					React.createElement(
-						'p',
-						null,
-						'Signed in as',
-						React.createElement('br', null),
-						' ',
-						React.createElement(
-							'span',
-							{ id: 'logged-in-name' },
-							this.props.name
-						)
-					),
-					React.createElement(
-						'a',
-						{ href: '#', onClick: this._signOut },
-						'Sign Out'
-					)
-				)
-			);
+	RestaurantIndexPageStore.all = function () {
+		if (_restaurants.length === 0) {
+			return [];
 		}
+		return _restaurants.slice(0);
+	};
 	
-	});
+	RestaurantIndexPageStore.find = function (id) {
+		return _restaurants[id];
+	};
 	
-	module.exports = enhanceWithClickOutside(YouPopout);
+	RestaurantIndexPageStore.meta = function (id) {
+		return $.extend(true, {}, _meta);
+	};
+	
+	RestaurantIndexPageStore.__onDispatch = function (payload) {
+		switch (payload.actionType) {
+			case RestaurantConstants.RESTAURANT_INDEX_RECEIVED:
+				_restaurants = payload.restaurants;
+				_meta = payload.meta;
+				RestaurantIndexPageStore.__emitChange();
+				break;
+		}
+	};
+	
+	module.exports = RestaurantIndexPageStore;
 
 /***/ },
 /* 218 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	/**
+	 * Copyright (c) 2014-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 */
 	
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-	
-	var React = __webpack_require__(1);
-	var ReactDOM = __webpack_require__(158);
-	
-	module.exports = function enhanceWithClickOutside(WrappedComponent) {
-	  var componentName = WrappedComponent.displayName || WrappedComponent.name;
-	
-	  return React.createClass({
-	    displayName: 'Wrapped' + componentName,
-	
-	    componentDidMount: function componentDidMount() {
-	      this.__wrappedComponent = this.refs.wrappedComponent;
-	      document.addEventListener('click', this.handleClickOutside, true);
-	    },
-	
-	    componentWillUnmount: function componentWillUnmount() {
-	      document.removeEventListener('click', this.handleClickOutside, true);
-	    },
-	
-	    handleClickOutside: function handleClickOutside(e) {
-	      var domNode = ReactDOM.findDOMNode(this);
-	      if ((!domNode || !domNode.contains(e.target)) && typeof this.refs.wrappedComponent.handleClickOutside === 'function') {
-	        this.refs.wrappedComponent.handleClickOutside(e);
-	      }
-	    },
-	
-	    render: function render() {
-	      return React.createElement(WrappedComponent, _extends({}, this.props, { ref: 'wrappedComponent' }));
-	    }
-	  });
-	};
+	module.exports.Container = __webpack_require__(219);
+	module.exports.MapStore = __webpack_require__(223);
+	module.exports.Mixin = __webpack_require__(235);
+	module.exports.ReduceStore = __webpack_require__(224);
+	module.exports.Store = __webpack_require__(225);
+
 
 /***/ },
 /* 219 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var RestaurantActions = __webpack_require__(220);
-	var CuisineActions = __webpack_require__(226);
-	var SessionActions = __webpack_require__(228);
-	var CityActions = __webpack_require__(230);
-	
-	var ApiUtil = {
-	
-		fetchRestaurant: function (id, callback) {
-			$.ajax({
-				type: "GET",
-				url: "/api/restaurants/" + id,
-				dataType: "json",
-				success: function (restaurant) {
-					RestaurantActions.receiveRestaurant(restaurant);
-				},
-				error: function () {
-					callback && callback({ published: false });
-				}
-			});
-		},
-	
-		createRestaurant: function (params, callback, failCallback) {
-			$.ajax({
-				type: "POST",
-				url: "/api/restaurants",
-				dataType: "json",
-				data: { restaurant: params },
-				success: function (restaurant) {
-					RestaurantActions.receiveCreatedRestaurant(restaurant);
-					callback && callback("/restaurants/edit/" + restaurant.id);
-				},
-				error: function (errors) {
-					failCallback && failCallback(errors);
-				}
-			});
-		},
-	
-		patchRestaurantWithImage: function (id, params) {
-			$.ajax({
-				type: "PATCH",
-				url: "/api/restaurants/" + id,
-				dataType: "json",
-				processData: false,
-				contentType: false,
-				data: params,
-				success: function (restaurant) {
-					RestaurantActions.receiveCreatedRestaurant(restaurant);
-				}
-			});
-		},
-	
-		patchRestaurant: function (id, params) {
-			$.ajax({
-				type: "PATCH",
-				url: "/api/restaurants/" + id,
-				dataType: "json",
-				data: { restaurant: params },
-				success: function (restaurant) {
-					RestaurantActions.receiveCreatedRestaurant(restaurant);
-				}
-			});
-		},
-	
-		fetchCreatedRestaurant: function (id, callback) {
-			$.ajax({
-				type: "GET",
-				url: "/api/restaurants/" + id,
-				dataType: "json",
-				data: { edit: true },
-				success: function (restaurant) {
-					RestaurantActions.receiveCreatedRestaurant(restaurant);
-				},
-				error: function () {
-					callback && callback();
-				}
-			});
-		},
-	
-		fetchRestaurantByParams: function (params) {
-			$.ajax({
-				type: "GET",
-				url: "/api/restaurants",
-				dataType: "json",
-				data: params,
-				success: function (restaurant) {
-					RestaurantActions.receiveRestaurant(restaurant);
-				}
-			});
-		},
-	
-		fetchRestaurantByParamsIndexStore: function (params) {
-			$.ajax({
-				type: "GET",
-				url: "/api/restaurants",
-				dataType: "json",
-				data: params,
-				success: function (restaurants) {
-					if (restaurants[0]) {
-						restaurants = { meta: {}, search_results: restaurants };
-					}
-					RestaurantActions.receiveIndexRestaurants(restaurants);
-				}
-			});
-		},
-	
-		fetchRestaurantByNameContain: function (str) {
-			$.ajax({
-				type: "GET",
-				url: "/api/restaurants",
-				dataType: "json",
-				data: { str: str },
-				success: function (restaurants) {
-					RestaurantActions.receiveRestaurants(restaurants);
-				}
-			});
-		},
-	
-		fetchRestaurantsByCuisine: function (cuisine_id, number) {
-			$.ajax({
-				type: "GET",
-				url: "/api/restaurants",
-				dataType: "json",
-				data: { cuisine_id: cuisine_id, per: number },
-				success: function (restaurants) {
-					RestaurantActions.receiveIndexRestaurants(restaurants);
-				}
-			});
-		},
-	
-		fetchCuisines: function () {
-			$.ajax({
-				type: "GET",
-				url: "/api/cuisines",
-				dataType: "json",
-				success: function (cuisines) {
-					CuisineActions.receiveCuisines(cuisines);
-				}
-			});
-		},
-	
-		login: function (credentials, callback, failCallback) {
-			$.ajax({
-				type: "POST",
-				url: "/api/session",
-				dataType: "json",
-				data: credentials,
-				success: function (currentUser) {
-					SessionActions.currentUserReceived(currentUser);
-					callback && callback();
-				},
-				error: function () {
-					failCallback && failCallback();
-				}
-			});
-		},
-	
-		logout: function (callback) {
-			$.ajax({
-				type: "DELETE",
-				url: "/api/session",
-				dataType: "json",
-				success: function () {
-					SessionActions.logout();
-					callback && callback();
-				}
-			});
-		},
-	
-		createUser: function (info, callback, failCallback) {
-			$.ajax({
-				type: "POST",
-				url: "/api/users",
-				dataType: "json",
-				data: { user: info },
-				success: function (currentUser) {
-					SessionActions.currentUserReceived(currentUser, callback);
-					callback && callback();
-				},
-				error: function (errors) {
-					failCallback && failCallback(errors);
-				}
-			});
-		},
-	
-		fetchCurrentUser: function (completion) {
-			$.ajax({
-				type: "GET",
-				url: "/api/session",
-				dataType: "json",
-				success: function (currentUser) {
-					if (currentUser.message !== "Not logged in") {
-						SessionActions.currentUserReceived(currentUser);
-					}
-				},
-				complete: function () {
-					completion && completion();
-				}
-			});
-		},
-	
-		fetchCities: function () {
-			$.ajax({
-				type: "GET",
-				url: "/api/cities",
-				dataType: "json",
-				success: function (cities) {
-					CityActions.receiveCities(cities);
-				}
-			});
-		},
-	
-		createContribution: function (params) {
-			$.ajax({
-				type: "POST",
-				url: "/api/contributions",
-				dataType: "json",
-				data: { contribution: params },
-				success: function (contribution) {
-					ApiUtil.fetchRestaurant(contribution.restaurant_id);
-				}
-			});
-		},
-	
-		createReward: function (params) {
-			$.ajax({
-				type: "POST",
-				url: "/api/rewards",
-				dataType: "json",
-				data: { reward: params },
-				success: function (reward) {
-					ApiUtil.fetchCreatedRestaurant(reward.restaurant_id);
-				}
-			});
-		}
-	
-	};
-	
-	module.exports = ApiUtil;
-
-/***/ },
-/* 220 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var RestaurantConstants = __webpack_require__(221);
-	var AppDispatcher = __webpack_require__(222);
-	
-	var RestaurantActions = {
-		receiveRestaurant: function (restaurant) {
-			AppDispatcher.dispatch({
-				actionType: RestaurantConstants.RESTAURANT_RECEIVED,
-				restaurant: restaurant
-			});
-		},
-	
-		receiveRestaurants: function (restaurants) {
-			AppDispatcher.dispatch({
-				actionType: RestaurantConstants.RESTAURANTS_RECEIVED,
-				restaurants: restaurants
-			});
-		},
-	
-		clearSearchRestaurants: function () {
-			AppDispatcher.dispatch({
-				actionType: RestaurantConstants.CLEAR_SEARCH_RESTAURANTS
-			});
-		},
-	
-		receiveIndexRestaurants: function (restaurants) {
-			AppDispatcher.dispatch({
-				actionType: RestaurantConstants.RESTAURANT_INDEX_RECEIVED,
-				restaurants: restaurants.search_results,
-				meta: restaurants.meta
-			});
-		},
-	
-		receiveCreatedRestaurant: function (restaurant) {
-			AppDispatcher.dispatch({
-				actionType: RestaurantConstants.CREATED_RESTAURANT_RECEIVED,
-				restaurant: restaurant
-			});
-		}
-	};
-	
-	module.exports = RestaurantActions;
-
-/***/ },
-/* 221 */
-/***/ function(module, exports) {
-
-	var RestaurantConstants = {
-		RESTAURANT_RECEIVED: "RESTAURANT_RECEIVED",
-		RESTAURANTS_RECEIVED: "RESTAURANTS_RECEIVED",
-		CLEAR_SEARCH_RESTAURANTS: "CLEAR_SEARCH_RESTAURANTS",
-		RESTAURANT_INDEX_RECEIVED: "RESTAURANT_INDEX_RECEIVED",
-		CREATED_RESTAURANT_RECEIVED: "CREATED_RESTAURANT_RECEIVED"
-	};
-	
-	module.exports = RestaurantConstants;
-
-/***/ },
-/* 222 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Dispatcher = __webpack_require__(223).Dispatcher;
-	module.exports = new Dispatcher();
-
-/***/ },
-/* 223 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Copyright (c) 2014-2015, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 */
-	
-	module.exports.Dispatcher = __webpack_require__(224);
-
-
-/***/ },
-/* 224 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(process) {/**
-	 * Copyright (c) 2014-2015, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule Dispatcher
-	 * 
-	 * @preventMunge
-	 */
-	
-	'use strict';
-	
-	exports.__esModule = true;
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-	
-	var invariant = __webpack_require__(225);
-	
-	var _prefix = 'ID_';
-	
-	/**
-	 * Dispatcher is used to broadcast payloads to registered callbacks. This is
-	 * different from generic pub-sub systems in two ways:
-	 *
-	 *   1) Callbacks are not subscribed to particular events. Every payload is
-	 *      dispatched to every registered callback.
-	 *   2) Callbacks can be deferred in whole or part until other callbacks have
-	 *      been executed.
-	 *
-	 * For example, consider this hypothetical flight destination form, which
-	 * selects a default city when a country is selected:
-	 *
-	 *   var flightDispatcher = new Dispatcher();
-	 *
-	 *   // Keeps track of which country is selected
-	 *   var CountryStore = {country: null};
-	 *
-	 *   // Keeps track of which city is selected
-	 *   var CityStore = {city: null};
-	 *
-	 *   // Keeps track of the base flight price of the selected city
-	 *   var FlightPriceStore = {price: null}
-	 *
-	 * When a user changes the selected city, we dispatch the payload:
-	 *
-	 *   flightDispatcher.dispatch({
-	 *     actionType: 'city-update',
-	 *     selectedCity: 'paris'
-	 *   });
-	 *
-	 * This payload is digested by `CityStore`:
-	 *
-	 *   flightDispatcher.register(function(payload) {
-	 *     if (payload.actionType === 'city-update') {
-	 *       CityStore.city = payload.selectedCity;
-	 *     }
-	 *   });
-	 *
-	 * When the user selects a country, we dispatch the payload:
-	 *
-	 *   flightDispatcher.dispatch({
-	 *     actionType: 'country-update',
-	 *     selectedCountry: 'australia'
-	 *   });
-	 *
-	 * This payload is digested by both stores:
-	 *
-	 *   CountryStore.dispatchToken = flightDispatcher.register(function(payload) {
-	 *     if (payload.actionType === 'country-update') {
-	 *       CountryStore.country = payload.selectedCountry;
-	 *     }
-	 *   });
-	 *
-	 * When the callback to update `CountryStore` is registered, we save a reference
-	 * to the returned token. Using this token with `waitFor()`, we can guarantee
-	 * that `CountryStore` is updated before the callback that updates `CityStore`
-	 * needs to query its data.
-	 *
-	 *   CityStore.dispatchToken = flightDispatcher.register(function(payload) {
-	 *     if (payload.actionType === 'country-update') {
-	 *       // `CountryStore.country` may not be updated.
-	 *       flightDispatcher.waitFor([CountryStore.dispatchToken]);
-	 *       // `CountryStore.country` is now guaranteed to be updated.
-	 *
-	 *       // Select the default city for the new country
-	 *       CityStore.city = getDefaultCityForCountry(CountryStore.country);
-	 *     }
-	 *   });
-	 *
-	 * The usage of `waitFor()` can be chained, for example:
-	 *
-	 *   FlightPriceStore.dispatchToken =
-	 *     flightDispatcher.register(function(payload) {
-	 *       switch (payload.actionType) {
-	 *         case 'country-update':
-	 *         case 'city-update':
-	 *           flightDispatcher.waitFor([CityStore.dispatchToken]);
-	 *           FlightPriceStore.price =
-	 *             getFlightPriceStore(CountryStore.country, CityStore.city);
-	 *           break;
-	 *     }
-	 *   });
-	 *
-	 * The `country-update` payload will be guaranteed to invoke the stores'
-	 * registered callbacks in order: `CountryStore`, `CityStore`, then
-	 * `FlightPriceStore`.
-	 */
-	
-	var Dispatcher = (function () {
-	  function Dispatcher() {
-	    _classCallCheck(this, Dispatcher);
-	
-	    this._callbacks = {};
-	    this._isDispatching = false;
-	    this._isHandled = {};
-	    this._isPending = {};
-	    this._lastID = 1;
-	  }
-	
-	  /**
-	   * Registers a callback to be invoked with every dispatched payload. Returns
-	   * a token that can be used with `waitFor()`.
-	   */
-	
-	  Dispatcher.prototype.register = function register(callback) {
-	    var id = _prefix + this._lastID++;
-	    this._callbacks[id] = callback;
-	    return id;
-	  };
-	
-	  /**
-	   * Removes a callback based on its token.
-	   */
-	
-	  Dispatcher.prototype.unregister = function unregister(id) {
-	    !this._callbacks[id] ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.unregister(...): `%s` does not map to a registered callback.', id) : invariant(false) : undefined;
-	    delete this._callbacks[id];
-	  };
-	
-	  /**
-	   * Waits for the callbacks specified to be invoked before continuing execution
-	   * of the current callback. This method should only be used by a callback in
-	   * response to a dispatched payload.
-	   */
-	
-	  Dispatcher.prototype.waitFor = function waitFor(ids) {
-	    !this._isDispatching ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.waitFor(...): Must be invoked while dispatching.') : invariant(false) : undefined;
-	    for (var ii = 0; ii < ids.length; ii++) {
-	      var id = ids[ii];
-	      if (this._isPending[id]) {
-	        !this._isHandled[id] ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.waitFor(...): Circular dependency detected while ' + 'waiting for `%s`.', id) : invariant(false) : undefined;
-	        continue;
-	      }
-	      !this._callbacks[id] ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.waitFor(...): `%s` does not map to a registered callback.', id) : invariant(false) : undefined;
-	      this._invokeCallback(id);
-	    }
-	  };
-	
-	  /**
-	   * Dispatches a payload to all registered callbacks.
-	   */
-	
-	  Dispatcher.prototype.dispatch = function dispatch(payload) {
-	    !!this._isDispatching ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatch.dispatch(...): Cannot dispatch in the middle of a dispatch.') : invariant(false) : undefined;
-	    this._startDispatching(payload);
-	    try {
-	      for (var id in this._callbacks) {
-	        if (this._isPending[id]) {
-	          continue;
-	        }
-	        this._invokeCallback(id);
-	      }
-	    } finally {
-	      this._stopDispatching();
-	    }
-	  };
-	
-	  /**
-	   * Is this Dispatcher currently dispatching.
-	   */
-	
-	  Dispatcher.prototype.isDispatching = function isDispatching() {
-	    return this._isDispatching;
-	  };
-	
-	  /**
-	   * Call the callback stored with the given id. Also do some internal
-	   * bookkeeping.
-	   *
-	   * @internal
-	   */
-	
-	  Dispatcher.prototype._invokeCallback = function _invokeCallback(id) {
-	    this._isPending[id] = true;
-	    this._callbacks[id](this._pendingPayload);
-	    this._isHandled[id] = true;
-	  };
-	
-	  /**
-	   * Set up bookkeeping needed when dispatching.
-	   *
-	   * @internal
-	   */
-	
-	  Dispatcher.prototype._startDispatching = function _startDispatching(payload) {
-	    for (var id in this._callbacks) {
-	      this._isPending[id] = false;
-	      this._isHandled[id] = false;
-	    }
-	    this._pendingPayload = payload;
-	    this._isDispatching = true;
-	  };
-	
-	  /**
-	   * Clear bookkeeping used for dispatching.
-	   *
-	   * @internal
-	   */
-	
-	  Dispatcher.prototype._stopDispatching = function _stopDispatching() {
-	    delete this._pendingPayload;
-	    this._isDispatching = false;
-	  };
-	
-	  return Dispatcher;
-	})();
-	
-	module.exports = Dispatcher;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
-
-/***/ },
-/* 225 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(process) {/**
-	 * Copyright 2013-2015, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule invariant
-	 */
-	
-	"use strict";
-	
-	/**
-	 * Use invariant() to assert state which your program assumes to be true.
-	 *
-	 * Provide sprintf-style format (only %s is supported) and arguments
-	 * to provide information about what broke and what you were
-	 * expecting.
-	 *
-	 * The invariant message will be stripped in production, but the invariant
-	 * will remain to ensure logic does not differ in production.
-	 */
-	
-	var invariant = function (condition, format, a, b, c, d, e, f) {
-	  if (process.env.NODE_ENV !== 'production') {
-	    if (format === undefined) {
-	      throw new Error('invariant requires an error message argument');
-	    }
-	  }
-	
-	  if (!condition) {
-	    var error;
-	    if (format === undefined) {
-	      error = new Error('Minified exception occurred; use the non-minified dev environment ' + 'for the full error message and additional helpful warnings.');
-	    } else {
-	      var args = [a, b, c, d, e, f];
-	      var argIndex = 0;
-	      error = new Error('Invariant Violation: ' + format.replace(/%s/g, function () {
-	        return args[argIndex++];
-	      }));
-	    }
-	
-	    error.framesToPop = 1; // we don't care about invariant's own frame
-	    throw error;
-	  }
-	};
-	
-	module.exports = invariant;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
-
-/***/ },
-/* 226 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var CuisinesConstants = __webpack_require__(227);
-	var AppDispatcher = __webpack_require__(222);
-	
-	var CuisineActions = {
-		receiveCuisines: function (cuisines) {
-			AppDispatcher.dispatch({
-				actionType: CuisinesConstants.CUISINES_RECEIVED,
-				cuisines: cuisines
-			});
-		}
-	};
-	
-	module.exports = CuisineActions;
-
-/***/ },
-/* 227 */
-/***/ function(module, exports) {
-
-	var CuisineConstants = {
-		CUISINES_RECEIVED: "CUISINES_RECEIVED"
-	};
-	
-	module.exports = CuisineConstants;
-
-/***/ },
-/* 228 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var AppDispatcher = __webpack_require__(222);
-	var SessionConstants = __webpack_require__(229);
-	
-	var SessionActions = {
-	  currentUserReceived: function (currentUser, callback) {
-	    AppDispatcher.dispatch({
-	      actionType: SessionConstants.CURRENT_USER_RECEIVED,
-	      currentUser: currentUser,
-	      callback: callback
-	    });
-	  },
-	
-	  logout: function () {
-	    AppDispatcher.dispatch({
-	      actionType: SessionConstants.LOGOUT
-	    });
-	  }
-	};
-	
-	module.exports = SessionActions;
-
-/***/ },
-/* 229 */
-/***/ function(module, exports) {
-
-	module.exports = {
-	  CURRENT_USER_RECEIVED: "CURRENT_USER_RECEIVED",
-	  LOGOUT: "LOGOUT"
-	};
-
-/***/ },
-/* 230 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var CityConstants = __webpack_require__(231);
-	var AppDispatcher = __webpack_require__(222);
-	
-	var CityActions = {
-		receiveCities: function (cities) {
-			AppDispatcher.dispatch({
-				actionType: CityConstants.CITIES_RECEIVED,
-				cities: cities
-			});
-		}
-	};
-	
-	module.exports = CityActions;
-
-/***/ },
-/* 231 */
-/***/ function(module, exports) {
-
-	var CityConstants = {
-		CITIES_RECEIVED: "CITIES_RECEIVED"
-	};
-	
-	module.exports = CityConstants;
-
-/***/ },
-/* 232 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
-	 * A mixin for handling (effectively) onClickOutside for React components.
-	 * Note that we're not intercepting any events in this approach, and we're
-	 * not using double events for capturing and discarding in layers or wrappers.
-	 *
-	 * The idea is that components define function
-	 *
-	 *   handleClickOutside: function() { ... }
-	 *
-	 * If no such function is defined, an error will be thrown, as this means
-	 * either it still needs to be written, or the component should not be using
-	 * this mixing since it will not exhibit onClickOutside behaviour.
-	 *
-	 */
-	(function (root, factory) {
-	  if (true) {
-	    // AMD. Register as an anonymous module.
-	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(158)], __WEBPACK_AMD_DEFINE_RESULT__ = function(reactDom) {
-	      return factory(root, reactDom);
-	    }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	  } else if (typeof exports === 'object') {
-	    // Node. Note that this does not work with strict
-	    // CommonJS, but only CommonJS-like environments
-	    // that support module.exports
-	    module.exports = factory(root, require('react-dom'));
-	  } else {
-	    // Browser globals (root is window)
-	    root.OnClickOutside = factory(root, ReactDOM);
-	  }
-	}(this, function (root, ReactDOM) {
-	  "use strict";
-	
-	  // Use a parallel array because we can't use
-	  // objects as keys, they get toString-coerced
-	  var registeredComponents = [];
-	  var handlers = [];
-	
-	  var IGNORE_CLASS = 'ignore-react-onclickoutside';
-	
-	  var isSourceFound = function(source, localNode, ignoreClass) {
-	    if (source === localNode) {
-	      return true;
-	    }
-	    // SVG <use/> elements do not technically reside in the rendered DOM, so
-	    // they do not have classList directly, but they offer a link to their
-	    // corresponding element, which can have classList. This extra check is for
-	    // that case.
-	    // See: http://www.w3.org/TR/SVG11/struct.html#InterfaceSVGUseElement
-	    // Discussion: https://github.com/Pomax/react-onclickoutside/pull/17
-	    if (source.correspondingElement) {
-	      return source.correspondingElement.classList.contains(ignoreClass);
-	    }
-	    return source.classList.contains(ignoreClass);
-	  };
-	
-	  return {
-	    componentDidMount: function() {
-	      if(typeof this.handleClickOutside !== "function")
-	        throw new Error("Component lacks a handleClickOutside(event) function for processing outside click events.");
-	
-	      var fn = this.__outsideClickHandler = (function(localNode, eventHandler, ignoreClass) {
-	        return function(evt) {
-	          evt.stopPropagation();
-	          var source = evt.target;
-	          var found = false;
-	          // If source=local then this event came from "somewhere"
-	          // inside and should be ignored. We could handle this with
-	          // a layered approach, too, but that requires going back to
-	          // thinking in terms of Dom node nesting, running counter
-	          // to React's "you shouldn't care about the DOM" philosophy.
-	          while(source.parentNode) {
-	            found = isSourceFound(source, localNode, ignoreClass);
-	            if(found) return;
-	            source = source.parentNode;
-	          }
-	          // If element is in detached DOM, consider it not clicked
-	          // outside as it can't be known whether it was outside.
-	          if(source !== document) return;
-	          eventHandler(evt);
-	        }
-	      }(ReactDOM.findDOMNode(this), this.handleClickOutside, this.props.outsideClickIgnoreClass || IGNORE_CLASS));
-	
-	      var pos = registeredComponents.length;
-	      registeredComponents.push(this);
-	      handlers[pos] = fn;
-	
-	      // If there is a truthy disableOnClickOutside property for this
-	      // component, don't immediately start listening for outside events.
-	      if (!this.props.disableOnClickOutside) {
-	        this.enableOnClickOutside();
-	      }
-	    },
-	
-	    componentWillUnmount: function() {
-	      this.disableOnClickOutside();
-	      this.__outsideClickHandler = false;
-	      var pos = registeredComponents.indexOf(this);
-	      if( pos>-1) {
-	        if (handlers[pos]) {
-	          // clean up so we don't leak memory
-	          handlers.splice(pos, 1);
-	          registeredComponents.splice(pos, 1);
-	        }
-	      }
-	    },
-	
-	    /**
-	     * Can be called to explicitly enable event listening
-	     * for clicks and touches outside of this element.
-	     */
-	    enableOnClickOutside: function() {
-	      var fn = this.__outsideClickHandler;
-	      if (document != null) {
-	        document.addEventListener("mousedown", fn);
-	        document.addEventListener("touchstart", fn);
-	      }
-	    },
-	
-	    /**
-	     * Can be called to explicitly disable event listening
-	     * for clicks and touches outside of this element.
-	     */
-	    disableOnClickOutside: function() {
-	      var fn = this.__outsideClickHandler;
-	      if (document != null) {
-	        document.removeEventListener("mousedown", fn);
-	        document.removeEventListener("touchstart", fn);
-	      }
-	    }
-	  };
-	
-	}));
-
-
-/***/ },
-/* 233 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var PropTypes = React.PropTypes;
-	var LinkedStateMixin = __webpack_require__(234);
-	var ApiUtil = __webpack_require__(219);
-	var RestaurantActions = __webpack_require__(220);
-	var RestaurantIndexStore = __webpack_require__(238);
-	
-	var SearchBar = React.createClass({
-		displayName: 'SearchBar',
-	
-		mixins: [LinkedStateMixin],
-	
-		getInitialState: function () {
-			return { searchVal: "" };
-		},
-	
-		clearIfSearchEmpty: function () {
-			if (RestaurantIndexStore.all().length < 1) {
-				this.setState({ searchVal: "" });
-			}
-		},
-	
-		componentDidMount: function () {
-			this.listener = RestaurantIndexStore.addListener(this.clearIfSearchEmpty);
-		},
-	
-		componentWillUnmount: function () {
-			this.listener.remove();
-		},
-	
-		searchCallback: function () {
-			ApiUtil.fetchRestaurantByNameContain(this.state.searchVal);
-		},
-	
-		onChange: function (e) {
-			clearTimeout(this.searchToken);
-	
-			if (e.target.value !== "") {
-				this.searchToken = setTimeout(this.searchCallback, 500);
-			} else {
-				this.searchToken = RestaurantActions.clearSearchRestaurants();
-			}
-		},
-	
-		render: function () {
-			return React.createElement(
-				'div',
-				{ className: 'searchBar' },
-				React.createElement('div', { id: 'searchIcon', className: 'fa fa-search' }),
-				React.createElement('input', { type: 'text',
-					valueLink: this.linkState('searchVal'),
-					placeholder: 'Search Restaurants',
-					onInput: this.onChange
-				})
-			);
-		}
-	
-	});
-	
-	module.exports = SearchBar;
-
-/***/ },
-/* 234 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__(235);
-
-/***/ },
-/* 235 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Copyright 2013-2015, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule LinkedStateMixin
-	 * @typechecks static-only
-	 */
-	
-	'use strict';
-	
-	var ReactLink = __webpack_require__(236);
-	var ReactStateSetters = __webpack_require__(237);
-	
-	/**
-	 * A simple mixin around ReactLink.forState().
-	 */
-	var LinkedStateMixin = {
-	  /**
-	   * Create a ReactLink that's linked to part of this component's state. The
-	   * ReactLink will have the current value of this.state[key] and will call
-	   * setState() when a change is requested.
-	   *
-	   * @param {string} key state key to update. Note: you may want to use keyOf()
-	   * if you're using Google Closure Compiler advanced mode.
-	   * @return {ReactLink} ReactLink instance linking to the state.
-	   */
-	  linkState: function (key) {
-	    return new ReactLink(this.state[key], ReactStateSetters.createStateKeySetter(this, key));
-	  }
-	};
-	
-	module.exports = LinkedStateMixin;
-
-/***/ },
-/* 236 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Copyright 2013-2015, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule ReactLink
-	 * @typechecks static-only
-	 */
-	
-	'use strict';
-	
-	/**
-	 * ReactLink encapsulates a common pattern in which a component wants to modify
-	 * a prop received from its parent. ReactLink allows the parent to pass down a
-	 * value coupled with a callback that, when invoked, expresses an intent to
-	 * modify that value. For example:
-	 *
-	 * React.createClass({
-	 *   getInitialState: function() {
-	 *     return {value: ''};
-	 *   },
-	 *   render: function() {
-	 *     var valueLink = new ReactLink(this.state.value, this._handleValueChange);
-	 *     return <input valueLink={valueLink} />;
-	 *   },
-	 *   _handleValueChange: function(newValue) {
-	 *     this.setState({value: newValue});
-	 *   }
-	 * });
-	 *
-	 * We have provided some sugary mixins to make the creation and
-	 * consumption of ReactLink easier; see LinkedValueUtils and LinkedStateMixin.
-	 */
-	
-	var React = __webpack_require__(2);
-	
-	/**
-	 * @param {*} value current value of the link
-	 * @param {function} requestChange callback to request a change
-	 */
-	function ReactLink(value, requestChange) {
-	  this.value = value;
-	  this.requestChange = requestChange;
-	}
-	
-	/**
-	 * Creates a PropType that enforces the ReactLink API and optionally checks the
-	 * type of the value being passed inside the link. Example:
-	 *
-	 * MyComponent.propTypes = {
-	 *   tabIndexLink: ReactLink.PropTypes.link(React.PropTypes.number)
-	 * }
-	 */
-	function createLinkTypeChecker(linkType) {
-	  var shapes = {
-	    value: typeof linkType === 'undefined' ? React.PropTypes.any.isRequired : linkType.isRequired,
-	    requestChange: React.PropTypes.func.isRequired
-	  };
-	  return React.PropTypes.shape(shapes);
-	}
-	
-	ReactLink.PropTypes = {
-	  link: createLinkTypeChecker
-	};
-	
-	module.exports = ReactLink;
-
-/***/ },
-/* 237 */
-/***/ function(module, exports) {
-
-	/**
-	 * Copyright 2013-2015, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule ReactStateSetters
-	 */
-	
-	'use strict';
-	
-	var ReactStateSetters = {
-	  /**
-	   * Returns a function that calls the provided function, and uses the result
-	   * of that to set the component's state.
-	   *
-	   * @param {ReactCompositeComponent} component
-	   * @param {function} funcReturningState Returned callback uses this to
-	   *                                      determine how to update state.
-	   * @return {function} callback that when invoked uses funcReturningState to
-	   *                    determined the object literal to setState.
-	   */
-	  createStateSetter: function (component, funcReturningState) {
-	    return function (a, b, c, d, e, f) {
-	      var partialState = funcReturningState.call(component, a, b, c, d, e, f);
-	      if (partialState) {
-	        component.setState(partialState);
-	      }
-	    };
-	  },
-	
-	  /**
-	   * Returns a single-argument callback that can be used to update a single
-	   * key in the component's state.
-	   *
-	   * Note: this is memoized function, which makes it inexpensive to call.
-	   *
-	   * @param {ReactCompositeComponent} component
-	   * @param {string} key The key in the state that you should update.
-	   * @return {function} callback of 1 argument which calls setState() with
-	   *                    the provided keyName and callback argument.
-	   */
-	  createStateKeySetter: function (component, key) {
-	    // Memoize the setters.
-	    var cache = component.__keySetters || (component.__keySetters = {});
-	    return cache[key] || (cache[key] = createStateKeySetter(component, key));
-	  }
-	};
-	
-	function createStateKeySetter(component, key) {
-	  // Partial state is allocated outside of the function closure so it can be
-	  // reused with every call, avoiding memory allocation when this function
-	  // is called.
-	  var partialState = {};
-	  return function stateKeySetter(value) {
-	    partialState[key] = value;
-	    component.setState(partialState);
-	  };
-	}
-	
-	ReactStateSetters.Mixin = {
-	  /**
-	   * Returns a function that calls the provided function, and uses the result
-	   * of that to set the component's state.
-	   *
-	   * For example, these statements are equivalent:
-	   *
-	   *   this.setState({x: 1});
-	   *   this.createStateSetter(function(xValue) {
-	   *     return {x: xValue};
-	   *   })(1);
-	   *
-	   * @param {function} funcReturningState Returned callback uses this to
-	   *                                      determine how to update state.
-	   * @return {function} callback that when invoked uses funcReturningState to
-	   *                    determined the object literal to setState.
-	   */
-	  createStateSetter: function (funcReturningState) {
-	    return ReactStateSetters.createStateSetter(this, funcReturningState);
-	  },
-	
-	  /**
-	   * Returns a single-argument callback that can be used to update a single
-	   * key in the component's state.
-	   *
-	   * For example, these statements are equivalent:
-	   *
-	   *   this.setState({x: 1});
-	   *   this.createStateKeySetter('x')(1);
-	   *
-	   * Note: this is memoized function, which makes it inexpensive to call.
-	   *
-	   * @param {string} key The key in the state that you should update.
-	   * @return {function} callback of 1 argument which calls setState() with
-	   *                    the provided keyName and callback argument.
-	   */
-	  createStateKeySetter: function (key) {
-	    return ReactStateSetters.createStateKeySetter(this, key);
-	  }
-	};
-	
-	module.exports = ReactStateSetters;
-
-/***/ },
-/* 238 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Store = __webpack_require__(239).Store;
-	var AppDispatcher = __webpack_require__(222);
-	var RestaurantConstants = __webpack_require__(221);
-	var HelperUtil = __webpack_require__(256);
-	
-	var _restaurants = [];
-	
-	var RestaurantIndexStore = new Store(AppDispatcher);
-	
-	var _newRestaurants = function (restaurants) {
-	  if (restaurants.length === 0) {
-	    _restaurants = ["none"];
-	  } else {
-	    _restaurants = restaurants;
-	  }
-	};
-	
-	RestaurantIndexStore.all = function () {
-	  return _restaurants.slice(0);
-	};
-	
-	RestaurantIndexStore.find = function (id) {
-	  return _restaurants[id];
-	};
-	
-	RestaurantIndexStore.__onDispatch = function (payload) {
-	  switch (payload.actionType) {
-	    case RestaurantConstants.RESTAURANTS_RECEIVED:
-	      _newRestaurants(payload.restaurants);
-	      RestaurantIndexStore.__emitChange();
-	      break;
-	    case RestaurantConstants.CLEAR_SEARCH_RESTAURANTS:
-	      _restaurants = [];
-	      RestaurantIndexStore.__emitChange();
-	      break;
-	  }
-	};
-	
-	module.exports = RestaurantIndexStore;
-
-/***/ },
-/* 239 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Copyright (c) 2014-2015, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 */
-	
-	module.exports.Container = __webpack_require__(240);
-	module.exports.MapStore = __webpack_require__(243);
-	module.exports.Mixin = __webpack_require__(255);
-	module.exports.ReduceStore = __webpack_require__(244);
-	module.exports.Store = __webpack_require__(245);
-
-
-/***/ },
-/* 240 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26371,10 +24986,10 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxStoreGroup = __webpack_require__(241);
+	var FluxStoreGroup = __webpack_require__(220);
 	
-	var invariant = __webpack_require__(225);
-	var shallowEqual = __webpack_require__(242);
+	var invariant = __webpack_require__(221);
+	var shallowEqual = __webpack_require__(222);
 	
 	var DEFAULT_OPTIONS = {
 	  pure: true,
@@ -26532,7 +25147,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 241 */
+/* 220 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26551,7 +25166,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(225);
+	var invariant = __webpack_require__(221);
 	
 	/**
 	 * FluxStoreGroup allows you to execute a callback on every dispatch after
@@ -26613,7 +25228,62 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 242 */
+/* 221 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {/**
+	 * Copyright 2013-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule invariant
+	 */
+	
+	"use strict";
+	
+	/**
+	 * Use invariant() to assert state which your program assumes to be true.
+	 *
+	 * Provide sprintf-style format (only %s is supported) and arguments
+	 * to provide information about what broke and what you were
+	 * expecting.
+	 *
+	 * The invariant message will be stripped in production, but the invariant
+	 * will remain to ensure logic does not differ in production.
+	 */
+	
+	var invariant = function (condition, format, a, b, c, d, e, f) {
+	  if (process.env.NODE_ENV !== 'production') {
+	    if (format === undefined) {
+	      throw new Error('invariant requires an error message argument');
+	    }
+	  }
+	
+	  if (!condition) {
+	    var error;
+	    if (format === undefined) {
+	      error = new Error('Minified exception occurred; use the non-minified dev environment ' + 'for the full error message and additional helpful warnings.');
+	    } else {
+	      var args = [a, b, c, d, e, f];
+	      var argIndex = 0;
+	      error = new Error('Invariant Violation: ' + format.replace(/%s/g, function () {
+	        return args[argIndex++];
+	      }));
+	    }
+	
+	    error.framesToPop = 1; // we don't care about invariant's own frame
+	    throw error;
+	  }
+	};
+	
+	module.exports = invariant;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
+
+/***/ },
+/* 222 */
 /***/ function(module, exports) {
 
 	/**
@@ -26668,7 +25338,7 @@
 	module.exports = shallowEqual;
 
 /***/ },
-/* 243 */
+/* 223 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26689,10 +25359,10 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxReduceStore = __webpack_require__(244);
-	var Immutable = __webpack_require__(254);
+	var FluxReduceStore = __webpack_require__(224);
+	var Immutable = __webpack_require__(234);
 	
-	var invariant = __webpack_require__(225);
+	var invariant = __webpack_require__(221);
 	
 	/**
 	 * This is a simple store. It allows caching key value pairs. An implementation
@@ -26818,7 +25488,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 244 */
+/* 224 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26839,10 +25509,10 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxStore = __webpack_require__(245);
+	var FluxStore = __webpack_require__(225);
 	
-	var abstractMethod = __webpack_require__(253);
-	var invariant = __webpack_require__(225);
+	var abstractMethod = __webpack_require__(233);
+	var invariant = __webpack_require__(221);
 	
 	var FluxReduceStore = (function (_FluxStore) {
 	  _inherits(FluxReduceStore, _FluxStore);
@@ -26925,7 +25595,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 245 */
+/* 225 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26944,11 +25614,11 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var _require = __webpack_require__(246);
+	var _require = __webpack_require__(226);
 	
 	var EventEmitter = _require.EventEmitter;
 	
-	var invariant = __webpack_require__(225);
+	var invariant = __webpack_require__(221);
 	
 	/**
 	 * This class should be extended by the stores in your application, like so:
@@ -27108,7 +25778,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 246 */
+/* 226 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -27121,14 +25791,14 @@
 	 */
 	
 	var fbemitter = {
-	  EventEmitter: __webpack_require__(247)
+	  EventEmitter: __webpack_require__(227)
 	};
 	
 	module.exports = fbemitter;
 
 
 /***/ },
-/* 247 */
+/* 227 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -27147,11 +25817,11 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var EmitterSubscription = __webpack_require__(248);
-	var EventSubscriptionVendor = __webpack_require__(250);
+	var EmitterSubscription = __webpack_require__(228);
+	var EventSubscriptionVendor = __webpack_require__(230);
 	
-	var emptyFunction = __webpack_require__(252);
-	var invariant = __webpack_require__(251);
+	var emptyFunction = __webpack_require__(232);
+	var invariant = __webpack_require__(231);
 	
 	/**
 	 * @class BaseEventEmitter
@@ -27325,7 +25995,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 248 */
+/* 228 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -27346,7 +26016,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var EventSubscription = __webpack_require__(249);
+	var EventSubscription = __webpack_require__(229);
 	
 	/**
 	 * EmitterSubscription represents a subscription with listener and context data.
@@ -27378,7 +26048,7 @@
 	module.exports = EmitterSubscription;
 
 /***/ },
-/* 249 */
+/* 229 */
 /***/ function(module, exports) {
 
 	/**
@@ -27432,7 +26102,7 @@
 	module.exports = EventSubscription;
 
 /***/ },
-/* 250 */
+/* 230 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -27451,7 +26121,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(251);
+	var invariant = __webpack_require__(231);
 	
 	/**
 	 * EventSubscriptionVendor stores a set of EventSubscriptions that are
@@ -27541,7 +26211,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 251 */
+/* 231 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -27596,7 +26266,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 252 */
+/* 232 */
 /***/ function(module, exports) {
 
 	/**
@@ -27638,7 +26308,7 @@
 	module.exports = emptyFunction;
 
 /***/ },
-/* 253 */
+/* 233 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -27655,7 +26325,7 @@
 	
 	'use strict';
 	
-	var invariant = __webpack_require__(225);
+	var invariant = __webpack_require__(221);
 	
 	function abstractMethod(className, methodName) {
 	   true ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Subclasses of %s must override %s() with their own implementation.', className, methodName) : invariant(false) : undefined;
@@ -27665,7 +26335,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 254 */
+/* 234 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -32652,7 +31322,7 @@
 	}));
 
 /***/ },
-/* 255 */
+/* 235 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -32669,9 +31339,9 @@
 	
 	'use strict';
 	
-	var FluxStoreGroup = __webpack_require__(241);
+	var FluxStoreGroup = __webpack_require__(220);
 	
-	var invariant = __webpack_require__(225);
+	var invariant = __webpack_require__(221);
 	
 	/**
 	 * `FluxContainer` should be preferred over this mixin, but it requires using
@@ -32775,7 +31445,281 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 256 */
+/* 236 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Dispatcher = __webpack_require__(237).Dispatcher;
+	module.exports = new Dispatcher();
+
+/***/ },
+/* 237 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright (c) 2014-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 */
+	
+	module.exports.Dispatcher = __webpack_require__(238);
+
+
+/***/ },
+/* 238 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {/**
+	 * Copyright (c) 2014-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule Dispatcher
+	 * 
+	 * @preventMunge
+	 */
+	
+	'use strict';
+	
+	exports.__esModule = true;
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+	
+	var invariant = __webpack_require__(221);
+	
+	var _prefix = 'ID_';
+	
+	/**
+	 * Dispatcher is used to broadcast payloads to registered callbacks. This is
+	 * different from generic pub-sub systems in two ways:
+	 *
+	 *   1) Callbacks are not subscribed to particular events. Every payload is
+	 *      dispatched to every registered callback.
+	 *   2) Callbacks can be deferred in whole or part until other callbacks have
+	 *      been executed.
+	 *
+	 * For example, consider this hypothetical flight destination form, which
+	 * selects a default city when a country is selected:
+	 *
+	 *   var flightDispatcher = new Dispatcher();
+	 *
+	 *   // Keeps track of which country is selected
+	 *   var CountryStore = {country: null};
+	 *
+	 *   // Keeps track of which city is selected
+	 *   var CityStore = {city: null};
+	 *
+	 *   // Keeps track of the base flight price of the selected city
+	 *   var FlightPriceStore = {price: null}
+	 *
+	 * When a user changes the selected city, we dispatch the payload:
+	 *
+	 *   flightDispatcher.dispatch({
+	 *     actionType: 'city-update',
+	 *     selectedCity: 'paris'
+	 *   });
+	 *
+	 * This payload is digested by `CityStore`:
+	 *
+	 *   flightDispatcher.register(function(payload) {
+	 *     if (payload.actionType === 'city-update') {
+	 *       CityStore.city = payload.selectedCity;
+	 *     }
+	 *   });
+	 *
+	 * When the user selects a country, we dispatch the payload:
+	 *
+	 *   flightDispatcher.dispatch({
+	 *     actionType: 'country-update',
+	 *     selectedCountry: 'australia'
+	 *   });
+	 *
+	 * This payload is digested by both stores:
+	 *
+	 *   CountryStore.dispatchToken = flightDispatcher.register(function(payload) {
+	 *     if (payload.actionType === 'country-update') {
+	 *       CountryStore.country = payload.selectedCountry;
+	 *     }
+	 *   });
+	 *
+	 * When the callback to update `CountryStore` is registered, we save a reference
+	 * to the returned token. Using this token with `waitFor()`, we can guarantee
+	 * that `CountryStore` is updated before the callback that updates `CityStore`
+	 * needs to query its data.
+	 *
+	 *   CityStore.dispatchToken = flightDispatcher.register(function(payload) {
+	 *     if (payload.actionType === 'country-update') {
+	 *       // `CountryStore.country` may not be updated.
+	 *       flightDispatcher.waitFor([CountryStore.dispatchToken]);
+	 *       // `CountryStore.country` is now guaranteed to be updated.
+	 *
+	 *       // Select the default city for the new country
+	 *       CityStore.city = getDefaultCityForCountry(CountryStore.country);
+	 *     }
+	 *   });
+	 *
+	 * The usage of `waitFor()` can be chained, for example:
+	 *
+	 *   FlightPriceStore.dispatchToken =
+	 *     flightDispatcher.register(function(payload) {
+	 *       switch (payload.actionType) {
+	 *         case 'country-update':
+	 *         case 'city-update':
+	 *           flightDispatcher.waitFor([CityStore.dispatchToken]);
+	 *           FlightPriceStore.price =
+	 *             getFlightPriceStore(CountryStore.country, CityStore.city);
+	 *           break;
+	 *     }
+	 *   });
+	 *
+	 * The `country-update` payload will be guaranteed to invoke the stores'
+	 * registered callbacks in order: `CountryStore`, `CityStore`, then
+	 * `FlightPriceStore`.
+	 */
+	
+	var Dispatcher = (function () {
+	  function Dispatcher() {
+	    _classCallCheck(this, Dispatcher);
+	
+	    this._callbacks = {};
+	    this._isDispatching = false;
+	    this._isHandled = {};
+	    this._isPending = {};
+	    this._lastID = 1;
+	  }
+	
+	  /**
+	   * Registers a callback to be invoked with every dispatched payload. Returns
+	   * a token that can be used with `waitFor()`.
+	   */
+	
+	  Dispatcher.prototype.register = function register(callback) {
+	    var id = _prefix + this._lastID++;
+	    this._callbacks[id] = callback;
+	    return id;
+	  };
+	
+	  /**
+	   * Removes a callback based on its token.
+	   */
+	
+	  Dispatcher.prototype.unregister = function unregister(id) {
+	    !this._callbacks[id] ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.unregister(...): `%s` does not map to a registered callback.', id) : invariant(false) : undefined;
+	    delete this._callbacks[id];
+	  };
+	
+	  /**
+	   * Waits for the callbacks specified to be invoked before continuing execution
+	   * of the current callback. This method should only be used by a callback in
+	   * response to a dispatched payload.
+	   */
+	
+	  Dispatcher.prototype.waitFor = function waitFor(ids) {
+	    !this._isDispatching ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.waitFor(...): Must be invoked while dispatching.') : invariant(false) : undefined;
+	    for (var ii = 0; ii < ids.length; ii++) {
+	      var id = ids[ii];
+	      if (this._isPending[id]) {
+	        !this._isHandled[id] ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.waitFor(...): Circular dependency detected while ' + 'waiting for `%s`.', id) : invariant(false) : undefined;
+	        continue;
+	      }
+	      !this._callbacks[id] ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.waitFor(...): `%s` does not map to a registered callback.', id) : invariant(false) : undefined;
+	      this._invokeCallback(id);
+	    }
+	  };
+	
+	  /**
+	   * Dispatches a payload to all registered callbacks.
+	   */
+	
+	  Dispatcher.prototype.dispatch = function dispatch(payload) {
+	    !!this._isDispatching ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatch.dispatch(...): Cannot dispatch in the middle of a dispatch.') : invariant(false) : undefined;
+	    this._startDispatching(payload);
+	    try {
+	      for (var id in this._callbacks) {
+	        if (this._isPending[id]) {
+	          continue;
+	        }
+	        this._invokeCallback(id);
+	      }
+	    } finally {
+	      this._stopDispatching();
+	    }
+	  };
+	
+	  /**
+	   * Is this Dispatcher currently dispatching.
+	   */
+	
+	  Dispatcher.prototype.isDispatching = function isDispatching() {
+	    return this._isDispatching;
+	  };
+	
+	  /**
+	   * Call the callback stored with the given id. Also do some internal
+	   * bookkeeping.
+	   *
+	   * @internal
+	   */
+	
+	  Dispatcher.prototype._invokeCallback = function _invokeCallback(id) {
+	    this._isPending[id] = true;
+	    this._callbacks[id](this._pendingPayload);
+	    this._isHandled[id] = true;
+	  };
+	
+	  /**
+	   * Set up bookkeeping needed when dispatching.
+	   *
+	   * @internal
+	   */
+	
+	  Dispatcher.prototype._startDispatching = function _startDispatching(payload) {
+	    for (var id in this._callbacks) {
+	      this._isPending[id] = false;
+	      this._isHandled[id] = false;
+	    }
+	    this._pendingPayload = payload;
+	    this._isDispatching = true;
+	  };
+	
+	  /**
+	   * Clear bookkeeping used for dispatching.
+	   *
+	   * @internal
+	   */
+	
+	  Dispatcher.prototype._stopDispatching = function _stopDispatching() {
+	    delete this._pendingPayload;
+	    this._isDispatching = false;
+	  };
+	
+	  return Dispatcher;
+	})();
+	
+	module.exports = Dispatcher;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
+
+/***/ },
+/* 239 */
+/***/ function(module, exports) {
+
+	var RestaurantConstants = {
+		RESTAURANT_RECEIVED: "RESTAURANT_RECEIVED",
+		RESTAURANTS_RECEIVED: "RESTAURANTS_RECEIVED",
+		CLEAR_SEARCH_RESTAURANTS: "CLEAR_SEARCH_RESTAURANTS",
+		RESTAURANT_INDEX_RECEIVED: "RESTAURANT_INDEX_RECEIVED",
+		CREATED_RESTAURANT_RECEIVED: "CREATED_RESTAURANT_RECEIVED"
+	};
+	
+	module.exports = RestaurantConstants;
+
+/***/ },
+/* 240 */
 /***/ function(module, exports) {
 
 	var HelperUtil = {
@@ -32811,12 +31755,394 @@
 	};
 
 /***/ },
-/* 257 */
+/* 241 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Store = __webpack_require__(239).Store;
-	var SessionConstants = __webpack_require__(229);
-	var AppDispatcher = __webpack_require__(222);
+	var RestaurantActions = __webpack_require__(242);
+	var CuisineActions = __webpack_require__(243);
+	var SessionActions = __webpack_require__(245);
+	var CityActions = __webpack_require__(247);
+	
+	var ApiUtil = {
+	
+		fetchRestaurant: function (id, callback) {
+			$.ajax({
+				type: "GET",
+				url: "/api/restaurants/" + id,
+				dataType: "json",
+				success: function (restaurant) {
+					RestaurantActions.receiveRestaurant(restaurant);
+				},
+				error: function () {
+					callback && callback({ published: false });
+				}
+			});
+		},
+	
+		createRestaurant: function (params, callback, failCallback) {
+			$.ajax({
+				type: "POST",
+				url: "/api/restaurants",
+				dataType: "json",
+				data: { restaurant: params },
+				success: function (restaurant) {
+					RestaurantActions.receiveCreatedRestaurant(restaurant);
+					callback && callback("/restaurants/edit/" + restaurant.id);
+				},
+				error: function (errors) {
+					failCallback && failCallback(errors);
+				}
+			});
+		},
+	
+		patchRestaurantWithImage: function (id, params) {
+			$.ajax({
+				type: "PATCH",
+				url: "/api/restaurants/" + id,
+				dataType: "json",
+				processData: false,
+				contentType: false,
+				data: params,
+				success: function (restaurant) {
+					RestaurantActions.receiveCreatedRestaurant(restaurant);
+				}
+			});
+		},
+	
+		patchRestaurant: function (id, params) {
+			$.ajax({
+				type: "PATCH",
+				url: "/api/restaurants/" + id,
+				dataType: "json",
+				data: { restaurant: params },
+				success: function (restaurant) {
+					RestaurantActions.receiveCreatedRestaurant(restaurant);
+				}
+			});
+		},
+	
+		fetchCreatedRestaurant: function (id, callback) {
+			$.ajax({
+				type: "GET",
+				url: "/api/restaurants/" + id,
+				dataType: "json",
+				data: { edit: true },
+				success: function (restaurant) {
+					RestaurantActions.receiveCreatedRestaurant(restaurant);
+				},
+				error: function () {
+					callback && callback();
+				}
+			});
+		},
+	
+		fetchRestaurantByParams: function (params) {
+			$.ajax({
+				type: "GET",
+				url: "/api/restaurants",
+				dataType: "json",
+				data: params,
+				success: function (restaurant) {
+					RestaurantActions.receiveRestaurant(restaurant);
+				}
+			});
+		},
+	
+		fetchRestaurantByParamsIndexStore: function (params) {
+			$.ajax({
+				type: "GET",
+				url: "/api/restaurants",
+				dataType: "json",
+				data: params,
+				success: function (restaurants) {
+					if (restaurants[0]) {
+						restaurants = { meta: {}, search_results: restaurants };
+					}
+					RestaurantActions.receiveIndexRestaurants(restaurants);
+				}
+			});
+		},
+	
+		fetchRestaurantByNameContain: function (str, page) {
+			if (!page) {
+				page = 1;
+			}
+			$.ajax({
+				type: "GET",
+				url: "/api/restaurants",
+				dataType: "json",
+				data: { str: str, page: page },
+				success: function (restaurants) {
+					RestaurantActions.receiveRestaurants(restaurants);
+				}
+			});
+		},
+	
+		fetchRestaurantsByCuisine: function (cuisine_id, number) {
+			$.ajax({
+				type: "GET",
+				url: "/api/restaurants",
+				dataType: "json",
+				data: { cuisine_id: cuisine_id, per: number },
+				success: function (restaurants) {
+					RestaurantActions.receiveIndexRestaurants(restaurants);
+				}
+			});
+		},
+	
+		fetchCuisines: function () {
+			$.ajax({
+				type: "GET",
+				url: "/api/cuisines",
+				dataType: "json",
+				success: function (cuisines) {
+					CuisineActions.receiveCuisines(cuisines);
+				}
+			});
+		},
+	
+		login: function (credentials, callback, failCallback) {
+			$.ajax({
+				type: "POST",
+				url: "/api/session",
+				dataType: "json",
+				data: credentials,
+				success: function (currentUser) {
+					SessionActions.currentUserReceived(currentUser);
+					callback && callback();
+				},
+				error: function () {
+					failCallback && failCallback();
+				}
+			});
+		},
+	
+		logout: function (callback) {
+			$.ajax({
+				type: "DELETE",
+				url: "/api/session",
+				dataType: "json",
+				success: function () {
+					SessionActions.logout();
+					callback && callback();
+				}
+			});
+		},
+	
+		createUser: function (info, callback, failCallback) {
+			$.ajax({
+				type: "POST",
+				url: "/api/users",
+				dataType: "json",
+				data: { user: info },
+				success: function (currentUser) {
+					SessionActions.currentUserReceived(currentUser, callback);
+					callback && callback();
+				},
+				error: function (errors) {
+					failCallback && failCallback(errors);
+				}
+			});
+		},
+	
+		fetchCurrentUser: function (completion) {
+			$.ajax({
+				type: "GET",
+				url: "/api/session",
+				dataType: "json",
+				success: function (currentUser) {
+					if (currentUser.message !== "Not logged in") {
+						SessionActions.currentUserReceived(currentUser);
+					}
+				},
+				complete: function () {
+					completion && completion();
+				}
+			});
+		},
+	
+		fetchCities: function () {
+			$.ajax({
+				type: "GET",
+				url: "/api/cities",
+				dataType: "json",
+				success: function (cities) {
+					CityActions.receiveCities(cities);
+				}
+			});
+		},
+	
+		createContribution: function (params) {
+			$.ajax({
+				type: "POST",
+				url: "/api/contributions",
+				dataType: "json",
+				data: { contribution: params },
+				success: function (contribution) {
+					ApiUtil.fetchRestaurant(contribution.restaurant_id);
+				}
+			});
+		},
+	
+		createReward: function (params) {
+			$.ajax({
+				type: "POST",
+				url: "/api/rewards",
+				dataType: "json",
+				data: { reward: params },
+				success: function (reward) {
+					ApiUtil.fetchCreatedRestaurant(reward.restaurant_id);
+				}
+			});
+		}
+	
+	};
+	
+	module.exports = ApiUtil;
+
+/***/ },
+/* 242 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var RestaurantConstants = __webpack_require__(239);
+	var AppDispatcher = __webpack_require__(236);
+	
+	var RestaurantActions = {
+		receiveRestaurant: function (restaurant) {
+			AppDispatcher.dispatch({
+				actionType: RestaurantConstants.RESTAURANT_RECEIVED,
+				restaurant: restaurant
+			});
+		},
+	
+		receiveRestaurants: function (restaurants) {
+			AppDispatcher.dispatch({
+				actionType: RestaurantConstants.RESTAURANTS_RECEIVED,
+				restaurants: restaurants
+			});
+		},
+	
+		clearSearchRestaurants: function () {
+			AppDispatcher.dispatch({
+				actionType: RestaurantConstants.CLEAR_SEARCH_RESTAURANTS
+			});
+		},
+	
+		receiveIndexRestaurants: function (restaurants) {
+			AppDispatcher.dispatch({
+				actionType: RestaurantConstants.RESTAURANT_INDEX_RECEIVED,
+				restaurants: restaurants.search_results,
+				meta: restaurants.meta
+			});
+		},
+	
+		receiveCreatedRestaurant: function (restaurant) {
+			AppDispatcher.dispatch({
+				actionType: RestaurantConstants.CREATED_RESTAURANT_RECEIVED,
+				restaurant: restaurant
+			});
+		}
+	};
+	
+	module.exports = RestaurantActions;
+
+/***/ },
+/* 243 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var CuisinesConstants = __webpack_require__(244);
+	var AppDispatcher = __webpack_require__(236);
+	
+	var CuisineActions = {
+		receiveCuisines: function (cuisines) {
+			AppDispatcher.dispatch({
+				actionType: CuisinesConstants.CUISINES_RECEIVED,
+				cuisines: cuisines
+			});
+		}
+	};
+	
+	module.exports = CuisineActions;
+
+/***/ },
+/* 244 */
+/***/ function(module, exports) {
+
+	var CuisineConstants = {
+		CUISINES_RECEIVED: "CUISINES_RECEIVED"
+	};
+	
+	module.exports = CuisineConstants;
+
+/***/ },
+/* 245 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(236);
+	var SessionConstants = __webpack_require__(246);
+	
+	var SessionActions = {
+	  currentUserReceived: function (currentUser, callback) {
+	    AppDispatcher.dispatch({
+	      actionType: SessionConstants.CURRENT_USER_RECEIVED,
+	      currentUser: currentUser,
+	      callback: callback
+	    });
+	  },
+	
+	  logout: function () {
+	    AppDispatcher.dispatch({
+	      actionType: SessionConstants.LOGOUT
+	    });
+	  }
+	};
+	
+	module.exports = SessionActions;
+
+/***/ },
+/* 246 */
+/***/ function(module, exports) {
+
+	module.exports = {
+	  CURRENT_USER_RECEIVED: "CURRENT_USER_RECEIVED",
+	  LOGOUT: "LOGOUT"
+	};
+
+/***/ },
+/* 247 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var CityConstants = __webpack_require__(248);
+	var AppDispatcher = __webpack_require__(236);
+	
+	var CityActions = {
+		receiveCities: function (cities) {
+			AppDispatcher.dispatch({
+				actionType: CityConstants.CITIES_RECEIVED,
+				cities: cities
+			});
+		}
+	};
+	
+	module.exports = CityActions;
+
+/***/ },
+/* 248 */
+/***/ function(module, exports) {
+
+	var CityConstants = {
+		CITIES_RECEIVED: "CITIES_RECEIVED"
+	};
+	
+	module.exports = CityConstants;
+
+/***/ },
+/* 249 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Store = __webpack_require__(218).Store;
+	var SessionConstants = __webpack_require__(246);
+	var AppDispatcher = __webpack_require__(236);
 	
 	var SessionStore = new Store(AppDispatcher);
 	
@@ -32852,12 +32178,1059 @@
 	module.exports = SessionStore;
 
 /***/ },
-/* 258 */
+/* 250 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var CuisineStore = __webpack_require__(259);
-	var ApiUtil = __webpack_require__(219);
+	var PropTypes = React.PropTypes;
+	
+	var ProfileNav = React.createClass({
+	  displayName: 'ProfileNav',
+	
+	
+	  contextTypes: { router: React.PropTypes.object.isRequired },
+	
+	  _handleCreatedClick: function (e) {
+	    this.context.router.push('/profile/projects');
+	  },
+	
+	  _handleBackedClick: function (e) {
+	    this.context.router.push('/profile/backed');
+	  },
+	
+	  render: function () {
+	    var backedClass = "";
+	    var createdClass = "";
+	    if (this.props.selected === "0") {
+	      createdClass = "selected";
+	    } else {
+	      backedClass = "selected";
+	    }
+	
+	    return React.createElement(
+	      'nav',
+	      { className: 'profile-nav' },
+	      React.createElement(
+	        'ul',
+	        null,
+	        React.createElement(
+	          'li',
+	          { id: createdClass, onClick: this._handleCreatedClick },
+	          'Created Projects'
+	        ),
+	        React.createElement(
+	          'li',
+	          { id: backedClass, onClick: this._handleBackedClick },
+	          'Backed Projects'
+	        )
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = ProfileNav;
+
+/***/ },
+/* 251 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var SessionStore = __webpack_require__(249);
+	
+	var ProfileIndexItem = React.createClass({
+	  displayName: 'ProfileIndexItem',
+	
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
+	
+	  getInitialState: function () {
+	    return { imageClass: "hide-image" };
+	  },
+	
+	  _imageReady: function () {
+	    this.setState({ imageClass: "show-image" });
+	  },
+	
+	  handleEditClick: function () {
+	    this.context.router.push("/restaurants/edit/" + this.props.restaurant.id);
+	  },
+	
+	  handleShowClick: function () {
+	    this.context.router.push("/restaurants/" + this.props.restaurant.id);
+	  },
+	
+	  render: function () {
+	    var editText = "Continue Editing";
+	    var show = React.createElement('div', null);
+	
+	    if (this.props.restaurant.published) {
+	      show = React.createElement(
+	        'div',
+	        { id: 'show-index-item', className: 'edit-profile-index-item', onClick: this.handleShowClick },
+	        'Show'
+	      );
+	      editText = "Edit";
+	    }
+	
+	    var edit = React.createElement(
+	      'div',
+	      { className: 'edit-profile-index-item', onClick: this.handleEditClick },
+	      editText
+	    );
+	
+	    if (this.props.restaurant.user.id !== SessionStore.currentUser().id) {
+	      edit = React.createElement('div', { className: 'hide' });
+	    }
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'profile-index-item' },
+	      React.createElement(
+	        'div',
+	        { className: 'profile-index-item-image-wrapper' },
+	        React.createElement('img', {
+	          id: 'profile-index-item-img',
+	          src: this.props.restaurant.image_url,
+	          onLoad: this._imageReady,
+	          className: this.state.imageClass
+	        })
+	      ),
+	      React.createElement(
+	        'h3',
+	        null,
+	        this.props.restaurant.title
+	      ),
+	      edit,
+	      show
+	    );
+	  }
+	
+	});
+	
+	module.exports = ProfileIndexItem;
+
+/***/ },
+/* 252 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var PropTypes = React.PropTypes;
+	var RestaurantIndexStore = __webpack_require__(217);
+	var ApiUtil = __webpack_require__(241);
+	var SessionStore = __webpack_require__(249);
+	var ProfileNav = __webpack_require__(250);
+	var RestaurantProfilePageItem = __webpack_require__(251);
+	
+	var CreatedProjects = React.createClass({
+	  displayName: 'CreatedProjects',
+	
+	
+	  getInitialState: function () {
+	    return { restaurants: [] };
+	  },
+	
+	  componentDidMount: function () {
+	    this.token = RestaurantIndexStore.addListener(this._onChange);
+	    ApiUtil.fetchRestaurantByParamsIndexStore({
+	      user_id: SessionStore.currentUser().id
+	    });
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.token.remove();
+	  },
+	
+	  _onChange: function () {
+	    this.setState({ restaurants: RestaurantIndexStore.all() });
+	  },
+	
+	  render: function () {
+	    var startedRestaurants = [];
+	    var publishedRestaurants = [];
+	
+	    if (this.state.restaurants.length > 0) {
+	      this.state.restaurants.forEach(function (restaurant) {
+	
+	        if (!restaurant.published) {
+	          startedRestaurants.push(React.createElement(
+	            'li',
+	            { key: restaurant.id },
+	            React.createElement(RestaurantProfilePageItem, { restaurant: restaurant })
+	          ));
+	        } else {
+	          publishedRestaurants.push(React.createElement(
+	            'li',
+	            { key: restaurant.id },
+	            React.createElement(RestaurantProfilePageItem, { restaurant: restaurant })
+	          ));
+	        }
+	      });
+	    }
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'profile-page' },
+	      React.createElement(
+	        'div',
+	        { className: 'profile-page-content group' },
+	        React.createElement(
+	          'div',
+	          { className: 'group profile-page-header' },
+	          React.createElement(
+	            'h1',
+	            null,
+	            'Created projects'
+	          ),
+	          React.createElement(ProfileNav, { selected: '0' })
+	        ),
+	        React.createElement(
+	          'h2',
+	          null,
+	          'A place to keep track of all your created projects'
+	        ),
+	        React.createElement(
+	          'h3',
+	          null,
+	          'Started'
+	        ),
+	        React.createElement(
+	          'ul',
+	          { className: 'project-list group' },
+	          startedRestaurants
+	        ),
+	        React.createElement(
+	          'h3',
+	          null,
+	          'Live'
+	        ),
+	        React.createElement(
+	          'ul',
+	          { className: 'project-list group' },
+	          publishedRestaurants
+	        )
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = CreatedProjects;
+
+/***/ },
+/* 253 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var YouPopout = __webpack_require__(254);
+	var SearchBar = __webpack_require__(257);
+	var SessionStore = __webpack_require__(249);
+	
+	var NavBar = React.createClass({
+		displayName: 'NavBar',
+	
+	
+		contextTypes: { router: React.PropTypes.object.isRequired },
+	
+		getInitialState: function () {
+			var name = "";
+			if (SessionStore.isLoggedIn()) {
+				name = SessionStore.currentUser().name;
+			}
+			return { expandYou: false, isLoggedIn: SessionStore.isLoggedIn(), name: name };
+		},
+	
+		onChange: function () {
+			var name = "";
+			if (SessionStore.isLoggedIn()) {
+				name = SessionStore.currentUser().name;
+			}
+			this.setState({ isLoggedIn: SessionStore.isLoggedIn(), name: name });
+		},
+	
+		componentDidMount: function () {
+			this.listenToken = SessionStore.addListener(this.onChange);
+		},
+	
+		componentWillUnmount: function () {
+			this.listenToken.remove();
+		},
+	
+		_logoClick: function (e) {
+			e.preventDefault();
+			e.stopPropagation();
+			this.context.router.push("/");
+		},
+	
+		_logo: function () {
+			return React.createElement(
+				'h2',
+				{ className: 'site-logo group' },
+				React.createElement(
+					'a',
+					{ onClick: this._logoClick },
+					React.createElement(
+						'span',
+						{ className: 'dark-green' },
+						'KITCHEN'
+					),
+					React.createElement(
+						'span',
+						{ className: 'green' },
+						'STARTER'
+					)
+				)
+			);
+		},
+	
+		_newRestaurant: function (e) {
+			e.preventDefault();
+			this.context.router.push('/restaurants/new');
+		},
+	
+		_nav: function () {
+			return React.createElement(
+				'ul',
+				{ className: 'global-nav' },
+				React.createElement(
+					'li',
+					null,
+					React.createElement(
+						'a',
+						{ href: '#', onClick: this._restaurantIndex },
+						'Discover'
+					)
+				),
+				React.createElement(
+					'li',
+					null,
+					React.createElement(
+						'a',
+						{ href: '#', onClick: this._newRestaurant },
+						'Start a Project'
+					)
+				),
+				React.createElement(
+					'li',
+					null,
+					React.createElement(
+						'a',
+						{ href: '#' },
+						'About Us'
+					)
+				)
+			);
+		},
+	
+		_restaurantIndex: function (e) {
+			e.preventDefault();
+			this.context.router.push('/restaurants');
+		},
+	
+		_handleYouPopoutExitClick: function () {
+			this.setState({ expandYou: false });
+		},
+	
+		_youModal: function () {
+			if (this.state.expandYou) {
+				return React.createElement(YouPopout, {
+					handleExitClick: this._handleYouPopoutExitClick,
+					disableOnClickOutside: true,
+					name: this.state.name,
+					closeCB: this._handleYouPopoutExitClick
+				});
+			} else {
+				return "";
+			}
+		},
+	
+		_youClick: function (e) {
+			this.setState({ expandYou: !this.state.expandYou });
+		},
+	
+		_signUp: function (e) {
+			e.preventDefault();
+			this.context.router.push('/users/new');
+		},
+	
+		_signIn: function (e) {
+			e.preventDefault();
+			this.context.router.push('/session/new');
+		},
+	
+		render: function () {
+			var accountTab;
+	
+			if (!this.state.isLoggedIn) {
+				//placeholder for logged in
+				accountTab = React.createElement(
+					'ul',
+					{ className: 'login-nav' },
+					React.createElement(
+						'li',
+						null,
+						React.createElement(
+							'a',
+							{ onClick: this._signUp },
+							'Sign up'
+						)
+					),
+					React.createElement(
+						'li',
+						null,
+						React.createElement(
+							'a',
+							{ onClick: this._signIn },
+							'Login'
+						)
+					)
+				);
+			} else {
+				accountTab = React.createElement(
+					'ul',
+					{ className: 'login-nav-me' },
+					React.createElement(
+						'li',
+						null,
+						React.createElement(
+							'div',
+							{ onClick: this._youClick },
+							'You ',
+							React.createElement('span', { className: 'my-arrow fa fa-sort-desc' })
+						),
+						this._youModal()
+					)
+				);
+			}
+			return React.createElement(
+				'header',
+				{ className: 'group' },
+				this._logo(),
+				this._nav(),
+				React.createElement(SearchBar, null),
+				accountTab
+			);
+		}
+	});
+	
+	module.exports = NavBar;
+
+/***/ },
+/* 254 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var enhanceWithClickOutside = __webpack_require__(255);
+	var ApiUtils = __webpack_require__(241);
+	
+	var YouPopout = React.createClass({
+		displayName: 'YouPopout',
+	
+		mixins: [__webpack_require__(256)],
+	
+		contextTypes: { router: React.PropTypes.object.isRequired },
+	
+		_signOut: function (e) {
+			e.preventDefault();
+			this.props.closeCB();
+			ApiUtils.logout(this.context.router.push.bind(this, '/session/new'));
+		},
+	
+		handleClickOutside: function () {
+			this.props.handleExitClick();
+		},
+	
+		_backedRestaurants: function () {
+			this.props.closeCB();
+			this.context.router.push('/profile/backed');
+		},
+	
+		_createdRestaurants: function () {
+			this.props.closeCB();
+			this.context.router.push('/profile/projects');
+		},
+	
+		render: function () {
+			return React.createElement(
+				'div',
+				{ id: 'you-popout' },
+				React.createElement(
+					'div',
+					{ className: 'you-popout-col group' },
+					React.createElement(
+						'h3',
+						null,
+						'Your Links'
+					),
+					React.createElement(
+						'ul',
+						null,
+						React.createElement(
+							'li',
+							{ onClick: this._createdRestaurants },
+							'Created Restaurants'
+						),
+						React.createElement(
+							'li',
+							{ onClick: this._backedRestaurants },
+							'Backed Restaurants'
+						)
+					),
+					React.createElement(
+						'p',
+						null,
+						'Signed in as',
+						React.createElement('br', null),
+						' ',
+						React.createElement(
+							'span',
+							{ id: 'logged-in-name' },
+							this.props.name
+						)
+					),
+					React.createElement(
+						'a',
+						{ href: '#', onClick: this._signOut },
+						'Sign Out'
+					)
+				)
+			);
+		}
+	
+	});
+	
+	module.exports = enhanceWithClickOutside(YouPopout);
+
+/***/ },
+/* 255 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(158);
+	
+	module.exports = function enhanceWithClickOutside(WrappedComponent) {
+	  var componentName = WrappedComponent.displayName || WrappedComponent.name;
+	
+	  return React.createClass({
+	    displayName: 'Wrapped' + componentName,
+	
+	    componentDidMount: function componentDidMount() {
+	      this.__wrappedComponent = this.refs.wrappedComponent;
+	      document.addEventListener('click', this.handleClickOutside, true);
+	    },
+	
+	    componentWillUnmount: function componentWillUnmount() {
+	      document.removeEventListener('click', this.handleClickOutside, true);
+	    },
+	
+	    handleClickOutside: function handleClickOutside(e) {
+	      var domNode = ReactDOM.findDOMNode(this);
+	      if ((!domNode || !domNode.contains(e.target)) && typeof this.refs.wrappedComponent.handleClickOutside === 'function') {
+	        this.refs.wrappedComponent.handleClickOutside(e);
+	      }
+	    },
+	
+	    render: function render() {
+	      return React.createElement(WrappedComponent, _extends({}, this.props, { ref: 'wrappedComponent' }));
+	    }
+	  });
+	};
+
+/***/ },
+/* 256 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
+	 * A mixin for handling (effectively) onClickOutside for React components.
+	 * Note that we're not intercepting any events in this approach, and we're
+	 * not using double events for capturing and discarding in layers or wrappers.
+	 *
+	 * The idea is that components define function
+	 *
+	 *   handleClickOutside: function() { ... }
+	 *
+	 * If no such function is defined, an error will be thrown, as this means
+	 * either it still needs to be written, or the component should not be using
+	 * this mixing since it will not exhibit onClickOutside behaviour.
+	 *
+	 */
+	(function (root, factory) {
+	  if (true) {
+	    // AMD. Register as an anonymous module.
+	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(158)], __WEBPACK_AMD_DEFINE_RESULT__ = function(reactDom) {
+	      return factory(root, reactDom);
+	    }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	  } else if (typeof exports === 'object') {
+	    // Node. Note that this does not work with strict
+	    // CommonJS, but only CommonJS-like environments
+	    // that support module.exports
+	    module.exports = factory(root, require('react-dom'));
+	  } else {
+	    // Browser globals (root is window)
+	    root.OnClickOutside = factory(root, ReactDOM);
+	  }
+	}(this, function (root, ReactDOM) {
+	  "use strict";
+	
+	  // Use a parallel array because we can't use
+	  // objects as keys, they get toString-coerced
+	  var registeredComponents = [];
+	  var handlers = [];
+	
+	  var IGNORE_CLASS = 'ignore-react-onclickoutside';
+	
+	  var isSourceFound = function(source, localNode, ignoreClass) {
+	    if (source === localNode) {
+	      return true;
+	    }
+	    // SVG <use/> elements do not technically reside in the rendered DOM, so
+	    // they do not have classList directly, but they offer a link to their
+	    // corresponding element, which can have classList. This extra check is for
+	    // that case.
+	    // See: http://www.w3.org/TR/SVG11/struct.html#InterfaceSVGUseElement
+	    // Discussion: https://github.com/Pomax/react-onclickoutside/pull/17
+	    if (source.correspondingElement) {
+	      return source.correspondingElement.classList.contains(ignoreClass);
+	    }
+	    return source.classList.contains(ignoreClass);
+	  };
+	
+	  return {
+	    componentDidMount: function() {
+	      if(typeof this.handleClickOutside !== "function")
+	        throw new Error("Component lacks a handleClickOutside(event) function for processing outside click events.");
+	
+	      var fn = this.__outsideClickHandler = (function(localNode, eventHandler, ignoreClass) {
+	        return function(evt) {
+	          evt.stopPropagation();
+	          var source = evt.target;
+	          var found = false;
+	          // If source=local then this event came from "somewhere"
+	          // inside and should be ignored. We could handle this with
+	          // a layered approach, too, but that requires going back to
+	          // thinking in terms of Dom node nesting, running counter
+	          // to React's "you shouldn't care about the DOM" philosophy.
+	          while(source.parentNode) {
+	            found = isSourceFound(source, localNode, ignoreClass);
+	            if(found) return;
+	            source = source.parentNode;
+	          }
+	          // If element is in detached DOM, consider it not clicked
+	          // outside as it can't be known whether it was outside.
+	          if(source !== document) return;
+	          eventHandler(evt);
+	        }
+	      }(ReactDOM.findDOMNode(this), this.handleClickOutside, this.props.outsideClickIgnoreClass || IGNORE_CLASS));
+	
+	      var pos = registeredComponents.length;
+	      registeredComponents.push(this);
+	      handlers[pos] = fn;
+	
+	      // If there is a truthy disableOnClickOutside property for this
+	      // component, don't immediately start listening for outside events.
+	      if (!this.props.disableOnClickOutside) {
+	        this.enableOnClickOutside();
+	      }
+	    },
+	
+	    componentWillUnmount: function() {
+	      this.disableOnClickOutside();
+	      this.__outsideClickHandler = false;
+	      var pos = registeredComponents.indexOf(this);
+	      if( pos>-1) {
+	        if (handlers[pos]) {
+	          // clean up so we don't leak memory
+	          handlers.splice(pos, 1);
+	          registeredComponents.splice(pos, 1);
+	        }
+	      }
+	    },
+	
+	    /**
+	     * Can be called to explicitly enable event listening
+	     * for clicks and touches outside of this element.
+	     */
+	    enableOnClickOutside: function() {
+	      var fn = this.__outsideClickHandler;
+	      if (document != null) {
+	        document.addEventListener("mousedown", fn);
+	        document.addEventListener("touchstart", fn);
+	      }
+	    },
+	
+	    /**
+	     * Can be called to explicitly disable event listening
+	     * for clicks and touches outside of this element.
+	     */
+	    disableOnClickOutside: function() {
+	      var fn = this.__outsideClickHandler;
+	      if (document != null) {
+	        document.removeEventListener("mousedown", fn);
+	        document.removeEventListener("touchstart", fn);
+	      }
+	    }
+	  };
+	
+	}));
+
+
+/***/ },
+/* 257 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var PropTypes = React.PropTypes;
+	var LinkedStateMixin = __webpack_require__(258);
+	var ApiUtil = __webpack_require__(241);
+	var RestaurantActions = __webpack_require__(242);
+	var RestaurantIndexStore = __webpack_require__(262);
+	
+	var SearchBar = React.createClass({
+		displayName: 'SearchBar',
+	
+		mixins: [LinkedStateMixin],
+	
+		getInitialState: function () {
+			return { searchVal: "" };
+		},
+	
+		clearIfSearchEmpty: function () {
+			if (RestaurantIndexStore.all().length < 1) {
+				this.setState({ searchVal: "" });
+			}
+		},
+	
+		componentDidMount: function () {
+			this.listener = RestaurantIndexStore.addListener(this.clearIfSearchEmpty);
+		},
+	
+		componentWillUnmount: function () {
+			this.listener.remove();
+		},
+	
+		searchCallback: function () {
+			ApiUtil.fetchRestaurantByNameContain(this.state.searchVal);
+		},
+	
+		onChange: function (e) {
+			clearTimeout(this.searchToken);
+	
+			if (e.target.value !== "") {
+				this.searchToken = setTimeout(this.searchCallback, 500);
+			} else {
+				this.searchToken = RestaurantActions.clearSearchRestaurants();
+			}
+		},
+	
+		render: function () {
+			return React.createElement(
+				'div',
+				{ className: 'searchBar' },
+				React.createElement('div', { id: 'searchIcon', className: 'fa fa-search' }),
+				React.createElement('input', { type: 'text',
+					valueLink: this.linkState('searchVal'),
+					placeholder: 'Search Restaurants',
+					onInput: this.onChange
+				})
+			);
+		}
+	
+	});
+	
+	module.exports = SearchBar;
+
+/***/ },
+/* 258 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(259);
+
+/***/ },
+/* 259 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright 2013-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule LinkedStateMixin
+	 * @typechecks static-only
+	 */
+	
+	'use strict';
+	
+	var ReactLink = __webpack_require__(260);
+	var ReactStateSetters = __webpack_require__(261);
+	
+	/**
+	 * A simple mixin around ReactLink.forState().
+	 */
+	var LinkedStateMixin = {
+	  /**
+	   * Create a ReactLink that's linked to part of this component's state. The
+	   * ReactLink will have the current value of this.state[key] and will call
+	   * setState() when a change is requested.
+	   *
+	   * @param {string} key state key to update. Note: you may want to use keyOf()
+	   * if you're using Google Closure Compiler advanced mode.
+	   * @return {ReactLink} ReactLink instance linking to the state.
+	   */
+	  linkState: function (key) {
+	    return new ReactLink(this.state[key], ReactStateSetters.createStateKeySetter(this, key));
+	  }
+	};
+	
+	module.exports = LinkedStateMixin;
+
+/***/ },
+/* 260 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright 2013-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule ReactLink
+	 * @typechecks static-only
+	 */
+	
+	'use strict';
+	
+	/**
+	 * ReactLink encapsulates a common pattern in which a component wants to modify
+	 * a prop received from its parent. ReactLink allows the parent to pass down a
+	 * value coupled with a callback that, when invoked, expresses an intent to
+	 * modify that value. For example:
+	 *
+	 * React.createClass({
+	 *   getInitialState: function() {
+	 *     return {value: ''};
+	 *   },
+	 *   render: function() {
+	 *     var valueLink = new ReactLink(this.state.value, this._handleValueChange);
+	 *     return <input valueLink={valueLink} />;
+	 *   },
+	 *   _handleValueChange: function(newValue) {
+	 *     this.setState({value: newValue});
+	 *   }
+	 * });
+	 *
+	 * We have provided some sugary mixins to make the creation and
+	 * consumption of ReactLink easier; see LinkedValueUtils and LinkedStateMixin.
+	 */
+	
+	var React = __webpack_require__(2);
+	
+	/**
+	 * @param {*} value current value of the link
+	 * @param {function} requestChange callback to request a change
+	 */
+	function ReactLink(value, requestChange) {
+	  this.value = value;
+	  this.requestChange = requestChange;
+	}
+	
+	/**
+	 * Creates a PropType that enforces the ReactLink API and optionally checks the
+	 * type of the value being passed inside the link. Example:
+	 *
+	 * MyComponent.propTypes = {
+	 *   tabIndexLink: ReactLink.PropTypes.link(React.PropTypes.number)
+	 * }
+	 */
+	function createLinkTypeChecker(linkType) {
+	  var shapes = {
+	    value: typeof linkType === 'undefined' ? React.PropTypes.any.isRequired : linkType.isRequired,
+	    requestChange: React.PropTypes.func.isRequired
+	  };
+	  return React.PropTypes.shape(shapes);
+	}
+	
+	ReactLink.PropTypes = {
+	  link: createLinkTypeChecker
+	};
+	
+	module.exports = ReactLink;
+
+/***/ },
+/* 261 */
+/***/ function(module, exports) {
+
+	/**
+	 * Copyright 2013-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule ReactStateSetters
+	 */
+	
+	'use strict';
+	
+	var ReactStateSetters = {
+	  /**
+	   * Returns a function that calls the provided function, and uses the result
+	   * of that to set the component's state.
+	   *
+	   * @param {ReactCompositeComponent} component
+	   * @param {function} funcReturningState Returned callback uses this to
+	   *                                      determine how to update state.
+	   * @return {function} callback that when invoked uses funcReturningState to
+	   *                    determined the object literal to setState.
+	   */
+	  createStateSetter: function (component, funcReturningState) {
+	    return function (a, b, c, d, e, f) {
+	      var partialState = funcReturningState.call(component, a, b, c, d, e, f);
+	      if (partialState) {
+	        component.setState(partialState);
+	      }
+	    };
+	  },
+	
+	  /**
+	   * Returns a single-argument callback that can be used to update a single
+	   * key in the component's state.
+	   *
+	   * Note: this is memoized function, which makes it inexpensive to call.
+	   *
+	   * @param {ReactCompositeComponent} component
+	   * @param {string} key The key in the state that you should update.
+	   * @return {function} callback of 1 argument which calls setState() with
+	   *                    the provided keyName and callback argument.
+	   */
+	  createStateKeySetter: function (component, key) {
+	    // Memoize the setters.
+	    var cache = component.__keySetters || (component.__keySetters = {});
+	    return cache[key] || (cache[key] = createStateKeySetter(component, key));
+	  }
+	};
+	
+	function createStateKeySetter(component, key) {
+	  // Partial state is allocated outside of the function closure so it can be
+	  // reused with every call, avoiding memory allocation when this function
+	  // is called.
+	  var partialState = {};
+	  return function stateKeySetter(value) {
+	    partialState[key] = value;
+	    component.setState(partialState);
+	  };
+	}
+	
+	ReactStateSetters.Mixin = {
+	  /**
+	   * Returns a function that calls the provided function, and uses the result
+	   * of that to set the component's state.
+	   *
+	   * For example, these statements are equivalent:
+	   *
+	   *   this.setState({x: 1});
+	   *   this.createStateSetter(function(xValue) {
+	   *     return {x: xValue};
+	   *   })(1);
+	   *
+	   * @param {function} funcReturningState Returned callback uses this to
+	   *                                      determine how to update state.
+	   * @return {function} callback that when invoked uses funcReturningState to
+	   *                    determined the object literal to setState.
+	   */
+	  createStateSetter: function (funcReturningState) {
+	    return ReactStateSetters.createStateSetter(this, funcReturningState);
+	  },
+	
+	  /**
+	   * Returns a single-argument callback that can be used to update a single
+	   * key in the component's state.
+	   *
+	   * For example, these statements are equivalent:
+	   *
+	   *   this.setState({x: 1});
+	   *   this.createStateKeySetter('x')(1);
+	   *
+	   * Note: this is memoized function, which makes it inexpensive to call.
+	   *
+	   * @param {string} key The key in the state that you should update.
+	   * @return {function} callback of 1 argument which calls setState() with
+	   *                    the provided keyName and callback argument.
+	   */
+	  createStateKeySetter: function (key) {
+	    return ReactStateSetters.createStateKeySetter(this, key);
+	  }
+	};
+	
+	module.exports = ReactStateSetters;
+
+/***/ },
+/* 262 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Store = __webpack_require__(218).Store;
+	var AppDispatcher = __webpack_require__(236);
+	var RestaurantConstants = __webpack_require__(239);
+	var HelperUtil = __webpack_require__(240);
+	
+	var _restaurants = [];
+	var _meta = {};
+	
+	var RestaurantIndexStore = new Store(AppDispatcher);
+	
+	var _newRestaurants = function (restaurants) {
+	  if (restaurants.length === 0) {
+	    _restaurants = ["none"];
+	  } else {
+	    _restaurants = restaurants;
+	  }
+	};
+	
+	RestaurantIndexStore.all = function () {
+	  return _restaurants.slice(0);
+	};
+	
+	RestaurantIndexStore.meta = function () {
+	  return $.extend(true, {}, _meta);
+	};
+	
+	RestaurantIndexStore.find = function (id) {
+	  return _restaurants[id];
+	};
+	
+	RestaurantIndexStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case RestaurantConstants.RESTAURANTS_RECEIVED:
+	      _newRestaurants(payload.restaurants.search_results);
+	      _meta = payload.restaurants.meta;
+	      RestaurantIndexStore.__emitChange();
+	      break;
+	    case RestaurantConstants.CLEAR_SEARCH_RESTAURANTS:
+	      _restaurants = [];
+	      RestaurantIndexStore.__emitChange();
+	      break;
+	  }
+	};
+	
+	module.exports = RestaurantIndexStore;
+
+/***/ },
+/* 263 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var CuisineStore = __webpack_require__(264);
+	var ApiUtil = __webpack_require__(241);
 	
 	var FooterBar = React.createClass({
 	  displayName: 'FooterBar',
@@ -32983,13 +33356,13 @@
 	module.exports = FooterBar;
 
 /***/ },
-/* 259 */
+/* 264 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Store = __webpack_require__(239).Store;
-	var AppDispatcher = __webpack_require__(222);
-	var CuisinesConstants = __webpack_require__(227);
-	var HelperUtil = __webpack_require__(256);
+	var Store = __webpack_require__(218).Store;
+	var AppDispatcher = __webpack_require__(236);
+	var CuisinesConstants = __webpack_require__(244);
+	var HelperUtil = __webpack_require__(240);
 	
 	var CuisineStore = new Store(AppDispatcher);
 	
@@ -33010,14 +33383,14 @@
 	module.exports = CuisineStore;
 
 /***/ },
-/* 260 */
+/* 265 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var RestaurantStore = __webpack_require__(261);
-	var ApiUtil = __webpack_require__(219);
-	var ImageSideBar = __webpack_require__(262);
-	var RewardsIndex = __webpack_require__(284);
+	var RestaurantStore = __webpack_require__(266);
+	var ApiUtil = __webpack_require__(241);
+	var ImageSideBar = __webpack_require__(267);
+	var RewardsIndex = __webpack_require__(289);
 	
 	var RestaurantShow = React.createClass({
 		displayName: 'RestaurantShow',
@@ -33160,12 +33533,12 @@
 	module.exports = RestaurantShow;
 
 /***/ },
-/* 261 */
+/* 266 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Store = __webpack_require__(239).Store;
-	var AppDispatcher = __webpack_require__(222);
-	var RestaurantConstants = __webpack_require__(221);
+	var Store = __webpack_require__(218).Store;
+	var AppDispatcher = __webpack_require__(236);
+	var RestaurantConstants = __webpack_require__(239);
 	
 	var _restaurant = {};
 	
@@ -33195,13 +33568,13 @@
 	module.exports = RestaurantStore;
 
 /***/ },
-/* 262 */
+/* 267 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var SessionStore = __webpack_require__(257);
-	var Modal = __webpack_require__(263);
-	var ContributionForm = __webpack_require__(283);
+	var SessionStore = __webpack_require__(249);
+	var Modal = __webpack_require__(268);
+	var ContributionForm = __webpack_require__(288);
 	
 	$(function () {
 		var appElement = $('#root')[0];
@@ -33354,23 +33727,23 @@
 	module.exports = ImageSideBar;
 
 /***/ },
-/* 263 */
+/* 268 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(264);
+	module.exports = __webpack_require__(269);
 	
 
 
 /***/ },
-/* 264 */
+/* 269 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(158);
-	var ExecutionEnvironment = __webpack_require__(265);
-	var ModalPortal = React.createFactory(__webpack_require__(266));
-	var ariaAppHider = __webpack_require__(281);
-	var elementClass = __webpack_require__(282);
+	var ExecutionEnvironment = __webpack_require__(270);
+	var ModalPortal = React.createFactory(__webpack_require__(271));
+	var ariaAppHider = __webpack_require__(286);
+	var elementClass = __webpack_require__(287);
 	var renderSubtreeIntoContainer = __webpack_require__(158).unstable_renderSubtreeIntoContainer;
 	
 	var SafeHTMLElement = ExecutionEnvironment.canUseDOM ? window.HTMLElement : {};
@@ -33449,7 +33822,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 265 */
+/* 270 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -33494,14 +33867,14 @@
 
 
 /***/ },
-/* 266 */
+/* 271 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var div = React.DOM.div;
-	var focusManager = __webpack_require__(267);
-	var scopeTab = __webpack_require__(269);
-	var Assign = __webpack_require__(270);
+	var focusManager = __webpack_require__(272);
+	var scopeTab = __webpack_require__(274);
+	var Assign = __webpack_require__(275);
 	
 	
 	// so that our CSS is statically analyzable
@@ -33698,10 +34071,10 @@
 
 
 /***/ },
-/* 267 */
+/* 272 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var findTabbable = __webpack_require__(268);
+	var findTabbable = __webpack_require__(273);
 	var modalElement = null;
 	var focusLaterElement = null;
 	var needToFocus = false;
@@ -33772,7 +34145,7 @@
 
 
 /***/ },
-/* 268 */
+/* 273 */
 /***/ function(module, exports) {
 
 	/*!
@@ -33828,10 +34201,10 @@
 
 
 /***/ },
-/* 269 */
+/* 274 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var findTabbable = __webpack_require__(268);
+	var findTabbable = __webpack_require__(273);
 	
 	module.exports = function(node, event) {
 	  var tabbable = findTabbable(node);
@@ -33849,7 +34222,7 @@
 
 
 /***/ },
-/* 270 */
+/* 275 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -33860,9 +34233,9 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var baseAssign = __webpack_require__(271),
-	    createAssigner = __webpack_require__(277),
-	    keys = __webpack_require__(273);
+	var baseAssign = __webpack_require__(276),
+	    createAssigner = __webpack_require__(282),
+	    keys = __webpack_require__(278);
 	
 	/**
 	 * A specialized version of `_.assign` for customizing assigned values without
@@ -33935,7 +34308,7 @@
 
 
 /***/ },
-/* 271 */
+/* 276 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -33946,8 +34319,8 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var baseCopy = __webpack_require__(272),
-	    keys = __webpack_require__(273);
+	var baseCopy = __webpack_require__(277),
+	    keys = __webpack_require__(278);
 	
 	/**
 	 * The base implementation of `_.assign` without support for argument juggling,
@@ -33968,7 +34341,7 @@
 
 
 /***/ },
-/* 272 */
+/* 277 */
 /***/ function(module, exports) {
 
 	/**
@@ -34006,7 +34379,7 @@
 
 
 /***/ },
-/* 273 */
+/* 278 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -34017,9 +34390,9 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var getNative = __webpack_require__(274),
-	    isArguments = __webpack_require__(275),
-	    isArray = __webpack_require__(276);
+	var getNative = __webpack_require__(279),
+	    isArguments = __webpack_require__(280),
+	    isArray = __webpack_require__(281);
 	
 	/** Used to detect unsigned integer values. */
 	var reIsUint = /^\d+$/;
@@ -34248,7 +34621,7 @@
 
 
 /***/ },
-/* 274 */
+/* 279 */
 /***/ function(module, exports) {
 
 	/**
@@ -34391,7 +34764,7 @@
 
 
 /***/ },
-/* 275 */
+/* 280 */
 /***/ function(module, exports) {
 
 	/**
@@ -34640,7 +35013,7 @@
 
 
 /***/ },
-/* 276 */
+/* 281 */
 /***/ function(module, exports) {
 
 	/**
@@ -34826,7 +35199,7 @@
 
 
 /***/ },
-/* 277 */
+/* 282 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -34837,9 +35210,9 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var bindCallback = __webpack_require__(278),
-	    isIterateeCall = __webpack_require__(279),
-	    restParam = __webpack_require__(280);
+	var bindCallback = __webpack_require__(283),
+	    isIterateeCall = __webpack_require__(284),
+	    restParam = __webpack_require__(285);
 	
 	/**
 	 * Creates a function that assigns properties of source object(s) to a given
@@ -34884,7 +35257,7 @@
 
 
 /***/ },
-/* 278 */
+/* 283 */
 /***/ function(module, exports) {
 
 	/**
@@ -34955,7 +35328,7 @@
 
 
 /***/ },
-/* 279 */
+/* 284 */
 /***/ function(module, exports) {
 
 	/**
@@ -35093,7 +35466,7 @@
 
 
 /***/ },
-/* 280 */
+/* 285 */
 /***/ function(module, exports) {
 
 	/**
@@ -35166,7 +35539,7 @@
 
 
 /***/ },
-/* 281 */
+/* 286 */
 /***/ function(module, exports) {
 
 	var _element = typeof document !== 'undefined' ? document.body : null;
@@ -35213,7 +35586,7 @@
 
 
 /***/ },
-/* 282 */
+/* 287 */
 /***/ function(module, exports) {
 
 	module.exports = function(opts) {
@@ -35278,13 +35651,13 @@
 
 
 /***/ },
-/* 283 */
+/* 288 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var PropTypes = React.PropTypes;
-	var LinkedStateMixin = __webpack_require__(234);
-	var ApiUtil = __webpack_require__(219);
+	var LinkedStateMixin = __webpack_require__(258);
+	var ApiUtil = __webpack_require__(241);
 	
 	var NewContribution = React.createClass({
 	  displayName: 'NewContribution',
@@ -35378,7 +35751,7 @@
 	module.exports = NewContribution;
 
 /***/ },
-/* 284 */
+/* 289 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -35459,14 +35832,15 @@
 	module.exports = RewardsIndex;
 
 /***/ },
-/* 285 */
+/* 290 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var PropTypes = React.PropTypes;
-	var RestaurantSearchStore = __webpack_require__(238);
-	var IndexItem = __webpack_require__(286);
-	var RestaurantActions = __webpack_require__(220);
+	var RestaurantSearchStore = __webpack_require__(262);
+	var IndexItem = __webpack_require__(291);
+	var RestaurantActions = __webpack_require__(242);
+	var ApiUtil = __webpack_require__(241);
 	
 	var SearchIndex = React.createClass({
 	  displayName: 'SearchIndex',
@@ -35483,6 +35857,17 @@
 	
 	  componentDidMount: function () {
 	    this.listenToken = RestaurantSearchStore.addListener(this.onRestaurantSearchStoreChange);
+	  },
+	
+	  _changePage: function (val) {
+	    var meta = RestaurantSearchStore.meta();
+	    var page = meta.page + val;
+	    if (page > meta.total_pages) {
+	      page = 1;
+	    } else if (page === 0) {
+	      page = meta.total_pages;
+	    }
+	    ApiUtil.fetchRestaurantByNameContain(meta.query, page);
 	  },
 	
 	  componentWillUnmount: function () {
@@ -35525,6 +35910,16 @@
 	        React.createElement('div', {
 	          className: 'search-exit-button fa fa-times', onClick: RestaurantActions.clearSearchRestaurants
 	        }),
+	        React.createElement(
+	          'div',
+	          { onClick: this._changePage.bind(this, -1), id: 'left-angle-bracket' },
+	          React.createElement('i', { className: 'fa fa-angle-left' })
+	        ),
+	        React.createElement(
+	          'div',
+	          { onClick: this._changePage.bind(this, 1), id: 'right-angle-bracket' },
+	          React.createElement('i', { className: 'fa fa-angle-right' })
+	        ),
 	        restaurants
 	      )
 	    );
@@ -35535,7 +35930,7 @@
 	module.exports = SearchIndex;
 
 /***/ },
-/* 286 */
+/* 291 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -35659,15 +36054,15 @@
 	module.exports = IndexItem;
 
 /***/ },
-/* 287 */
+/* 292 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var PropTypes = React.PropTypes;
-	var CuisineSelector = __webpack_require__(288);
-	var RestaurantIndexStore = __webpack_require__(289);
-	var IndexItem = __webpack_require__(286);
-	var ApiUtil = __webpack_require__(219);
+	var CuisineSelector = __webpack_require__(293);
+	var RestaurantIndexStore = __webpack_require__(217);
+	var IndexItem = __webpack_require__(291);
+	var ApiUtil = __webpack_require__(241);
 	
 	var RestaurantIndex = React.createClass({
 		displayName: 'RestaurantIndex',
@@ -35743,13 +36138,13 @@
 	module.exports = RestaurantIndex;
 
 /***/ },
-/* 288 */
+/* 293 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var PropTypes = React.PropTypes;
-	var CuisineStore = __webpack_require__(259);
-	var ApiUtil = __webpack_require__(219);
+	var CuisineStore = __webpack_require__(264);
+	var ApiUtil = __webpack_require__(241);
 	
 	var CuisineSelector = React.createClass({
 		displayName: 'CuisineSelector',
@@ -35822,52 +36217,11 @@
 	module.exports = CuisineSelector;
 
 /***/ },
-/* 289 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Store = __webpack_require__(239).Store;
-	var AppDispatcher = __webpack_require__(222);
-	var RestaurantConstants = __webpack_require__(221);
-	var HelperUtil = __webpack_require__(256);
-	
-	var _restaurants = [];
-	var _meta = {};
-	
-	var RestaurantIndexPageStore = new Store(AppDispatcher);
-	
-	RestaurantIndexPageStore.all = function () {
-		if (_restaurants.length === 0) {
-			return [];
-		}
-		return _restaurants.slice(0);
-	};
-	
-	RestaurantIndexPageStore.find = function (id) {
-		return _restaurants[id];
-	};
-	
-	RestaurantIndexPageStore.meta = function (id) {
-		return $.extend(true, {}, _meta);
-	};
-	
-	RestaurantIndexPageStore.__onDispatch = function (payload) {
-		switch (payload.actionType) {
-			case RestaurantConstants.RESTAURANT_INDEX_RECEIVED:
-				_restaurants = payload.restaurants;
-				_meta = payload.meta;
-				RestaurantIndexPageStore.__emitChange();
-				break;
-		}
-	};
-	
-	module.exports = RestaurantIndexPageStore;
-
-/***/ },
-/* 290 */
+/* 294 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var ApiUtil = __webpack_require__(219);
+	var ApiUtil = __webpack_require__(241);
 	
 	var LoginForm = React.createClass({
 			displayName: 'LoginForm',
@@ -35964,11 +36318,11 @@
 	module.exports = LoginForm;
 
 /***/ },
-/* 291 */
+/* 295 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var ApiUtil = __webpack_require__(219);
+	var ApiUtil = __webpack_require__(241);
 	
 	var SignUpForm = React.createClass({
 			displayName: 'SignUpForm',
@@ -36083,16 +36437,16 @@
 	module.exports = SignUpForm;
 
 /***/ },
-/* 292 */
+/* 296 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var PropTypes = React.PropTypes;
-	var ApiUtil = __webpack_require__(219);
-	var LinkedStateMixin = __webpack_require__(234);
-	var CuisineStore = __webpack_require__(259);
-	var CityStore = __webpack_require__(293);
-	var HelperUtil = __webpack_require__(256);
+	var ApiUtil = __webpack_require__(241);
+	var LinkedStateMixin = __webpack_require__(258);
+	var CuisineStore = __webpack_require__(264);
+	var CityStore = __webpack_require__(297);
+	var HelperUtil = __webpack_require__(240);
 	
 	var NewRestaurant = React.createClass({
 	  displayName: 'NewRestaurant',
@@ -36291,13 +36645,13 @@
 	module.exports = NewRestaurant;
 
 /***/ },
-/* 293 */
+/* 297 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Store = __webpack_require__(239).Store;
-	var AppDispatcher = __webpack_require__(222);
-	var CityConstants = __webpack_require__(231);
-	var HelperUtil = __webpack_require__(256);
+	var Store = __webpack_require__(218).Store;
+	var AppDispatcher = __webpack_require__(236);
+	var CityConstants = __webpack_require__(248);
+	var HelperUtil = __webpack_require__(240);
 	
 	var CityStore = new Store(AppDispatcher);
 	
@@ -36328,21 +36682,21 @@
 	module.exports = CityStore;
 
 /***/ },
-/* 294 */
+/* 298 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var PropTypes = React.PropTypes;
-	var CuisineStore = __webpack_require__(259);
-	var CityStore = __webpack_require__(293);
-	var ApiUtil = __webpack_require__(219);
-	var LinkedStateMixin = __webpack_require__(234);
-	var RestaurantEditStore = __webpack_require__(295);
-	var BasicsForm = __webpack_require__(296);
-	var DescriptionForm = __webpack_require__(297);
-	var Modal = __webpack_require__(263);
-	var SessionStore = __webpack_require__(257);
-	var NewRewardsForm = __webpack_require__(299);
+	var CuisineStore = __webpack_require__(264);
+	var CityStore = __webpack_require__(297);
+	var ApiUtil = __webpack_require__(241);
+	var LinkedStateMixin = __webpack_require__(258);
+	var RestaurantEditStore = __webpack_require__(299);
+	var BasicsForm = __webpack_require__(300);
+	var DescriptionForm = __webpack_require__(301);
+	var Modal = __webpack_require__(268);
+	var SessionStore = __webpack_require__(249);
+	var NewRewardsForm = __webpack_require__(302);
 	
 	$(function () {
 	  var appElement = $('#root')[0];
@@ -36556,13 +36910,13 @@
 	module.exports = EditRestaurant;
 
 /***/ },
-/* 295 */
+/* 299 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Store = __webpack_require__(239).Store;
-	var AppDispatcher = __webpack_require__(222);
-	var RestaurantConstants = __webpack_require__(221);
-	var HelperUtil = __webpack_require__(256);
+	var Store = __webpack_require__(218).Store;
+	var AppDispatcher = __webpack_require__(236);
+	var RestaurantConstants = __webpack_require__(239);
+	var HelperUtil = __webpack_require__(240);
 	
 	var _restaurant = {};
 	
@@ -36584,15 +36938,15 @@
 	module.exports = RestaurantCreateStore;
 
 /***/ },
-/* 296 */
+/* 300 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var PropTypes = React.PropTypes;
-	var CuisineStore = __webpack_require__(259);
-	var CityStore = __webpack_require__(293);
-	var ApiUtil = __webpack_require__(219);
-	var LinkedStateMixin = __webpack_require__(234);
+	var CuisineStore = __webpack_require__(264);
+	var CityStore = __webpack_require__(297);
+	var ApiUtil = __webpack_require__(241);
+	var LinkedStateMixin = __webpack_require__(258);
 	
 	var BasicForm = React.createClass({
 	  displayName: 'BasicForm',
@@ -36730,15 +37084,15 @@
 	module.exports = BasicForm;
 
 /***/ },
-/* 297 */
+/* 301 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var PropTypes = React.PropTypes;
-	var CuisineStore = __webpack_require__(259);
-	var CityStore = __webpack_require__(293);
-	var ApiUtil = __webpack_require__(219);
-	var LinkedStateMixin = __webpack_require__(234);
+	var CuisineStore = __webpack_require__(264);
+	var CityStore = __webpack_require__(297);
+	var ApiUtil = __webpack_require__(241);
+	var LinkedStateMixin = __webpack_require__(258);
 	
 	var DescriptionForm = React.createClass({
 	  displayName: 'DescriptionForm',
@@ -36807,16 +37161,103 @@
 	module.exports = DescriptionForm;
 
 /***/ },
-/* 298 */
+/* 302 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var RestaurantStore = __webpack_require__(261);
-	var RestaurantIndexStore = __webpack_require__(289);
-	var CuisineStore = __webpack_require__(259);
-	var ApiUtil = __webpack_require__(219);
-	var CityStore = __webpack_require__(293);
-	var IndexItem = __webpack_require__(286);
+	var PropTypes = React.PropTypes;
+	var RewardsIndex = __webpack_require__(289);
+	var LinkedStateMixin = __webpack_require__(258);
+	var ApiUtil = __webpack_require__(241);
+	var Helper = __webpack_require__(240);
+	
+	var NewRewardForm = React.createClass({
+	  displayName: 'NewRewardForm',
+	
+	
+	  mixins: [LinkedStateMixin],
+	
+	  getInitialState: function () {
+	    return { changed: false, name: "", cost: "", description: "" };
+	  },
+	
+	  _handleSubmit: function (e) {
+	    e.preventDefault();
+	    ApiUtil.createReward({
+	      name: Helper.toTitleCase(this.state.name),
+	      min_dollar_amount: parseInt(this.state.cost),
+	      description: this.state.description,
+	      restaurant_id: this.props.restaurant.id
+	    });
+	    this.setState(this.getInitialState);
+	  },
+	
+	  render: function () {
+	    var disabled = true;
+	    var klass = "";
+	
+	    if (this.state.name && this.state.cost >= 1 && this.state.description) {
+	      disabled = false;
+	    }
+	
+	    if (disabled) {
+	      klass = "disabled";
+	    }
+	    return React.createElement(
+	      'div',
+	      { className: 'new-rewards-form edit-form group' },
+	      React.createElement(
+	        'h3',
+	        null,
+	        'New Reward'
+	      ),
+	      React.createElement(
+	        'form',
+	        { className: 'edit-form group', onSubmit: this._handleSubmit },
+	        React.createElement(
+	          'label',
+	          null,
+	          'Title',
+	          React.createElement('input', { type: 'text', placeholder: 'Title...', valueLink: this.linkState("name") })
+	        ),
+	        React.createElement(
+	          'label',
+	          null,
+	          'Pledge amount',
+	          React.createElement('input', { type: 'text', placeholder: '$1 minimum', valueLink: this.linkState("cost") })
+	        ),
+	        React.createElement(
+	          'label',
+	          null,
+	          'Description',
+	          React.createElement('textarea', { id: 'new-reward-description', placeholder: 'What are contributors getting?', valueLink: this.linkState("description") })
+	        ),
+	        React.createElement('input', { className: klass + " add-reward-button", disabled: disabled, type: 'submit', value: 'Add Reward!' })
+	      ),
+	      React.createElement(
+	        'h3',
+	        { id: 'existing-rewards' },
+	        'Existing Rewards'
+	      ),
+	      React.createElement(RewardsIndex, { rewards: this.props.restaurant.rewards })
+	    );
+	  }
+	
+	});
+	
+	module.exports = NewRewardForm;
+
+/***/ },
+/* 303 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var RestaurantStore = __webpack_require__(266);
+	var RestaurantIndexStore = __webpack_require__(217);
+	var CuisineStore = __webpack_require__(264);
+	var ApiUtil = __webpack_require__(241);
+	var CityStore = __webpack_require__(297);
+	var IndexItem = __webpack_require__(291);
 	
 	var Home = React.createClass({
 	  displayName: 'Home',
@@ -36966,417 +37407,6 @@
 	});
 	
 	module.exports = Home;
-
-/***/ },
-/* 299 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var PropTypes = React.PropTypes;
-	var RewardsIndex = __webpack_require__(284);
-	var LinkedStateMixin = __webpack_require__(234);
-	var ApiUtil = __webpack_require__(219);
-	var Helper = __webpack_require__(256);
-	
-	var NewRewardForm = React.createClass({
-	  displayName: 'NewRewardForm',
-	
-	
-	  mixins: [LinkedStateMixin],
-	
-	  getInitialState: function () {
-	    return { changed: false, name: "", cost: "", description: "" };
-	  },
-	
-	  _handleSubmit: function (e) {
-	    e.preventDefault();
-	    ApiUtil.createReward({
-	      name: Helper.toTitleCase(this.state.name),
-	      min_dollar_amount: parseInt(this.state.cost),
-	      description: this.state.description,
-	      restaurant_id: this.props.restaurant.id
-	    });
-	    this.setState(this.getInitialState);
-	  },
-	
-	  render: function () {
-	    var disabled = true;
-	    var klass = "";
-	
-	    if (this.state.name && this.state.cost >= 1 && this.state.description) {
-	      disabled = false;
-	    }
-	
-	    if (disabled) {
-	      klass = "disabled";
-	    }
-	    return React.createElement(
-	      'div',
-	      { className: 'new-rewards-form edit-form group' },
-	      React.createElement(
-	        'h3',
-	        null,
-	        'New Reward'
-	      ),
-	      React.createElement(
-	        'form',
-	        { className: 'edit-form group', onSubmit: this._handleSubmit },
-	        React.createElement(
-	          'label',
-	          null,
-	          'Title',
-	          React.createElement('input', { type: 'text', placeholder: 'Title...', valueLink: this.linkState("name") })
-	        ),
-	        React.createElement(
-	          'label',
-	          null,
-	          'Pledge amount',
-	          React.createElement('input', { type: 'text', placeholder: '$1 minimum', valueLink: this.linkState("cost") })
-	        ),
-	        React.createElement(
-	          'label',
-	          null,
-	          'Description',
-	          React.createElement('textarea', { id: 'new-reward-description', placeholder: 'What are contributors getting?', valueLink: this.linkState("description") })
-	        ),
-	        React.createElement('input', { className: klass + " add-reward-button", disabled: disabled, type: 'submit', value: 'Add Reward!' })
-	      ),
-	      React.createElement(
-	        'h3',
-	        { id: 'existing-rewards' },
-	        'Existing Rewards'
-	      ),
-	      React.createElement(RewardsIndex, { rewards: this.props.restaurant.rewards })
-	    );
-	  }
-	
-	});
-	
-	module.exports = NewRewardForm;
-
-/***/ },
-/* 300 */,
-/* 301 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var PropTypes = React.PropTypes;
-	var RestaurantIndexStore = __webpack_require__(289);
-	var ApiUtil = __webpack_require__(219);
-	var SessionStore = __webpack_require__(257);
-	var ProfileNav = __webpack_require__(302);
-	var RestaurantProfilePageItem = __webpack_require__(303);
-	
-	var CreatedProjects = React.createClass({
-	  displayName: 'CreatedProjects',
-	
-	
-	  getInitialState: function () {
-	    return { restaurants: [] };
-	  },
-	
-	  componentDidMount: function () {
-	    this.token = RestaurantIndexStore.addListener(this._onChange);
-	    ApiUtil.fetchRestaurantByParamsIndexStore({
-	      user_id: SessionStore.currentUser().id
-	    });
-	  },
-	
-	  componentWillUnmount: function () {
-	    this.token.remove();
-	  },
-	
-	  _onChange: function () {
-	    this.setState({ restaurants: RestaurantIndexStore.all() });
-	  },
-	
-	  render: function () {
-	    var startedRestaurants = [];
-	    var publishedRestaurants = [];
-	
-	    if (this.state.restaurants.length > 0) {
-	      this.state.restaurants.forEach(function (restaurant) {
-	
-	        if (!restaurant.published) {
-	          startedRestaurants.push(React.createElement(
-	            'li',
-	            { key: restaurant.id },
-	            React.createElement(RestaurantProfilePageItem, { restaurant: restaurant })
-	          ));
-	        } else {
-	          publishedRestaurants.push(React.createElement(
-	            'li',
-	            { key: restaurant.id },
-	            React.createElement(RestaurantProfilePageItem, { restaurant: restaurant })
-	          ));
-	        }
-	      });
-	    }
-	
-	    return React.createElement(
-	      'div',
-	      { className: 'profile-page' },
-	      React.createElement(
-	        'div',
-	        { className: 'profile-page-content group' },
-	        React.createElement(
-	          'div',
-	          { className: 'group profile-page-header' },
-	          React.createElement(
-	            'h1',
-	            null,
-	            'Created projects'
-	          ),
-	          React.createElement(ProfileNav, { selected: '0' })
-	        ),
-	        React.createElement(
-	          'h2',
-	          null,
-	          'A place to keep track of all your created projects'
-	        ),
-	        React.createElement(
-	          'h3',
-	          null,
-	          'Started'
-	        ),
-	        React.createElement(
-	          'ul',
-	          { className: 'project-list group' },
-	          startedRestaurants
-	        ),
-	        React.createElement(
-	          'h3',
-	          null,
-	          'Live'
-	        ),
-	        React.createElement(
-	          'ul',
-	          { className: 'project-list group' },
-	          publishedRestaurants
-	        )
-	      )
-	    );
-	  }
-	
-	});
-	
-	module.exports = CreatedProjects;
-
-/***/ },
-/* 302 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var PropTypes = React.PropTypes;
-	
-	var ProfileNav = React.createClass({
-	  displayName: 'ProfileNav',
-	
-	
-	  contextTypes: { router: React.PropTypes.object.isRequired },
-	
-	  _handleCreatedClick: function (e) {
-	    this.context.router.push('/profile/projects');
-	  },
-	
-	  _handleBackedClick: function (e) {
-	    this.context.router.push('/profile/backed');
-	  },
-	
-	  render: function () {
-	    var backedClass = "";
-	    var createdClass = "";
-	    if (this.props.selected === "0") {
-	      createdClass = "selected";
-	    } else {
-	      backedClass = "selected";
-	    }
-	
-	    return React.createElement(
-	      'nav',
-	      { className: 'profile-nav' },
-	      React.createElement(
-	        'ul',
-	        null,
-	        React.createElement(
-	          'li',
-	          { id: createdClass, onClick: this._handleCreatedClick },
-	          'Created Projects'
-	        ),
-	        React.createElement(
-	          'li',
-	          { id: backedClass, onClick: this._handleBackedClick },
-	          'Backed Projects'
-	        )
-	      )
-	    );
-	  }
-	
-	});
-	
-	module.exports = ProfileNav;
-
-/***/ },
-/* 303 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var SessionStore = __webpack_require__(257);
-	
-	var ProfileIndexItem = React.createClass({
-	  displayName: 'ProfileIndexItem',
-	
-	  contextTypes: {
-	    router: React.PropTypes.object.isRequired
-	  },
-	
-	  getInitialState: function () {
-	    return { imageClass: "hide-image" };
-	  },
-	
-	  _imageReady: function () {
-	    this.setState({ imageClass: "show-image" });
-	  },
-	
-	  handleEditClick: function () {
-	    this.context.router.push("/restaurants/edit/" + this.props.restaurant.id);
-	  },
-	
-	  handleShowClick: function () {
-	    this.context.router.push("/restaurants/" + this.props.restaurant.id);
-	  },
-	
-	  render: function () {
-	    var editText = "Continue Editing";
-	    var show = React.createElement('div', null);
-	
-	    if (this.props.restaurant.published) {
-	      show = React.createElement(
-	        'div',
-	        { id: 'show-index-item', className: 'edit-profile-index-item', onClick: this.handleShowClick },
-	        'Show'
-	      );
-	      editText = "Edit";
-	    }
-	
-	    var edit = React.createElement(
-	      'div',
-	      { className: 'edit-profile-index-item', onClick: this.handleEditClick },
-	      editText
-	    );
-	
-	    if (this.props.restaurant.user.id !== SessionStore.currentUser().id) {
-	      edit = React.createElement('div', { className: 'hide' });
-	    }
-	
-	    return React.createElement(
-	      'div',
-	      { className: 'profile-index-item' },
-	      React.createElement(
-	        'div',
-	        { className: 'profile-index-item-image-wrapper' },
-	        React.createElement('img', {
-	          id: 'profile-index-item-img',
-	          src: this.props.restaurant.image_url,
-	          onLoad: this._imageReady,
-	          className: this.state.imageClass
-	        })
-	      ),
-	      React.createElement(
-	        'h3',
-	        null,
-	        this.props.restaurant.title
-	      ),
-	      edit,
-	      show
-	    );
-	  }
-	
-	});
-	
-	module.exports = ProfileIndexItem;
-
-/***/ },
-/* 304 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var PropTypes = React.PropTypes;
-	var RestaurantIndexStore = __webpack_require__(289);
-	var ApiUtil = __webpack_require__(219);
-	var SessionStore = __webpack_require__(257);
-	var ProfileNav = __webpack_require__(302);
-	var RestaurantProfilePageItem = __webpack_require__(303);
-	
-	var BackProjects = React.createClass({
-	  displayName: 'BackProjects',
-	
-	
-	  getInitialState: function () {
-	    return { restaurants: [] };
-	  },
-	
-	  componentDidMount: function () {
-	    this.token = RestaurantIndexStore.addListener(this._onChange);
-	    ApiUtil.fetchRestaurantByParamsIndexStore({
-	      reward_user_id: SessionStore.currentUser().id
-	    });
-	  },
-	
-	  componentWillUnmount: function () {
-	    this.token.remove();
-	  },
-	
-	  _onChange: function () {
-	    this.setState({ restaurants: RestaurantIndexStore.all() });
-	  },
-	
-	  render: function () {
-	    var Restaurants = [];
-	
-	    if (this.state.restaurants.length > 0) {
-	      this.state.restaurants.forEach(function (restaurant) {
-	        Restaurants.push(React.createElement(
-	          'li',
-	          { key: restaurant.id },
-	          React.createElement(RestaurantProfilePageItem, { restaurant: restaurant })
-	        ));
-	      });
-	    }
-	
-	    return React.createElement(
-	      'div',
-	      { className: 'profile-page' },
-	      React.createElement(
-	        'div',
-	        { className: 'profile-page-content group' },
-	        React.createElement(
-	          'div',
-	          { className: 'group profile-page-header' },
-	          React.createElement(
-	            'h1',
-	            null,
-	            'Backed projects'
-	          ),
-	          React.createElement(ProfileNav, { selected: '1' })
-	        ),
-	        React.createElement(
-	          'h2',
-	          null,
-	          'A place to keep track of all your backed projects'
-	        ),
-	        React.createElement(
-	          'ul',
-	          { className: 'project-list group' },
-	          Restaurants
-	        )
-	      )
-	    );
-	  }
-	
-	});
-	
-	module.exports = BackProjects;
 
 /***/ }
 /******/ ]);

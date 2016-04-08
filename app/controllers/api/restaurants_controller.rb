@@ -42,11 +42,19 @@ class Api::RestaurantsController < ApplicationController
 			end
 		elsif params[:str]
 			str = params[:str]
-			str = str.split.map(&:capitalize).join(' ')
-			@restaurants = Restaurant.includes(:city, :user).with_total.where("title LIKE ?", "%#{str}%").where(published: true).where("expiration > NOW()").limit(3).order(title: :asc)
+      valid_ids = Restaurant.select("restaurants.id AS id").restaurant_search(str).pluck(:id)
+      @restaurants = Restaurant.includes(:city, :user)
+        .where(id: valid_ids).where(published: true).order(id: :asc).page(params[:page]).per(3)
+      if @restaurants
+        render :search_result
+      else
+        render text: "nothing here"
+      end
 		elsif params[:cuisine_id]
 			per = params[:per] || 9
-			@restaurants = Restaurant.includes(:city, :user).where(cuisine_id: params[:cuisine_id]).where(published: true).where("expiration > NOW()").order(title: :asc).page(1).per(per)
+			@restaurants = Restaurant.includes(:city, :user)
+        .where(cuisine_id: params[:cuisine_id]).where(published: true)
+        .where("expiration > NOW()").order(id: :asc).page(1).per(per)
 
 			render :search_result
 		elsif params[:featured]

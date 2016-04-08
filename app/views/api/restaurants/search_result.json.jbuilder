@@ -1,9 +1,14 @@
 
 json.meta do
   json.total_pages @restaurants.total_pages
-	json.query params[:cuisine_id]
+  if params[:cuisine_id]
+	   json.query params[:cuisine_id]
+  elsif params[:str]
+    json.query params[:str]
+  end
   json.per @restaurants.size
 	json.total_count @restaurants.total_count
+  json.page @restaurants.current_page
 end
 
 json.search_results @restaurants.with_total do |restaurant|
