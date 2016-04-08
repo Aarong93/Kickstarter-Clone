@@ -36237,94 +36237,117 @@
 	var ApiUtil = __webpack_require__(241);
 	
 	var LoginForm = React.createClass({
-			displayName: 'LoginForm',
+	  displayName: 'LoginForm',
 	
-			contextTypes: {
-					router: React.PropTypes.object.isRequired
-			},
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
 	
-			getInitialState: function () {
-					return {
-							email: "",
-							password: "",
-							showError: false
-					};
-			},
+	  getInitialState: function () {
+	    return {
+	      email: "",
+	      password: "",
+	      showError: false
+	    };
+	  },
 	
-			_error: function () {
-					if (!this.state.showError) {
-							return React.createElement('div', null);
-					}
-					return React.createElement(
-							'div',
-							{ className: 'errors' },
-							'Invalid Email Address or Password'
-					);
-			},
+	  _error: function () {
+	    if (!this.state.showError) {
+	      return React.createElement('div', null);
+	    }
+	    return React.createElement(
+	      'div',
+	      { className: 'errors' },
+	      'Invalid Email Address or Password'
+	    );
+	  },
 	
-			_showError: function () {
-					this.setState({ showError: true });
-			},
+	  _showError: function () {
+	    this.setState({ showError: true });
+	  },
 	
-			_loginGuest: function (e) {
-					this.setState({ email: "guest@gmail.com", password: 'password' }, this.handleSubmit);
-			},
+	  _loginGuest: function (e) {
+	    this.setState({ email: "guest@gmail.com", password: 'password' }, this.handleSubmit);
+	  },
 	
-			render: function () {
-					return React.createElement(
-							'div',
-							{ className: 'login-page' },
-							React.createElement(
-									'div',
-									{ className: 'login-form-wrapper' },
-									React.createElement(
-											'h1',
-											null,
-											' Log in'
-									),
-									React.createElement(
-											'form',
-											{ onSubmit: this.handleSubmit },
-											React.createElement('label', { htmlFor: 'email' }),
-											React.createElement('input', { placeholder: 'Email', onChange: this.updateEmail, type: 'text', value: this.state.email }),
-											React.createElement('label', { htmlFor: 'password' }),
-											React.createElement('input', { placeholder: 'Password', onChange: this.updatePassword, type: 'password', value: this.state.password }),
-											this._error(),
-											React.createElement(
-													'button',
-													{ id: 'log-in-button', className: 'submit-new-restaurant' },
-													'Log me in!'
-											),
-											React.createElement(
-													'div',
-													{ id: 'log-in-button-guest', className: 'submit-new-restaurant', onClick: this._loginGuest },
-													'Log in as guest!'
-											)
-									)
-							)
-					);
-			},
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'login-page' },
+	      React.createElement(
+	        'div',
+	        { className: 'login-form-wrapper' },
+	        React.createElement(
+	          'h1',
+	          null,
+	          ' Log in'
+	        ),
+	        React.createElement(
+	          'form',
+	          { onSubmit: this.handleSubmit },
+	          React.createElement('label', { htmlFor: 'email' }),
+	          React.createElement('input', { placeholder: 'Email', onChange: this.updateEmail, type: 'text', value: this.state.email }),
+	          React.createElement('label', { htmlFor: 'password' }),
+	          React.createElement('input', { placeholder: 'Password', onChange: this.updatePassword, type: 'password', value: this.state.password }),
+	          this._error(),
+	          React.createElement(
+	            'button',
+	            { id: 'log-in-button', className: 'submit-new-restaurant' },
+	            'Log me in!'
+	          ),
+	          React.createElement(
+	            'div',
+	            { id: 'log-in-button-guest', className: 'submit-new-restaurant', onClick: this._loginGuest },
+	            'Log in as guest!'
+	          ),
+	          React.createElement('div', { className: 'grey-line' }),
+	          React.createElement(
+	            'div',
+	            { className: 'login-or' },
+	            'or'
+	          ),
+	          React.createElement(
+	            'a',
+	            { className: 'facebook-login', href: '/auth/facebook' },
+	            'Log in with Facebook'
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'already-signed-up' },
+	            "New to KitchenStarter? ",
+	            React.createElement(
+	              'span',
+	              {
+	                onClick: this.context.router.push.bind(this, '/users/new'),
+	                className: 'blue-link' },
+	              'Sign up!'
+	            )
+	          )
+	        )
+	      )
+	    );
+	  },
 	
-			handleSubmit: function (e) {
-					if (e) {
-							e.preventDefault();
-					}
-					this.setState({ showError: false });
-					var nextRoute = this.props.location.query.nextRoute;
-					if (nextRoute) {
-							ApiUtil.login(this.state, this.context.router.push.bind(this, nextRoute), this._showError);
-					} else {
-							ApiUtil.login(this.state, this.context.router.goBack.bind(this), this._showError);
-					}
-			},
+	  handleSubmit: function (e) {
+	    if (e) {
+	      e.preventDefault();
+	    }
+	    this.setState({ showError: false });
+	    var nextRoute = this.props.location.query.nextRoute;
+	    if (nextRoute) {
+	      ApiUtil.login(this.state, this.context.router.push.bind(this, nextRoute), this._showError);
+	    } else {
+	      ApiUtil.login(this.state, this.context.router.goBack.bind(this), this._showError);
+	    }
+	  },
 	
-			updateEmail: function (e) {
-					this.setState({ email: e.currentTarget.value });
-			},
+	  updateEmail: function (e) {
+	    this.setState({ email: e.currentTarget.value });
+	  },
 	
-			updatePassword: function (e) {
-					this.setState({ password: e.currentTarget.value });
-			}
+	  updatePassword: function (e) {
+	    this.setState({ password: e.currentTarget.value });
+	  }
 	
 	});
 	
@@ -36338,112 +36361,135 @@
 	var ApiUtil = __webpack_require__(241);
 	
 	var SignUpForm = React.createClass({
-			displayName: 'SignUpForm',
+	  displayName: 'SignUpForm',
 	
-			contextTypes: {
-					router: React.PropTypes.object.isRequired
-			},
+	  contextTypes: {
+	    router: React.PropTypes.object.isRequired
+	  },
 	
-			getInitialState: function () {
-					return {
-							email: "",
-							name: "",
-							password: "",
-							showError: false,
-							errorMessage: ""
-					};
-			},
+	  getInitialState: function () {
+	    return {
+	      email: "",
+	      name: "",
+	      password: "",
+	      showError: false,
+	      errorMessage: ""
+	    };
+	  },
 	
-			_error: function () {
-					if (!this.state.showError) {
-							return React.createElement('div', null);
-					}
-					var messages = this.state.errorMessage.map(function (message) {
-							return React.createElement(
-									'div',
-									{ key: message },
-									React.createElement(
-											'p',
-											null,
-											message
-									),
-									React.createElement('br', null)
-							);
-					});
+	  _error: function () {
+	    if (!this.state.showError) {
+	      return React.createElement('div', null);
+	    }
+	    var messages = this.state.errorMessage.map(function (message) {
+	      return React.createElement(
+	        'div',
+	        { key: message },
+	        React.createElement(
+	          'p',
+	          null,
+	          message
+	        ),
+	        React.createElement('br', null)
+	      );
+	    });
 	
-					return React.createElement(
-							'div',
-							{ className: 'errors' },
-							messages
-					);
-			},
+	    return React.createElement(
+	      'div',
+	      { className: 'errors' },
+	      messages
+	    );
+	  },
 	
-			_showError: function (errorMessage) {
-					this.setState({
-							showError: true,
-							errorMessage: errorMessage.responseJSON
-					});
-			},
+	  _showError: function (errorMessage) {
+	    this.setState({
+	      showError: true,
+	      errorMessage: errorMessage.responseJSON
+	    });
+	  },
 	
-			_loginGuest: function (e) {
-					e.preventDefault();
-					ApiUtil.login({ email: "guest@gmail.com", password: "password" }, this.context.router.goBack.bind(this));
-			},
+	  _loginGuest: function (e) {
+	    e.preventDefault();
+	    ApiUtil.login({ email: "guest@gmail.com", password: "password" }, this.context.router.goBack.bind(this));
+	  },
 	
-			render: function () {
-					return React.createElement(
-							'div',
-							{ className: 'login-page' },
-							React.createElement(
-									'div',
-									{ className: 'login-form-wrapper' },
-									React.createElement(
-											'h1',
-											null,
-											'Sign up'
-									),
-									React.createElement(
-											'form',
-											{ onSubmit: this.handleSubmit },
-											React.createElement('label', { htmlFor: 'email' }),
-											React.createElement('input', { placeholder: 'Email', onChange: this.updateEmail, type: 'text', value: this.state.email }),
-											React.createElement('label', { htmlFor: 'name' }),
-											React.createElement('input', { placeholder: 'Name', onChange: this.updateName, type: 'text', value: this.state.name }),
-											React.createElement('label', { htmlFor: 'password' }),
-											React.createElement('input', { placeholder: 'Password', onChange: this.updatePassword, type: 'password', value: this.state.password }),
-											this._error(),
-											React.createElement(
-													'button',
-													{ id: 'log-in-button', className: 'submit-new-restaurant' },
-													'Sign me up!'
-											),
-											React.createElement(
-													'div',
-													{ id: 'log-in-button-guest', className: 'submit-new-restaurant', onClick: this._loginGuest },
-													'Sign in as guest!'
-											)
-									)
-							)
-					);
-			},
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'login-page' },
+	      React.createElement(
+	        'div',
+	        { className: 'login-form-wrapper' },
+	        React.createElement(
+	          'h1',
+	          null,
+	          'Sign up'
+	        ),
+	        React.createElement(
+	          'form',
+	          { onSubmit: this.handleSubmit },
+	          React.createElement('label', { htmlFor: 'email' }),
+	          React.createElement('input', { placeholder: 'Email', onChange: this.updateEmail, type: 'text', value: this.state.email }),
+	          React.createElement('label', { htmlFor: 'name' }),
+	          React.createElement('input', { placeholder: 'Name', onChange: this.updateName, type: 'text', value: this.state.name }),
+	          React.createElement('label', { htmlFor: 'password' }),
+	          React.createElement('input', { placeholder: 'Password', onChange: this.updatePassword, type: 'password', value: this.state.password }),
+	          this._error(),
+	          React.createElement(
+	            'button',
+	            { id: 'log-in-button', className: 'submit-new-restaurant' },
+	            'Sign me up!'
+	          ),
+	          React.createElement(
+	            'div',
+	            { id: 'log-in-button-guest', className: 'submit-new-restaurant', onClick: this._loginGuest },
+	            'Sign in as guest!'
+	          ),
+	          React.createElement('div', { className: 'grey-line' }),
+	          React.createElement(
+	            'div',
+	            { className: 'login-or' },
+	            'or'
+	          ),
+	          React.createElement(
+	            'a',
+	            { className: 'facebook-login', href: '/auth/facebook' },
+	            'Log in with Facebook'
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'already-signed-up' },
+	            "Have an account? ",
+	            React.createElement(
+	              'span',
+	              {
+	                onClick: this.context.router.push.bind(this, '/session/new'),
+	                className: 'blue-link' },
+	              'Log in'
+	            )
+	          )
+	        )
+	      )
+	    );
+	  },
 	
-			handleSubmit: function (e) {
-					e.preventDefault();
-					this.setState({ showError: false });
-					ApiUtil.createUser(this.state, this.context.router.goBack.bind(this), this._showError);
-			},
+	  handleSubmit: function (e) {
+	    e.preventDefault();
+	    this.setState({ showError: false });
+	    ApiUtil.createUser(this.state, this.context.router.goBack.bind(this), this._showError);
+	  },
 	
-			updateEmail: function (e) {
-					this.setState({ email: e.currentTarget.value });
-			},
+	  updateEmail: function (e) {
+	    this.setState({ email: e.currentTarget.value });
+	  },
 	
-			updateName: function (e) {
-					this.setState({ name: e.currentTarget.value });
-			},
+	  updateName: function (e) {
+	    this.setState({ name: e.currentTarget.value });
+	  },
 	
-			updatePassword: function (e) {
-					this.setState({ password: e.currentTarget.value });
-			}
+	  updatePassword: function (e) {
+	    this.setState({ password: e.currentTarget.value });
+	  }
 	
 	});
 	

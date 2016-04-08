@@ -69,6 +69,19 @@ var SignUpForm = React.createClass({
             <div id="log-in-button-guest" className="submit-new-restaurant" onClick={this._loginGuest}>
               Sign in as guest!
             </div>
+            <div className="grey-line" />
+            <div className="login-or">or</div>
+            <a className="facebook-login" href="/auth/facebook">
+              Log in with Facebook
+            </a>
+            <div className="already-signed-up">
+              {"Have an account? "}
+              <span
+              onClick={this.context.router.push.bind(this, '/session/new')}
+              className="blue-link">
+                Log in
+              </span>
+            </div>
 	        </form>
 				</div>
 			</div>

@@ -38,19 +38,20 @@
 #log-in-button {
 	font-size: 16px;
 	font-weight: normal;
-	height: 40px;
+	height: 30px;
 	margin-top: 30px;
-	width: 358px;
+	width: 359px;
 	padding: none;
 	margin: none;
-	line-height: 5px;
+	line-height: 0px;
 }
 
 #log-in-button-guest {
 	margin-top: 10px;
 	font-weight: 400;
 	text-align: center;
-	padding: 12.5px;
+	padding: 10px;
+  padding-right: 8px;
 }
 
 .errors {
@@ -61,4 +62,57 @@
   text-align: center;
   background-color: #E7254E;
   font-weight: 500;
+}
+
+.already-signed-up {
+  font-size: 14px;
+  margin: auto;
+  padding: 20px;
+  position: relative;
+  margin-top: 10px;
+  top: 20px;
+  display: block;
+  text-align: center;
+  border-top: 1px solid #D9D9DE;
+  color: #828587;
+}
+
+.blue-link {
+  color: #00a0ff;
+  font-weight: bold;
+}
+
+.blue-link:hover {
+  color: #000;
+  cursor: pointer;
+}
+
+.facebook-login {
+  color: #fff;
+  background-color: #3b5998;
+  text-align: center;
+  padding: 10px;
+  display: block;
+  border-radius: 5px;
+  margin-top: -10px;
+}
+
+.facebook-login:hover {
+  background-color: #30487b;
+}
+
+.grey-line {
+  border-top: 1px solid #D9D9DE;
+  margin-top: 30px;
+}
+
+.login-or {
+  position: relative;
+  top: -18px;
+  left: 163px;
+  font-size: 14px;
+  padding: 10px;
+  background-color: #fff;
+  color: #828587;
+  display: inline-block;
 }

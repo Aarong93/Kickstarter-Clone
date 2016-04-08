@@ -15,5 +15,8 @@ node_modules
 /app/assets/javascripts/bundle.js
 bundle.js
 
+*.swp
+
+
 # Ignore application configuration
 /config/application.yml

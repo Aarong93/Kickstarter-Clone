@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-	validates :email, :name, :password_digest, :session_token, presence: true
+	validates :email, :name, :session_token, presence: true
 	validates :email, uniqueness: true
 	validates :password, length: { minimum: 6, allow_nil: true}
 
@@ -29,6 +29,21 @@ class User < ActiveRecord::Base
 		self.save!
 		self.session_token
 	end
+
+  def self.find_or_create_by_auth_hash(auth_hash)
+    provider = auth_hash[:provider]
+    uid = auth_hash[:uid]
+
+    author = User.find_by(provider: provider, uid: uid)
+    return author if author
+
+    User.create(
+      provider: provider,
+      uid: uid,
+      name: auth_hash[:extra][:raw_info][:name],
+      email: auth_hash[:extra][:raw_info][:email]
+    )
+  end
 
 	private
 

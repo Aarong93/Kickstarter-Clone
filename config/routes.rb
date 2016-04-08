@@ -12,5 +12,6 @@ Rails.application.routes.draw do
 		resources :cities, only: [:index]
 	end
 
-	get '*unmatched_route', to: 'static_pages#root'
+  get "auth/facebook/callback", to: "omniauth#facebook"
+	get '*unmatched_route', to: 'static_pages#root', constraints: { url: /^((?!\/auth\/).)*$/ }
 end
