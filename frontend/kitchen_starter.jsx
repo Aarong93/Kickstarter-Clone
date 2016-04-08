@@ -6,6 +6,7 @@ var Route = ReactRouter.Route;
 var IndexRoute = ReactRouter.IndexRoute;
 var browserHistory = ReactRouter.browserHistory;
 
+var About = require('./components/about/about');
 var BackedProjects = require('./components/profiles/backed_projects');
 var CreatedProjects = require('./components/profiles/created_projects');
 var NavBar = require('./components/nav/nav_bar');
@@ -41,6 +42,7 @@ var router = (
  <Router history={browserHistory} onUpdate={_onUpdate}>
    <Route path="/" component={App} onEnter={_onLoad}>
      <IndexRoute component={Home}/>
+     <Route path="/about" component={About} />
      <Route path="/session/new" component={LoginForm} onEnter={_alreadyLoggedIn}/>
      <Route path="/users/new" component={SignUpForm} onEnter={_alreadyLoggedIn}/>
 		 <Route path="/restaurants" component={RestaurantIndex} />

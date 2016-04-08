@@ -25,6 +25,11 @@ var FooterBar = React.createClass({
     this.context.router.push('/restaurants/?' + query);
   },
 
+  _about: function (e) {
+    e.preventDefault();
+    this.context.router.push('/about');
+  },
+
 	render: function () {
     var cuisines = <div></div>;
 
@@ -41,7 +46,7 @@ var FooterBar = React.createClass({
           <div id="footer-col-1">
   					<h3 className="footer-about-us group">About us</h3>
               <ul className="footer-about-us-list">
-                <li>
+                <li onClick={this._about}>
                   What is KitchenStarter?
                 </li>
               </ul>

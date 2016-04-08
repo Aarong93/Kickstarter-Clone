@@ -47,9 +47,14 @@ var NavBar = React.createClass({
 		);
 	},
 
-  _newRestaurant: function(e) {
+  _newRestaurant: function (e) {
     e.preventDefault();
     this.context.router.push('/restaurants/new');
+  },
+
+  _about: function (e) {
+    e.preventDefault();
+    this.context.router.push('/about');
   },
 
 	_nav: function () {
@@ -57,7 +62,7 @@ var NavBar = React.createClass({
 			<ul className="global-nav">
 				<li><a href="#" onClick={this._restaurantIndex}>Discover</a></li>
 				<li><a href="#" onClick={this._newRestaurant}>Start a Project</a></li>
-				<li><a href="#">About Us</a></li>
+				<li><a href="#" onClick={this._about}>About Us</a></li>
 			</ul>
 		);
 	},

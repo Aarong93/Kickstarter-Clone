@@ -1,0 +1,42 @@
+.about-page {
+  min-height: 500px;
+  background-color: #F5F7F7;
+}
+
+.about-page-content  {
+  width: 800px;
+  margin: auto;
+}
+
+.about-page-content > h1 {
+  font-size: 48px;
+  line-height: 50px;
+  padding-top: 40px;
+  margin-bottom: 40px;
+}
+
+.about-page-content > p {
+  margin-top: 20px;
+  line-height: 1.5;
+  margin-left: 6px;
+}
+
+.about-page-content > h3 {
+  font-size: 32px;
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
+.about-page-content > ul {
+  color: #828587;
+  width: 150px;
+}
+
+.about-page-content > ul > li {
+  display: inline-block;
+  padding: 6px;
+}
+
+.about-page-content > ul > li:hover {
+  color: #000;
+}

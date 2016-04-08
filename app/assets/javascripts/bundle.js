@@ -52,6 +52,7 @@
 	var IndexRoute = ReactRouter.IndexRoute;
 	var browserHistory = ReactRouter.browserHistory;
 	
+	var About = __webpack_require__(304);
 	var BackedProjects = __webpack_require__(216);
 	var CreatedProjects = __webpack_require__(252);
 	var NavBar = __webpack_require__(253);
@@ -92,6 +93,7 @@
 	    Route,
 	    { path: '/', component: App, onEnter: _onLoad },
 	    React.createElement(IndexRoute, { component: Home }),
+	    React.createElement(Route, { path: '/about', component: About }),
 	    React.createElement(Route, { path: '/session/new', component: LoginForm, onEnter: _alreadyLoggedIn }),
 	    React.createElement(Route, { path: '/users/new', component: SignUpForm, onEnter: _alreadyLoggedIn }),
 	    React.createElement(Route, { path: '/restaurants', component: RestaurantIndex }),
@@ -32489,6 +32491,11 @@
 			this.context.router.push('/restaurants/new');
 		},
 	
+		_about: function (e) {
+			e.preventDefault();
+			this.context.router.push('/about');
+		},
+	
 		_nav: function () {
 			return React.createElement(
 				'ul',
@@ -32516,7 +32523,7 @@
 					null,
 					React.createElement(
 						'a',
-						{ href: '#' },
+						{ href: '#', onClick: this._about },
 						'About Us'
 					)
 				)
@@ -33257,6 +33264,11 @@
 	    this.context.router.push('/restaurants/?' + query);
 	  },
 	
+	  _about: function (e) {
+	    e.preventDefault();
+	    this.context.router.push('/about');
+	  },
+	
 	  render: function () {
 	    var cuisines = React.createElement('div', null);
 	
@@ -33289,7 +33301,7 @@
 	            { className: 'footer-about-us-list' },
 	            React.createElement(
 	              'li',
-	              null,
+	              { onClick: this._about },
 	              'What is KitchenStarter?'
 	            )
 	          )
@@ -37466,6 +37478,86 @@
 	});
 	
 	module.exports = Home;
+
+/***/ },
+/* 304 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var PropTypes = React.PropTypes;
+	
+	var About = React.createClass({
+	  displayName: "About",
+	
+	
+	  render: function () {
+	    return React.createElement(
+	      "div",
+	      { className: "about-page" },
+	      React.createElement(
+	        "div",
+	        { className: "about-page-content" },
+	        React.createElement(
+	          "h1",
+	          null,
+	          "What is KitchenStarter?"
+	        ),
+	        React.createElement(
+	          "p",
+	          null,
+	          "KitchenStarter is a KickStarter clone built using a Rails backend and a React.js frontend. ",
+	          React.createElement("br", null)
+	        ),
+	        React.createElement(
+	          "p",
+	          null,
+	          "Kitchen starter allows users to create projects to request funding for new restaurant ideas.",
+	          React.createElement("br", null),
+	          "Users can search for view and contribute to other users projects."
+	        ),
+	        React.createElement(
+	          "h3",
+	          null,
+	          "Contact Me"
+	        ),
+	        React.createElement(
+	          "ul",
+	          null,
+	          React.createElement(
+	            "li",
+	            null,
+	            React.createElement(
+	              "a",
+	              { href: "mailto:aaron.r.grau@gmail.com" },
+	              "Aaron.r.grau@gmail.com"
+	            )
+	          ),
+	          React.createElement(
+	            "li",
+	            null,
+	            React.createElement(
+	              "a",
+	              { href: "https://www.linkedin.com/in/aaronrgrau" },
+	              "LinkedIn"
+	            )
+	          ),
+	          React.createElement(
+	            "li",
+	            null,
+	            React.createElement(
+	              "a",
+	              { href: "https://github.com/Aarong93/KitchenStarter-A-Kick-Starter-Clone" },
+	              "Project Github"
+	            )
+	          )
+	        )
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = About;
 
 /***/ }
 /******/ ]);
