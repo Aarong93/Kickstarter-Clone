@@ -114,6 +114,10 @@ var ImageSideBar = React.createClass({
 				<div onClick={this._clickHandler} className={"show-back-this-button " + disabled}>
 					Back This Restaurant
 				</div>
+        <div className="expiration-info">
+          {"This project will only be funded if at least $" + this.props.restaurant.target +
+            " is pledged by " + this.props.restaurant.expiration + "."}
+        </div>
 			</div>
 		);
 	}

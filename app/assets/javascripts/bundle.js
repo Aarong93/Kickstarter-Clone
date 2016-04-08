@@ -33589,150 +33589,155 @@
 	var ContributionForm = __webpack_require__(288);
 	
 	$(function () {
-		var appElement = $('#root')[0];
-		Modal.setAppElement(appElement);
+	  var appElement = $('#root')[0];
+	  Modal.setAppElement(appElement);
 	});
 	
 	var modalStyles = {
-		content: {
-			top: '30%',
-			left: '50%',
-			right: 'auto',
-			bottom: 'auto',
-			marginRight: '-50%',
-			transform: 'translate(-50%, -50%)',
-			width: '330px'
-		}
+	  content: {
+	    top: '30%',
+	    left: '50%',
+	    right: 'auto',
+	    bottom: 'auto',
+	    marginRight: '-50%',
+	    transform: 'translate(-50%, -50%)',
+	    width: '330px'
+	  }
 	};
 	
 	var ImageSideBar = React.createClass({
-		displayName: 'ImageSideBar',
+	  displayName: 'ImageSideBar',
 	
 	
-		contextTypes: { router: React.PropTypes.object.isRequired },
+	  contextTypes: { router: React.PropTypes.object.isRequired },
 	
-		getInitialState: function () {
-			return { modalIsOpen: false };
-		},
+	  getInitialState: function () {
+	    return { modalIsOpen: false };
+	  },
 	
-		_clickHandler: function (e) {
-			e.preventDefault();
-			if (!SessionStore.isLoggedIn()) {
-				this.context.router.push('/session/new');
-			} else if (SessionStore.currentUser().id !== this.props.restaurant.user.id) {
-				this.openModal();
-			}
-		},
+	  _clickHandler: function (e) {
+	    e.preventDefault();
+	    if (!SessionStore.isLoggedIn()) {
+	      this.context.router.push('/session/new');
+	    } else if (SessionStore.currentUser().id !== this.props.restaurant.user.id) {
+	      this.openModal();
+	    }
+	  },
 	
-		openModal: function () {
-			this.setState({ modalIsOpen: true });
-		},
+	  openModal: function () {
+	    this.setState({ modalIsOpen: true });
+	  },
 	
-		closeModal: function () {
-			this.setState({ modalIsOpen: false });
-		},
+	  closeModal: function () {
+	    this.setState({ modalIsOpen: false });
+	  },
 	
-		render: function () {
-			var expires = new Date(this.props.restaurant.expiration);
-			if (expires <= 0) {
-				expires = "Finished";
-			}
-			var today = new Date();
+	  render: function () {
+	    var expires = new Date(this.props.restaurant.expiration);
+	    if (expires <= 0) {
+	      expires = "Finished";
+	    }
+	    var today = new Date();
 	
-			var modal = React.createElement(
-				Modal,
-				{
-					isOpen: this.state.modalIsOpen,
-					onRequestClose: this.closeModal,
-					style: modalStyles },
-				React.createElement(
-					'div',
-					{ className: 'modal-wrapper' },
-					React.createElement('div', { id: 'modal-x', className: 'search-exit-button fa fa-times', onClick: this.closeModal }),
-					React.createElement(
-						'h2',
-						{ id: 'modal-header' },
-						'Make a contribution'
-					),
-					React.createElement(ContributionForm, { close: this.closeModal, restaurant: this.props.restaurant })
-				)
-			);
+	    var modal = React.createElement(
+	      Modal,
+	      {
+	        isOpen: this.state.modalIsOpen,
+	        onRequestClose: this.closeModal,
+	        style: modalStyles },
+	      React.createElement(
+	        'div',
+	        { className: 'modal-wrapper' },
+	        React.createElement('div', { id: 'modal-x', className: 'search-exit-button fa fa-times', onClick: this.closeModal }),
+	        React.createElement(
+	          'h2',
+	          { id: 'modal-header' },
+	          'Make a contribution'
+	        ),
+	        React.createElement(ContributionForm, { close: this.closeModal, restaurant: this.props.restaurant })
+	      )
+	    );
 	
-			var disabled = "";
+	    var disabled = "";
 	
-			if (SessionStore.currentUser() && SessionStore.currentUser().id === this.props.restaurant.user.id) {
-				disabled = "disabled-contribute";
-			}
+	    if (SessionStore.currentUser() && SessionStore.currentUser().id === this.props.restaurant.user.id) {
+	      disabled = "disabled-contribute";
+	    }
 	
-			return React.createElement(
-				'div',
-				{ className: 'show-image-side-bar' },
-				modal,
-				React.createElement(
-					'ul',
-					{ className: 'show-image-side-bar-list' },
-					React.createElement(
-						'li',
-						null,
-						React.createElement(
-							'h5',
-							null,
-							this.props.restaurant.number_contributions
-						)
-					),
-					React.createElement(
-						'li',
-						null,
-						React.createElement(
-							'p',
-							null,
-							'contributions'
-						)
-					),
-					React.createElement(
-						'li',
-						null,
-						React.createElement(
-							'h5',
-							null,
-							"$" + this.props.restaurant.total
-						)
-					),
-					React.createElement(
-						'li',
-						null,
-						React.createElement(
-							'p',
-							null,
-							"pledged of $" + this.props.restaurant.target + " goal"
-						)
-					),
-					React.createElement(
-						'li',
-						null,
-						React.createElement(
-							'h5',
-							null,
-							Math.round((expires - today) / (1000 * 60 * 60 * 24))
-						)
-					),
-					React.createElement(
-						'li',
-						null,
-						React.createElement(
-							'p',
-							null,
-							'days to go'
-						)
-					)
-				),
-				React.createElement(
-					'div',
-					{ onClick: this._clickHandler, className: "show-back-this-button " + disabled },
-					'Back This Restaurant'
-				)
-			);
-		}
+	    return React.createElement(
+	      'div',
+	      { className: 'show-image-side-bar' },
+	      modal,
+	      React.createElement(
+	        'ul',
+	        { className: 'show-image-side-bar-list' },
+	        React.createElement(
+	          'li',
+	          null,
+	          React.createElement(
+	            'h5',
+	            null,
+	            this.props.restaurant.number_contributions
+	          )
+	        ),
+	        React.createElement(
+	          'li',
+	          null,
+	          React.createElement(
+	            'p',
+	            null,
+	            'contributions'
+	          )
+	        ),
+	        React.createElement(
+	          'li',
+	          null,
+	          React.createElement(
+	            'h5',
+	            null,
+	            "$" + this.props.restaurant.total
+	          )
+	        ),
+	        React.createElement(
+	          'li',
+	          null,
+	          React.createElement(
+	            'p',
+	            null,
+	            "pledged of $" + this.props.restaurant.target + " goal"
+	          )
+	        ),
+	        React.createElement(
+	          'li',
+	          null,
+	          React.createElement(
+	            'h5',
+	            null,
+	            Math.round((expires - today) / (1000 * 60 * 60 * 24))
+	          )
+	        ),
+	        React.createElement(
+	          'li',
+	          null,
+	          React.createElement(
+	            'p',
+	            null,
+	            'days to go'
+	          )
+	        )
+	      ),
+	      React.createElement(
+	        'div',
+	        { onClick: this._clickHandler, className: "show-back-this-button " + disabled },
+	        'Back This Restaurant'
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'expiration-info' },
+	        "This project will only be funded if at least $" + this.props.restaurant.target + " is pledged by " + this.props.restaurant.expiration + "."
+	      )
+	    );
+	  }
 	
 	});
 	

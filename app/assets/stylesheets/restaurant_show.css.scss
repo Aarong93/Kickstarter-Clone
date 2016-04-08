@@ -35,7 +35,12 @@
 	border-bottom: 1px solid #D9D9DE;
 	padding-bottom: 25px;
 }
-
+.expiration-info {
+  margin-top: 30px;
+  color: #828587;
+  font-size: 13px;
+  line-height: 1.25;
+}
 .restaurant-show-main-image {
 	width: 570px;
 	float: left;
@@ -47,6 +52,7 @@
 	float: right;
 	display: block;
 	margin-right: 30px;
+  width: 240px;
 	margin-top: 10px;
 }
 
@@ -69,6 +75,7 @@
 	color: #fff;
 	font-weight: bold;
 	font-size:16px;
+  display: inline-block;
 	padding: 18px 30px;
 	margin-top: 20px;
 	border-radius: 5px;
