@@ -35848,7 +35848,7 @@
 	
 	  //change to restaurants and create index item
 	  getInitialState: function () {
-	    return { restaurant: {} };
+	    return { restaurant: {}, reverse: false };
 	  },
 	
 	  onRestaurantSearchStoreChange: function () {
@@ -35867,6 +35867,12 @@
 	    } else if (page === 0) {
 	      page = meta.total_pages;
 	    }
+	    if (val < 0) {
+	      this.setState({ reverse: true });
+	    } else {
+	      this.setState({ reverse: false });
+	    }
+	
 	    ApiUtil.fetchRestaurantByNameContain(meta.query, page);
 	  },
 	
@@ -35890,11 +35896,18 @@
 	        )
 	      );
 	    }
+	    var nums = ["one", "two", "three"];
 	
+	    if (this.state.reverse) {
+	      nums = ["three", "two", "one"];
+	    }
+	
+	    var i = -1;
 	    var restaurants = this.state.restaurants.map(function (restaurant) {
+	      i++;
 	      return React.createElement(
 	        'div',
-	        { key: restaurant.id, className: 'index-item-wrapper-small' },
+	        { key: restaurant.id, className: "index-item-wrapper-small fade-in " + nums[i] },
 	        React.createElement(IndexItem, {
 	          restaurant: restaurant, callback: RestaurantActions.clearSearchRestaurants
 	        })

@@ -58,7 +58,8 @@ class Api::RestaurantsController < ApplicationController
 
 			render :search_result
 		elsif params[:featured]
-			@restaurants = Restaurant.includes(:city, :user).with_total.where(featured: true).where(published: true).where("expiration > NOW()").order(id: :asc)
+			@restaurants = Restaurant.includes(:city, :user).with_total.where(featured: true)
+        .where(published: true).where("expiration > NOW()").order(id: :asc)
 			@restaurant = @restaurants.shuffle.first;
 			render :show
     elsif params[:user_id]

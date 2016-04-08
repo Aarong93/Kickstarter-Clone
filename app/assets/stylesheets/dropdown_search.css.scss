@@ -18,11 +18,12 @@
 }
 
 .search-results {
-	max-width: 800px;
+	width: 800px;
 	display: inline-block;
 	background-color: #f7fafa;
 	padding-top: 30px;
 	padding-bottom: 40px;
+  position: relative;
 }
 
 .search-exit-button {
@@ -41,8 +42,8 @@
   font-size: 30px;
   font-weight: bold;
   position: absolute;
-  top: 300px;
-  left: 120px;
+  top: 200px;
+  left: -40px;
   color: #828587;
 }
 
@@ -51,11 +52,53 @@
   font-weight: bold;
   position: absolute;
   color: #828587;
-  top: 300px;
-  right: 150px;
+  top: 200px;
+  right: 5px;
 }
 
 #left-angle-bracket:hover, #right-angle-bracket:hover {
   cursor: pointer;
   color: #000;
+}
+
+#index-item-fade-in {
+
+}
+
+@-webkit-keyframes fadeIn { from { opacity:0; opacity: 1\9; /* IE9 only */ } to { opacity:1; } }
+@-moz-keyframes fadeIn { from { opacity:0; opacity: 1\9; /* IE9 only */ } to { opacity:1; } }
+@keyframes fadeIn { from { opacity:0; opacity: 1\9; /* IE9 only */ } to { opacity:1; } }
+
+
+.fade-in {
+    opacity:0;  /* make things invisible upon start */
+    -webkit-animation:fadeIn ease-in 1;  /* call our keyframe named fadeIn, use animattion ease-in and repeat it only 1 time */
+    -moz-animation:fadeIn ease-in 1;
+    animation:fadeIn ease-in 1;
+
+    -webkit-animation-fill-mode:forwards;  /* this makes sure that after animation is done we remain at the last keyframe value (opacity: 1)*/
+    -moz-animation-fill-mode:forwards;
+    animation-fill-mode:forwards;
+
+    -webkit-animation-duration:.15s;
+    -moz-animation-duration:.15s;
+    animation-duration:.15s;
+}
+
+.fade-in.one {
+-webkit-animation-delay: 0s;
+-moz-animation-delay: 0s;
+animation-delay: 0s;
+}
+
+.fade-in.two {
+-webkit-animation-delay: 0.2s;
+-moz-animation-delay:0.2s;
+animation-delay: 0.2s;
+}
+
+.fade-in.three {
+-webkit-animation-delay: 0.4s;
+-moz-animation-delay: 0.4s;
+animation-delay: 0.4s;
 }
