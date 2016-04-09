@@ -159,6 +159,7 @@
 .city-selector-holder > select {
   display: inline-block;
   float: left;
+  -webkit-appearance: none;
 }
 
 #city-selector, .city-selector-click-box {
