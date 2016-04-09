@@ -89,7 +89,7 @@ var BasicForm = React.createClass({
           <textarea placeholder="Describe your restaurant in one sentence..." onInput={this._setChanged} valueLink={this.linkState('blurb')} />
         </label>
         <label>End Date
-          <input type="date" placeholder="dd/mm/yyyy" onInput={this._setChanged} valueLink={this.linkState('expiration')} />
+          <input type="date" placeholder="mm/dd/yyyy" onInput={this._setChanged} valueLink={this.linkState('expiration')} />
         </label>
         <label>Funding Goal
           <input placeholder="$0..." type="text" onInput={this._setChanged} valueLink={this.linkState('target')} />
