@@ -15,7 +15,7 @@ var About = React.createClass({
             a Rails backend and a React.js frontend. <br />
           </p>
           <p>
-            Kitchen starter allows
+            KitchenStarter allows
             users to create projects in order to request funding for new restaurant ideas.<br></br>
             Users can search for, view, and contribute to other users projects.
           </p>
