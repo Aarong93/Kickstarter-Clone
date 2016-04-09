@@ -85,6 +85,7 @@ var EditRestaurant = React.createClass({
 	    ApiUtil.patchRestaurant(this.state.restaurant.id, this.refs.curForm.data());
 		}
     this.refs.curForm.setState({changed: false});
+    window.scrollTo(0, 0);
   },
 
   _selectTab: function (e) {
