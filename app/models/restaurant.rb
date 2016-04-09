@@ -20,7 +20,7 @@ class Restaurant < ActiveRecord::Base
     }
 
 	has_attached_file :image, default_url: :set_default_url_on_cuisine,
-		:styles => {small: "250x150#", large: "1800x1200#"},
+		:styles => {small: "250x150>", large: "1800x1200>"},
 		:convert_options => { :small => "-quality 75 -strip" }
 	validates_attachment_content_type :image, content_type: /\Aimage\/.*\Z/
 
