@@ -28,6 +28,7 @@ var IndexItem = React.createClass({
 		var expires = new Date(this.props.restaurant.expiration);
 		var today = new Date();
 		var daysLeft = Math.round((expires - today)/(1000*60*60*24));
+		var style = {backgroundImage: 'url(' + this.props.restaurant.image_url + ')'};
 
 		var percentDone =
 			(this.props.restaurant.total/this.props.restaurant.target)*100;
@@ -37,12 +38,13 @@ var IndexItem = React.createClass({
 		}
 		return (
 			<div className="index-item" onClick={this.handleClick}>
-				<img
+				<div
 					id="index-item-img"
-					src={this.props.restaurant.image_url}
 					onLoad={this._imageReady}
 					className={this.state.imageClass}
+					style={style}
 					/>
+				<img id="img-timer" onLoad={this._imageReady} src={this.props.restaurant.image_url}/>
 				<div className="index-item-info">
 					<h3>{this.props.restaurant.title}</h3>
 					<h4>{this.props.restaurant.user.name}</h4>
