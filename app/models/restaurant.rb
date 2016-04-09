@@ -35,7 +35,7 @@ class Restaurant < ActiveRecord::Base
   private
 
   def set_default_url_on_cuisine
-    "Americano.jpg"
+    cuisine.food + ".jpg"
   end
 
 end
