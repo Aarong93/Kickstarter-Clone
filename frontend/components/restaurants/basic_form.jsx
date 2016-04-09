@@ -64,7 +64,7 @@ var BasicForm = React.createClass({
     var saveButton = <div id="disabled-save-button" className="save-button">Save Changes</div>;
     var discardChanges = <div id="disabled-discard-button" className="discard-button">Discard Changes</div>;
     if (this.state.changed) {
-      saveButton = <div className="save-button" onClick={this.props.save}>Save Changes</div>;
+      saveButton = <div placeholder="dd/mm/yyyy" className="save-button" onClick={this.props.save}>Save Changes</div>;
       discardChanges = <div className="discard-button" onClick={this._discardChanges}>Discard Changes</div>;
     }
 
