@@ -64,7 +64,7 @@ var BasicForm = React.createClass({
     var saveButton = <div id="disabled-save-button" className="save-button">Save Changes</div>;
     var discardChanges = <div id="disabled-discard-button" className="discard-button">Discard Changes</div>;
     if (this.state.changed) {
-      saveButton = <div placeholder="dd/mm/yyyy" className="save-button" onClick={this.props.save}>Save Changes</div>;
+      saveButton = <div  className="save-button" onClick={this.props.save}>Save Changes</div>;
       discardChanges = <div className="discard-button" onClick={this._discardChanges}>Discard Changes</div>;
     }
 
@@ -89,7 +89,7 @@ var BasicForm = React.createClass({
           <textarea placeholder="Describe your restaurant in one sentence..." onInput={this._setChanged} valueLink={this.linkState('blurb')} />
         </label>
         <label>End Date
-          <input type="date" onInput={this._setChanged} valueLink={this.linkState('expiration')} />
+          <input type="date" placeholder="dd/mm/yyyy" onInput={this._setChanged} valueLink={this.linkState('expiration')} />
         </label>
         <label>Funding Goal
           <input placeholder="$0..." type="text" onInput={this._setChanged} valueLink={this.linkState('target')} />
