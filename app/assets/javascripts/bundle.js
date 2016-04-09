@@ -33525,40 +33525,42 @@
 		},
 	
 		_mainShow: function () {
+			var style = { backgroundImage: 'url(' + this.state.restaurant.image_url + ')' };
 			return React.createElement(
 				'div',
 				{ className: 'restaurant-show-main-content group' },
 				React.createElement(
 					'div',
-					{ className: 'restaurant-show-main-image image_wrapper' },
-					React.createElement('img', {
-						src: this.state.restaurant.image_url,
-						onLoad: this._imageReady,
-						className: this.state.imageClass
+					{ className: 'restaurant-show-main-image image_wrapper group' },
+					React.createElement('div', {
+						style: style,
+						className: this.state.imageClass,
+						id: 'show-page-image'
 					}),
+					React.createElement('img', { id: 'img-timer', onLoad: this._imageReady, src: this.state.restaurant.image_url })
+				),
+				React.createElement(ImageSideBar, { restaurant: this.state.restaurant }),
+				React.createElement(
+					'div',
+					{ className: 'group city-cuisine-show' },
 					React.createElement(
-						'div',
-						{ className: 'group city-cuisine-show' },
-						React.createElement(
-							'p',
-							null,
-							React.createElement('i', { className: 'fa fa-map-marker' }),
-							'   ',
-							this.state.restaurant.city.name
-						),
-						React.createElement(
-							'p',
-							null,
-							this.state.restaurant.cuisine.food
-						)
+						'p',
+						null,
+						React.createElement('i', { className: 'fa fa-map-marker' }),
+						'   ',
+						this.state.restaurant.city.name
 					),
 					React.createElement(
 						'p',
-						{ className: 'blurb-show' },
-						this.state.restaurant.blurb
+						null,
+						this.state.restaurant.cuisine.food
 					)
 				),
-				React.createElement(ImageSideBar, { restaurant: this.state.restaurant })
+				React.createElement(
+					'p',
+					{ className: 'blurb-show' },
+					this.state.restaurant.blurb
+				)
 			);
 		},
 	
@@ -33681,7 +33683,7 @@
 	    bottom: 'auto',
 	    marginRight: '-50%',
 	    transform: 'translate(-50%, -50%)',
-	    width: '370px'
+	    width: '400px'
 	  }
 	};
 	
@@ -36075,6 +36077,7 @@
 			var expires = new Date(this.props.restaurant.expiration);
 			var today = new Date();
 			var daysLeft = Math.round((expires - today) / (1000 * 60 * 60 * 24));
+			var style = { backgroundImage: 'url(' + this.props.restaurant.image_url + ')' };
 	
 			var percentDone = this.props.restaurant.total / this.props.restaurant.target * 100;
 			var progressWidth = { width: percentDone + "%" };
@@ -36083,13 +36086,13 @@
 			}
 			return React.createElement(
 				"div",
-				{ className: "index-item", onClick: this.handleClick },
-				React.createElement("img", {
+				{ className: "index-item group", onClick: this.handleClick },
+				React.createElement("div", {
 					id: "index-item-img",
-					src: this.props.restaurant.image_url,
-					onLoad: this._imageReady,
-					className: this.state.imageClass
+					className: this.state.imageClass,
+					style: style
 				}),
+				React.createElement("img", { id: "img-timer", onLoad: this._imageReady, src: this.props.restaurant.image_url }),
 				React.createElement(
 					"div",
 					{ className: "index-item-info" },
@@ -36933,6 +36936,7 @@
 	      ApiUtil.patchRestaurant(this.state.restaurant.id, this.refs.curForm.data());
 	    }
 	    this.refs.curForm.setState({ changed: false });
+	    window.scrollTo(0, 0);
 	  },
 	
 	  _selectTab: function (e) {
@@ -37190,7 +37194,7 @@
 	        'Discard Changes'
 	      );
 	    }
-	
+	    var style = { backgroundImage: 'url(' + this.props.restaurant.image_url + ')' };
 	    return React.createElement(
 	      'div',
 	      { className: 'edit-form group' },
@@ -37206,7 +37210,6 @@
 	        'Upload a New Image',
 	        React.createElement('input', { id: 'file-input',
 	          type: 'file',
-	
 	          onChange: this.handleFileChange
 	        })
 	      ),
@@ -37214,9 +37217,12 @@
 	        'label',
 	        null,
 	        'Current Image',
-	        React.createElement('img', { onLoad: this._imageReady,
-	          className: this.state.imageClass,
-	          src: this.state.imageUrl })
+	        React.createElement('div', {
+	          style: style,
+	          id: 'current-image',
+	          className: this.state.imageClass
+	        }),
+	        React.createElement('img', { id: 'img-timer', onLoad: this._imageReady, src: this.props.restaurant.image_url })
 	      ),
 	      React.createElement(
 	        'label',

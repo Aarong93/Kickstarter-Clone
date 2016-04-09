@@ -25,6 +25,8 @@
   font-weight: bold;
 }
 
+
+
 .edit-restaurant-tabs > li {
   float: left;
   text-align: center;
@@ -98,12 +100,17 @@
 	background-color: #fff;
 }
 
-.edit-form > label > img {
-	margin-left: 190px;
-	width: 310px;
-	height: 210px;
-	border-radius: 5px;
+#current-image {
+  position: relative;
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  margin-left: 190px;
+  width: 310px;
+  height: 210px;
+  border-radius: 5px;
 }
+
 .edit-form > label > input,  .edit-form > label > textarea{
   padding: 5px;
   outline: none;

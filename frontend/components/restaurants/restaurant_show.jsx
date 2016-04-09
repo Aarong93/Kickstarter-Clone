@@ -43,14 +43,18 @@ var RestaurantShow = React.createClass({
 	},
 
 	_mainShow: function () {
+		var style = {backgroundImage: 'url(' + this.state.restaurant.image_url + ')'};
 		return (
 				<div className="restaurant-show-main-content group">
-					<div className="restaurant-show-main-image image_wrapper">
-						<img
-							src={this.state.restaurant.image_url}
-							onLoad={this._imageReady}
+					<div className="restaurant-show-main-image image_wrapper group">
+						<div
+							style={style}
 							className={this.state.imageClass}
-						/>
+							id="show-page-image"
+						></div>
+						<img id="img-timer" onLoad={this._imageReady} src={this.state.restaurant.image_url}/>
+					</div>
+						<ImageSideBar restaurant={this.state.restaurant}/>
             <div className="group city-cuisine-show">
               <p>
                 <i className="fa fa-map-marker" />   {this.state.restaurant.city.name}
@@ -62,8 +66,6 @@ var RestaurantShow = React.createClass({
             <p className="blurb-show">
               {this.state.restaurant.blurb}
             </p>
-					</div>
-					<ImageSideBar restaurant={this.state.restaurant}/>
 				</div>
 		);
 	},

@@ -37,10 +37,9 @@ var IndexItem = React.createClass({
 			progressWidth = {width: ("100%")};
 		}
 		return (
-			<div className="index-item" onClick={this.handleClick}>
+			<div className="index-item group" onClick={this.handleClick}>
 				<div
 					id="index-item-img"
-					onLoad={this._imageReady}
 					className={this.state.imageClass}
 					style={style}
 					/>

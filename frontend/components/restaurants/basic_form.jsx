@@ -67,7 +67,7 @@ var BasicForm = React.createClass({
       saveButton = <div  className="save-button" onClick={this.props.save}>Save Changes</div>;
       discardChanges = <div className="discard-button" onClick={this._discardChanges}>Discard Changes</div>;
     }
-
+    var style = {backgroundImage: 'url(' + this.props.restaurant.image_url + ')'};
     return (
       <div className="edit-form group">
         <label>Title
@@ -76,14 +76,16 @@ var BasicForm = React.createClass({
         <label>Upload a New Image
 					<input id="file-input"
 						type="file"
-
         		onChange={this.handleFileChange}
 						/>
         </label>
         <label>Current Image
-					<img onLoad={this._imageReady}
+					<div
+            style={style}
+            id = "current-image"
 						className={this.state.imageClass}
-						src={this.state.imageUrl} />
+						 />
+           <img id="img-timer" onLoad={this._imageReady} src={this.props.restaurant.image_url}/>
         </label>
         <label>Blurb
           <textarea placeholder="Describe your restaurant in one sentence..." onInput={this._setChanged} valueLink={this.linkState('blurb')} />

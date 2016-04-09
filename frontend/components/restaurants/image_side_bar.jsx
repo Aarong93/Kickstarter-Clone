@@ -16,7 +16,7 @@ var modalStyles = {
     bottom                : 'auto',
     marginRight           : '-50%',
     transform             : 'translate(-50%, -50%)',
-    width                 : '370px',
+    width                 : '400px',
   }
 };
 
