@@ -20,8 +20,8 @@ class Restaurant < ActiveRecord::Base
     }
 
 	has_attached_file :image, default_url: :set_default_url_on_cuisine,
-		:styles => {:thumb => "100x100#", small: "250x150#", large: "1800x1200#"},
-		:convert_options => { :thumb => "-quality 75 -strip" }
+		:styles => {small: "250x150>", large: "1800x1200>"},
+		:convert_options => { :small => "-quality 75 -strip" }
 	validates_attachment_content_type :image, content_type: /\Aimage\/.*\Z/
 
 	validates :user_id, :cuisine_id, :title, :city_id, presence: true
@@ -37,7 +37,7 @@ class Restaurant < ActiveRecord::Base
   private
 
   def set_default_url_on_cuisine
-    cuisine.food + ".jpg"
+    cuisine.food + "_:style.jpg"
   end
 
 end
