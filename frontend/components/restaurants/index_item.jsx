@@ -18,6 +18,12 @@ var IndexItem = React.createClass({
 		this.context.router.push("/restaurants/" + this.props.restaurant.id);
 	},
 
+	componentWillReceiveProps: function (newProps) {
+		if (this.props.restaurant.image_url !== newProps.restaurant.image_url) {
+			this.setState({imageClass: "hide-image"});
+		}
+	},
+
 	render: function() {
 		var expires = new Date(this.props.restaurant.expiration);
 		var today = new Date();

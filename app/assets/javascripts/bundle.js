@@ -52,23 +52,23 @@
 	var IndexRoute = ReactRouter.IndexRoute;
 	var browserHistory = ReactRouter.browserHistory;
 	
-	var About = __webpack_require__(304);
-	var BackedProjects = __webpack_require__(216);
-	var CreatedProjects = __webpack_require__(252);
-	var NavBar = __webpack_require__(253);
-	var Footer = __webpack_require__(263);
-	var RestaurantShow = __webpack_require__(265);
-	var SearchIndex = __webpack_require__(290);
-	var RestaurantIndex = __webpack_require__(292);
-	var LoginForm = __webpack_require__(294);
-	var SignUpForm = __webpack_require__(295);
-	var RestaurantNew = __webpack_require__(296);
-	var RestaurantEdit = __webpack_require__(298);
-	var Home = __webpack_require__(303);
+	var About = __webpack_require__(216);
+	var BackedProjects = __webpack_require__(217);
+	var CreatedProjects = __webpack_require__(253);
+	var NavBar = __webpack_require__(254);
+	var Footer = __webpack_require__(264);
+	var RestaurantShow = __webpack_require__(266);
+	var SearchIndex = __webpack_require__(291);
+	var RestaurantIndex = __webpack_require__(293);
+	var LoginForm = __webpack_require__(295);
+	var SignUpForm = __webpack_require__(296);
+	var RestaurantNew = __webpack_require__(297);
+	var RestaurantEdit = __webpack_require__(299);
+	var Home = __webpack_require__(304);
 	
-	var SessionStore = __webpack_require__(249);
-	var ApiUtil = __webpack_require__(241);
-	var RestaurantActions = __webpack_require__(242);
+	var SessionStore = __webpack_require__(250);
+	var ApiUtil = __webpack_require__(242);
+	var RestaurantActions = __webpack_require__(243);
 	
 	var App = React.createClass({
 	  displayName: 'App',
@@ -24828,11 +24828,91 @@
 
 	var React = __webpack_require__(1);
 	var PropTypes = React.PropTypes;
-	var RestaurantIndexStore = __webpack_require__(217);
-	var ApiUtil = __webpack_require__(241);
-	var SessionStore = __webpack_require__(249);
-	var ProfileNav = __webpack_require__(250);
-	var RestaurantProfilePageItem = __webpack_require__(251);
+	
+	var About = React.createClass({
+	  displayName: "About",
+	
+	
+	  render: function () {
+	    return React.createElement(
+	      "div",
+	      { className: "about-page" },
+	      React.createElement(
+	        "div",
+	        { className: "about-page-content" },
+	        React.createElement(
+	          "h1",
+	          null,
+	          "What is KitchenStarter?"
+	        ),
+	        React.createElement(
+	          "p",
+	          null,
+	          "KitchenStarter is a KickStarter clone built using a Rails backend and a React.js frontend. ",
+	          React.createElement("br", null)
+	        ),
+	        React.createElement(
+	          "p",
+	          null,
+	          "KitchenStarter allows users to create projects in order to request funding for new restaurant ideas.",
+	          React.createElement("br", null),
+	          "Users can search for, view, and contribute to other users projects."
+	        ),
+	        React.createElement(
+	          "h3",
+	          null,
+	          "Contact Me"
+	        ),
+	        React.createElement(
+	          "ul",
+	          null,
+	          React.createElement(
+	            "li",
+	            null,
+	            React.createElement(
+	              "a",
+	              { href: "mailto:aaron.r.grau@gmail.com" },
+	              "Aaron.r.grau@gmail.com"
+	            )
+	          ),
+	          React.createElement(
+	            "li",
+	            null,
+	            React.createElement(
+	              "a",
+	              { href: "https://www.linkedin.com/in/aaronrgrau" },
+	              "LinkedIn"
+	            )
+	          ),
+	          React.createElement(
+	            "li",
+	            null,
+	            React.createElement(
+	              "a",
+	              { href: "https://github.com/Aarong93/KitchenStarter-A-Kick-Starter-Clone" },
+	              "Project Github"
+	            )
+	          )
+	        )
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = About;
+
+/***/ },
+/* 217 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var PropTypes = React.PropTypes;
+	var RestaurantIndexStore = __webpack_require__(218);
+	var ApiUtil = __webpack_require__(242);
+	var SessionStore = __webpack_require__(250);
+	var ProfileNav = __webpack_require__(251);
+	var RestaurantProfilePageItem = __webpack_require__(252);
 	
 	var BackProjects = React.createClass({
 	  displayName: 'BackProjects',
@@ -24905,13 +24985,13 @@
 	module.exports = BackProjects;
 
 /***/ },
-/* 217 */
+/* 218 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Store = __webpack_require__(218).Store;
-	var AppDispatcher = __webpack_require__(236);
-	var RestaurantConstants = __webpack_require__(239);
-	var HelperUtil = __webpack_require__(240);
+	var Store = __webpack_require__(219).Store;
+	var AppDispatcher = __webpack_require__(237);
+	var RestaurantConstants = __webpack_require__(240);
+	var HelperUtil = __webpack_require__(241);
 	
 	var _restaurants = [];
 	var _meta = {};
@@ -24946,7 +25026,7 @@
 	module.exports = RestaurantIndexPageStore;
 
 /***/ },
-/* 218 */
+/* 219 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -24958,15 +25038,15 @@
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 */
 	
-	module.exports.Container = __webpack_require__(219);
-	module.exports.MapStore = __webpack_require__(223);
-	module.exports.Mixin = __webpack_require__(235);
-	module.exports.ReduceStore = __webpack_require__(224);
-	module.exports.Store = __webpack_require__(225);
+	module.exports.Container = __webpack_require__(220);
+	module.exports.MapStore = __webpack_require__(224);
+	module.exports.Mixin = __webpack_require__(236);
+	module.exports.ReduceStore = __webpack_require__(225);
+	module.exports.Store = __webpack_require__(226);
 
 
 /***/ },
-/* 219 */
+/* 220 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -24988,10 +25068,10 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxStoreGroup = __webpack_require__(220);
+	var FluxStoreGroup = __webpack_require__(221);
 	
-	var invariant = __webpack_require__(221);
-	var shallowEqual = __webpack_require__(222);
+	var invariant = __webpack_require__(222);
+	var shallowEqual = __webpack_require__(223);
 	
 	var DEFAULT_OPTIONS = {
 	  pure: true,
@@ -25149,7 +25229,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 220 */
+/* 221 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25168,7 +25248,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(221);
+	var invariant = __webpack_require__(222);
 	
 	/**
 	 * FluxStoreGroup allows you to execute a callback on every dispatch after
@@ -25230,7 +25310,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 221 */
+/* 222 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25285,7 +25365,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 222 */
+/* 223 */
 /***/ function(module, exports) {
 
 	/**
@@ -25340,7 +25420,7 @@
 	module.exports = shallowEqual;
 
 /***/ },
-/* 223 */
+/* 224 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25361,10 +25441,10 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxReduceStore = __webpack_require__(224);
-	var Immutable = __webpack_require__(234);
+	var FluxReduceStore = __webpack_require__(225);
+	var Immutable = __webpack_require__(235);
 	
-	var invariant = __webpack_require__(221);
+	var invariant = __webpack_require__(222);
 	
 	/**
 	 * This is a simple store. It allows caching key value pairs. An implementation
@@ -25490,7 +25570,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 224 */
+/* 225 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25511,10 +25591,10 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxStore = __webpack_require__(225);
+	var FluxStore = __webpack_require__(226);
 	
-	var abstractMethod = __webpack_require__(233);
-	var invariant = __webpack_require__(221);
+	var abstractMethod = __webpack_require__(234);
+	var invariant = __webpack_require__(222);
 	
 	var FluxReduceStore = (function (_FluxStore) {
 	  _inherits(FluxReduceStore, _FluxStore);
@@ -25597,7 +25677,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 225 */
+/* 226 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25616,11 +25696,11 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var _require = __webpack_require__(226);
+	var _require = __webpack_require__(227);
 	
 	var EventEmitter = _require.EventEmitter;
 	
-	var invariant = __webpack_require__(221);
+	var invariant = __webpack_require__(222);
 	
 	/**
 	 * This class should be extended by the stores in your application, like so:
@@ -25780,7 +25860,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 226 */
+/* 227 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -25793,14 +25873,14 @@
 	 */
 	
 	var fbemitter = {
-	  EventEmitter: __webpack_require__(227)
+	  EventEmitter: __webpack_require__(228)
 	};
 	
 	module.exports = fbemitter;
 
 
 /***/ },
-/* 227 */
+/* 228 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25819,11 +25899,11 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var EmitterSubscription = __webpack_require__(228);
-	var EventSubscriptionVendor = __webpack_require__(230);
+	var EmitterSubscription = __webpack_require__(229);
+	var EventSubscriptionVendor = __webpack_require__(231);
 	
-	var emptyFunction = __webpack_require__(232);
-	var invariant = __webpack_require__(231);
+	var emptyFunction = __webpack_require__(233);
+	var invariant = __webpack_require__(232);
 	
 	/**
 	 * @class BaseEventEmitter
@@ -25997,7 +26077,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 228 */
+/* 229 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -26018,7 +26098,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var EventSubscription = __webpack_require__(229);
+	var EventSubscription = __webpack_require__(230);
 	
 	/**
 	 * EmitterSubscription represents a subscription with listener and context data.
@@ -26050,7 +26130,7 @@
 	module.exports = EmitterSubscription;
 
 /***/ },
-/* 229 */
+/* 230 */
 /***/ function(module, exports) {
 
 	/**
@@ -26104,7 +26184,7 @@
 	module.exports = EventSubscription;
 
 /***/ },
-/* 230 */
+/* 231 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26123,7 +26203,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(231);
+	var invariant = __webpack_require__(232);
 	
 	/**
 	 * EventSubscriptionVendor stores a set of EventSubscriptions that are
@@ -26213,7 +26293,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 231 */
+/* 232 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26268,7 +26348,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 232 */
+/* 233 */
 /***/ function(module, exports) {
 
 	/**
@@ -26310,7 +26390,7 @@
 	module.exports = emptyFunction;
 
 /***/ },
-/* 233 */
+/* 234 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -26327,7 +26407,7 @@
 	
 	'use strict';
 	
-	var invariant = __webpack_require__(221);
+	var invariant = __webpack_require__(222);
 	
 	function abstractMethod(className, methodName) {
 	   true ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Subclasses of %s must override %s() with their own implementation.', className, methodName) : invariant(false) : undefined;
@@ -26337,7 +26417,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 234 */
+/* 235 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -31324,7 +31404,7 @@
 	}));
 
 /***/ },
-/* 235 */
+/* 236 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -31341,9 +31421,9 @@
 	
 	'use strict';
 	
-	var FluxStoreGroup = __webpack_require__(220);
+	var FluxStoreGroup = __webpack_require__(221);
 	
-	var invariant = __webpack_require__(221);
+	var invariant = __webpack_require__(222);
 	
 	/**
 	 * `FluxContainer` should be preferred over this mixin, but it requires using
@@ -31447,14 +31527,14 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 236 */
+/* 237 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Dispatcher = __webpack_require__(237).Dispatcher;
+	var Dispatcher = __webpack_require__(238).Dispatcher;
 	module.exports = new Dispatcher();
 
 /***/ },
-/* 237 */
+/* 238 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -31466,11 +31546,11 @@
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 */
 	
-	module.exports.Dispatcher = __webpack_require__(238);
+	module.exports.Dispatcher = __webpack_require__(239);
 
 
 /***/ },
-/* 238 */
+/* 239 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -31492,7 +31572,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(221);
+	var invariant = __webpack_require__(222);
 	
 	var _prefix = 'ID_';
 	
@@ -31707,7 +31787,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 239 */
+/* 240 */
 /***/ function(module, exports) {
 
 	var RestaurantConstants = {
@@ -31721,7 +31801,7 @@
 	module.exports = RestaurantConstants;
 
 /***/ },
-/* 240 */
+/* 241 */
 /***/ function(module, exports) {
 
 	var HelperUtil = {
@@ -31757,13 +31837,13 @@
 	};
 
 /***/ },
-/* 241 */
+/* 242 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var RestaurantActions = __webpack_require__(242);
-	var CuisineActions = __webpack_require__(243);
-	var SessionActions = __webpack_require__(245);
-	var CityActions = __webpack_require__(247);
+	var RestaurantActions = __webpack_require__(243);
+	var CuisineActions = __webpack_require__(244);
+	var SessionActions = __webpack_require__(246);
+	var CityActions = __webpack_require__(248);
 	
 	var ApiUtil = {
 	
@@ -32003,11 +32083,11 @@
 	module.exports = ApiUtil;
 
 /***/ },
-/* 242 */
+/* 243 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var RestaurantConstants = __webpack_require__(239);
-	var AppDispatcher = __webpack_require__(236);
+	var RestaurantConstants = __webpack_require__(240);
+	var AppDispatcher = __webpack_require__(237);
 	
 	var RestaurantActions = {
 		receiveRestaurant: function (restaurant) {
@@ -32049,11 +32129,11 @@
 	module.exports = RestaurantActions;
 
 /***/ },
-/* 243 */
+/* 244 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var CuisinesConstants = __webpack_require__(244);
-	var AppDispatcher = __webpack_require__(236);
+	var CuisinesConstants = __webpack_require__(245);
+	var AppDispatcher = __webpack_require__(237);
 	
 	var CuisineActions = {
 		receiveCuisines: function (cuisines) {
@@ -32067,7 +32147,7 @@
 	module.exports = CuisineActions;
 
 /***/ },
-/* 244 */
+/* 245 */
 /***/ function(module, exports) {
 
 	var CuisineConstants = {
@@ -32077,11 +32157,11 @@
 	module.exports = CuisineConstants;
 
 /***/ },
-/* 245 */
+/* 246 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var AppDispatcher = __webpack_require__(236);
-	var SessionConstants = __webpack_require__(246);
+	var AppDispatcher = __webpack_require__(237);
+	var SessionConstants = __webpack_require__(247);
 	
 	var SessionActions = {
 	  currentUserReceived: function (currentUser, callback) {
@@ -32102,7 +32182,7 @@
 	module.exports = SessionActions;
 
 /***/ },
-/* 246 */
+/* 247 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -32111,11 +32191,11 @@
 	};
 
 /***/ },
-/* 247 */
+/* 248 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var CityConstants = __webpack_require__(248);
-	var AppDispatcher = __webpack_require__(236);
+	var CityConstants = __webpack_require__(249);
+	var AppDispatcher = __webpack_require__(237);
 	
 	var CityActions = {
 		receiveCities: function (cities) {
@@ -32129,7 +32209,7 @@
 	module.exports = CityActions;
 
 /***/ },
-/* 248 */
+/* 249 */
 /***/ function(module, exports) {
 
 	var CityConstants = {
@@ -32139,12 +32219,12 @@
 	module.exports = CityConstants;
 
 /***/ },
-/* 249 */
+/* 250 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Store = __webpack_require__(218).Store;
-	var SessionConstants = __webpack_require__(246);
-	var AppDispatcher = __webpack_require__(236);
+	var Store = __webpack_require__(219).Store;
+	var SessionConstants = __webpack_require__(247);
+	var AppDispatcher = __webpack_require__(237);
 	
 	var SessionStore = new Store(AppDispatcher);
 	
@@ -32180,7 +32260,7 @@
 	module.exports = SessionStore;
 
 /***/ },
-/* 250 */
+/* 251 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -32234,11 +32314,11 @@
 	module.exports = ProfileNav;
 
 /***/ },
-/* 251 */
+/* 252 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var SessionStore = __webpack_require__(249);
+	var SessionStore = __webpack_require__(250);
 	
 	var ProfileIndexItem = React.createClass({
 	  displayName: 'ProfileIndexItem',
@@ -32314,16 +32394,16 @@
 	module.exports = ProfileIndexItem;
 
 /***/ },
-/* 252 */
+/* 253 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var PropTypes = React.PropTypes;
-	var RestaurantIndexStore = __webpack_require__(217);
-	var ApiUtil = __webpack_require__(241);
-	var SessionStore = __webpack_require__(249);
-	var ProfileNav = __webpack_require__(250);
-	var RestaurantProfilePageItem = __webpack_require__(251);
+	var RestaurantIndexStore = __webpack_require__(218);
+	var ApiUtil = __webpack_require__(242);
+	var SessionStore = __webpack_require__(250);
+	var ProfileNav = __webpack_require__(251);
+	var RestaurantProfilePageItem = __webpack_require__(252);
 	
 	var CreatedProjects = React.createClass({
 	  displayName: 'CreatedProjects',
@@ -32421,13 +32501,13 @@
 	module.exports = CreatedProjects;
 
 /***/ },
-/* 253 */
+/* 254 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var YouPopout = __webpack_require__(254);
-	var SearchBar = __webpack_require__(257);
-	var SessionStore = __webpack_require__(249);
+	var YouPopout = __webpack_require__(255);
+	var SearchBar = __webpack_require__(258);
+	var SessionStore = __webpack_require__(250);
 	
 	var NavBar = React.createClass({
 		displayName: 'NavBar',
@@ -32624,17 +32704,17 @@
 	module.exports = NavBar;
 
 /***/ },
-/* 254 */
+/* 255 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var enhanceWithClickOutside = __webpack_require__(255);
-	var ApiUtils = __webpack_require__(241);
+	var enhanceWithClickOutside = __webpack_require__(256);
+	var ApiUtils = __webpack_require__(242);
 	
 	var YouPopout = React.createClass({
 		displayName: 'YouPopout',
 	
-		mixins: [__webpack_require__(256)],
+		mixins: [__webpack_require__(257)],
 	
 		contextTypes: { router: React.PropTypes.object.isRequired },
 	
@@ -32710,7 +32790,7 @@
 	module.exports = enhanceWithClickOutside(YouPopout);
 
 /***/ },
-/* 255 */
+/* 256 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32749,7 +32829,7 @@
 	};
 
 /***/ },
-/* 256 */
+/* 257 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -32887,15 +32967,15 @@
 
 
 /***/ },
-/* 257 */
+/* 258 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var PropTypes = React.PropTypes;
-	var LinkedStateMixin = __webpack_require__(258);
-	var ApiUtil = __webpack_require__(241);
-	var RestaurantActions = __webpack_require__(242);
-	var RestaurantIndexStore = __webpack_require__(262);
+	var LinkedStateMixin = __webpack_require__(259);
+	var ApiUtil = __webpack_require__(242);
+	var RestaurantActions = __webpack_require__(243);
+	var RestaurantIndexStore = __webpack_require__(263);
 	
 	var SearchBar = React.createClass({
 		displayName: 'SearchBar',
@@ -32952,13 +33032,13 @@
 	module.exports = SearchBar;
 
 /***/ },
-/* 258 */
+/* 259 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(259);
+	module.exports = __webpack_require__(260);
 
 /***/ },
-/* 259 */
+/* 260 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -32975,8 +33055,8 @@
 	
 	'use strict';
 	
-	var ReactLink = __webpack_require__(260);
-	var ReactStateSetters = __webpack_require__(261);
+	var ReactLink = __webpack_require__(261);
+	var ReactStateSetters = __webpack_require__(262);
 	
 	/**
 	 * A simple mixin around ReactLink.forState().
@@ -32999,7 +33079,7 @@
 	module.exports = LinkedStateMixin;
 
 /***/ },
-/* 260 */
+/* 261 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -33073,7 +33153,7 @@
 	module.exports = ReactLink;
 
 /***/ },
-/* 261 */
+/* 262 */
 /***/ function(module, exports) {
 
 	/**
@@ -33182,13 +33262,13 @@
 	module.exports = ReactStateSetters;
 
 /***/ },
-/* 262 */
+/* 263 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Store = __webpack_require__(218).Store;
-	var AppDispatcher = __webpack_require__(236);
-	var RestaurantConstants = __webpack_require__(239);
-	var HelperUtil = __webpack_require__(240);
+	var Store = __webpack_require__(219).Store;
+	var AppDispatcher = __webpack_require__(237);
+	var RestaurantConstants = __webpack_require__(240);
+	var HelperUtil = __webpack_require__(241);
 	
 	var _restaurants = [];
 	var _meta = {};
@@ -33232,12 +33312,12 @@
 	module.exports = RestaurantIndexStore;
 
 /***/ },
-/* 263 */
+/* 264 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var CuisineStore = __webpack_require__(264);
-	var ApiUtil = __webpack_require__(241);
+	var CuisineStore = __webpack_require__(265);
+	var ApiUtil = __webpack_require__(242);
 	
 	var FooterBar = React.createClass({
 	  displayName: 'FooterBar',
@@ -33368,13 +33448,13 @@
 	module.exports = FooterBar;
 
 /***/ },
-/* 264 */
+/* 265 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Store = __webpack_require__(218).Store;
-	var AppDispatcher = __webpack_require__(236);
-	var CuisinesConstants = __webpack_require__(244);
-	var HelperUtil = __webpack_require__(240);
+	var Store = __webpack_require__(219).Store;
+	var AppDispatcher = __webpack_require__(237);
+	var CuisinesConstants = __webpack_require__(245);
+	var HelperUtil = __webpack_require__(241);
 	
 	var CuisineStore = new Store(AppDispatcher);
 	
@@ -33395,14 +33475,14 @@
 	module.exports = CuisineStore;
 
 /***/ },
-/* 265 */
+/* 266 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var RestaurantStore = __webpack_require__(266);
-	var ApiUtil = __webpack_require__(241);
-	var ImageSideBar = __webpack_require__(267);
-	var RewardsIndex = __webpack_require__(289);
+	var RestaurantStore = __webpack_require__(267);
+	var ApiUtil = __webpack_require__(242);
+	var ImageSideBar = __webpack_require__(268);
+	var RewardsIndex = __webpack_require__(290);
 	
 	var RestaurantShow = React.createClass({
 		displayName: 'RestaurantShow',
@@ -33545,12 +33625,12 @@
 	module.exports = RestaurantShow;
 
 /***/ },
-/* 266 */
+/* 267 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Store = __webpack_require__(218).Store;
-	var AppDispatcher = __webpack_require__(236);
-	var RestaurantConstants = __webpack_require__(239);
+	var Store = __webpack_require__(219).Store;
+	var AppDispatcher = __webpack_require__(237);
+	var RestaurantConstants = __webpack_require__(240);
 	
 	var _restaurant = {};
 	
@@ -33580,13 +33660,13 @@
 	module.exports = RestaurantStore;
 
 /***/ },
-/* 267 */
+/* 268 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var SessionStore = __webpack_require__(249);
-	var Modal = __webpack_require__(268);
-	var ContributionForm = __webpack_require__(288);
+	var SessionStore = __webpack_require__(250);
+	var Modal = __webpack_require__(269);
+	var ContributionForm = __webpack_require__(289);
 	
 	$(function () {
 	  var appElement = $('#root')[0];
@@ -33744,23 +33824,23 @@
 	module.exports = ImageSideBar;
 
 /***/ },
-/* 268 */
+/* 269 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(269);
+	module.exports = __webpack_require__(270);
 	
 
 
 /***/ },
-/* 269 */
+/* 270 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(158);
-	var ExecutionEnvironment = __webpack_require__(270);
-	var ModalPortal = React.createFactory(__webpack_require__(271));
-	var ariaAppHider = __webpack_require__(286);
-	var elementClass = __webpack_require__(287);
+	var ExecutionEnvironment = __webpack_require__(271);
+	var ModalPortal = React.createFactory(__webpack_require__(272));
+	var ariaAppHider = __webpack_require__(287);
+	var elementClass = __webpack_require__(288);
 	var renderSubtreeIntoContainer = __webpack_require__(158).unstable_renderSubtreeIntoContainer;
 	
 	var SafeHTMLElement = ExecutionEnvironment.canUseDOM ? window.HTMLElement : {};
@@ -33839,7 +33919,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 270 */
+/* 271 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -33884,14 +33964,14 @@
 
 
 /***/ },
-/* 271 */
+/* 272 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var div = React.DOM.div;
-	var focusManager = __webpack_require__(272);
-	var scopeTab = __webpack_require__(274);
-	var Assign = __webpack_require__(275);
+	var focusManager = __webpack_require__(273);
+	var scopeTab = __webpack_require__(275);
+	var Assign = __webpack_require__(276);
 	
 	
 	// so that our CSS is statically analyzable
@@ -34088,10 +34168,10 @@
 
 
 /***/ },
-/* 272 */
+/* 273 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var findTabbable = __webpack_require__(273);
+	var findTabbable = __webpack_require__(274);
 	var modalElement = null;
 	var focusLaterElement = null;
 	var needToFocus = false;
@@ -34162,7 +34242,7 @@
 
 
 /***/ },
-/* 273 */
+/* 274 */
 /***/ function(module, exports) {
 
 	/*!
@@ -34218,10 +34298,10 @@
 
 
 /***/ },
-/* 274 */
+/* 275 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var findTabbable = __webpack_require__(273);
+	var findTabbable = __webpack_require__(274);
 	
 	module.exports = function(node, event) {
 	  var tabbable = findTabbable(node);
@@ -34239,7 +34319,7 @@
 
 
 /***/ },
-/* 275 */
+/* 276 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -34250,9 +34330,9 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var baseAssign = __webpack_require__(276),
-	    createAssigner = __webpack_require__(282),
-	    keys = __webpack_require__(278);
+	var baseAssign = __webpack_require__(277),
+	    createAssigner = __webpack_require__(283),
+	    keys = __webpack_require__(279);
 	
 	/**
 	 * A specialized version of `_.assign` for customizing assigned values without
@@ -34325,7 +34405,7 @@
 
 
 /***/ },
-/* 276 */
+/* 277 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -34336,8 +34416,8 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var baseCopy = __webpack_require__(277),
-	    keys = __webpack_require__(278);
+	var baseCopy = __webpack_require__(278),
+	    keys = __webpack_require__(279);
 	
 	/**
 	 * The base implementation of `_.assign` without support for argument juggling,
@@ -34358,7 +34438,7 @@
 
 
 /***/ },
-/* 277 */
+/* 278 */
 /***/ function(module, exports) {
 
 	/**
@@ -34396,7 +34476,7 @@
 
 
 /***/ },
-/* 278 */
+/* 279 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -34407,9 +34487,9 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var getNative = __webpack_require__(279),
-	    isArguments = __webpack_require__(280),
-	    isArray = __webpack_require__(281);
+	var getNative = __webpack_require__(280),
+	    isArguments = __webpack_require__(281),
+	    isArray = __webpack_require__(282);
 	
 	/** Used to detect unsigned integer values. */
 	var reIsUint = /^\d+$/;
@@ -34638,7 +34718,7 @@
 
 
 /***/ },
-/* 279 */
+/* 280 */
 /***/ function(module, exports) {
 
 	/**
@@ -34781,7 +34861,7 @@
 
 
 /***/ },
-/* 280 */
+/* 281 */
 /***/ function(module, exports) {
 
 	/**
@@ -35030,7 +35110,7 @@
 
 
 /***/ },
-/* 281 */
+/* 282 */
 /***/ function(module, exports) {
 
 	/**
@@ -35216,7 +35296,7 @@
 
 
 /***/ },
-/* 282 */
+/* 283 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -35227,9 +35307,9 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var bindCallback = __webpack_require__(283),
-	    isIterateeCall = __webpack_require__(284),
-	    restParam = __webpack_require__(285);
+	var bindCallback = __webpack_require__(284),
+	    isIterateeCall = __webpack_require__(285),
+	    restParam = __webpack_require__(286);
 	
 	/**
 	 * Creates a function that assigns properties of source object(s) to a given
@@ -35274,7 +35354,7 @@
 
 
 /***/ },
-/* 283 */
+/* 284 */
 /***/ function(module, exports) {
 
 	/**
@@ -35345,7 +35425,7 @@
 
 
 /***/ },
-/* 284 */
+/* 285 */
 /***/ function(module, exports) {
 
 	/**
@@ -35483,7 +35563,7 @@
 
 
 /***/ },
-/* 285 */
+/* 286 */
 /***/ function(module, exports) {
 
 	/**
@@ -35556,7 +35636,7 @@
 
 
 /***/ },
-/* 286 */
+/* 287 */
 /***/ function(module, exports) {
 
 	var _element = typeof document !== 'undefined' ? document.body : null;
@@ -35603,7 +35683,7 @@
 
 
 /***/ },
-/* 287 */
+/* 288 */
 /***/ function(module, exports) {
 
 	module.exports = function(opts) {
@@ -35668,13 +35748,13 @@
 
 
 /***/ },
-/* 288 */
+/* 289 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var PropTypes = React.PropTypes;
-	var LinkedStateMixin = __webpack_require__(258);
-	var ApiUtil = __webpack_require__(241);
+	var LinkedStateMixin = __webpack_require__(259);
+	var ApiUtil = __webpack_require__(242);
 	
 	var NewContribution = React.createClass({
 	  displayName: 'NewContribution',
@@ -35768,7 +35848,7 @@
 	module.exports = NewContribution;
 
 /***/ },
-/* 289 */
+/* 290 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -35849,15 +35929,15 @@
 	module.exports = RewardsIndex;
 
 /***/ },
-/* 290 */
+/* 291 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var PropTypes = React.PropTypes;
-	var RestaurantSearchStore = __webpack_require__(262);
-	var IndexItem = __webpack_require__(291);
-	var RestaurantActions = __webpack_require__(242);
-	var ApiUtil = __webpack_require__(241);
+	var RestaurantSearchStore = __webpack_require__(263);
+	var IndexItem = __webpack_require__(292);
+	var RestaurantActions = __webpack_require__(243);
+	var ApiUtil = __webpack_require__(242);
 	
 	var SearchIndex = React.createClass({
 	  displayName: 'SearchIndex',
@@ -35960,7 +36040,7 @@
 	module.exports = SearchIndex;
 
 /***/ },
-/* 291 */
+/* 292 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -35983,6 +36063,12 @@
 		handleClick: function () {
 			this.props.callback && this.props.callback();
 			this.context.router.push("/restaurants/" + this.props.restaurant.id);
+		},
+	
+		componentWillReceiveProps: function (newProps) {
+			if (this.props.restaurant.image_url !== newProps.restaurant.image_url) {
+				this.setState({ imageClass: "hide-image" });
+			}
 		},
 	
 		render: function () {
@@ -36084,15 +36170,15 @@
 	module.exports = IndexItem;
 
 /***/ },
-/* 292 */
+/* 293 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var PropTypes = React.PropTypes;
-	var CuisineSelector = __webpack_require__(293);
-	var RestaurantIndexStore = __webpack_require__(217);
-	var IndexItem = __webpack_require__(291);
-	var ApiUtil = __webpack_require__(241);
+	var CuisineSelector = __webpack_require__(294);
+	var RestaurantIndexStore = __webpack_require__(218);
+	var IndexItem = __webpack_require__(292);
+	var ApiUtil = __webpack_require__(242);
 	
 	var RestaurantIndex = React.createClass({
 		displayName: 'RestaurantIndex',
@@ -36168,13 +36254,13 @@
 	module.exports = RestaurantIndex;
 
 /***/ },
-/* 293 */
+/* 294 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var PropTypes = React.PropTypes;
-	var CuisineStore = __webpack_require__(264);
-	var ApiUtil = __webpack_require__(241);
+	var CuisineStore = __webpack_require__(265);
+	var ApiUtil = __webpack_require__(242);
 	
 	var CuisineSelector = React.createClass({
 		displayName: 'CuisineSelector',
@@ -36247,11 +36333,11 @@
 	module.exports = CuisineSelector;
 
 /***/ },
-/* 294 */
+/* 295 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var ApiUtil = __webpack_require__(241);
+	var ApiUtil = __webpack_require__(242);
 	
 	var LoginForm = React.createClass({
 	  displayName: 'LoginForm',
@@ -36371,11 +36457,11 @@
 	module.exports = LoginForm;
 
 /***/ },
-/* 295 */
+/* 296 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var ApiUtil = __webpack_require__(241);
+	var ApiUtil = __webpack_require__(242);
 	
 	var SignUpForm = React.createClass({
 	  displayName: 'SignUpForm',
@@ -36513,16 +36599,16 @@
 	module.exports = SignUpForm;
 
 /***/ },
-/* 296 */
+/* 297 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var PropTypes = React.PropTypes;
-	var ApiUtil = __webpack_require__(241);
-	var LinkedStateMixin = __webpack_require__(258);
-	var CuisineStore = __webpack_require__(264);
-	var CityStore = __webpack_require__(297);
-	var HelperUtil = __webpack_require__(240);
+	var ApiUtil = __webpack_require__(242);
+	var LinkedStateMixin = __webpack_require__(259);
+	var CuisineStore = __webpack_require__(265);
+	var CityStore = __webpack_require__(298);
+	var HelperUtil = __webpack_require__(241);
 	
 	var NewRestaurant = React.createClass({
 	  displayName: 'NewRestaurant',
@@ -36721,13 +36807,13 @@
 	module.exports = NewRestaurant;
 
 /***/ },
-/* 297 */
+/* 298 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Store = __webpack_require__(218).Store;
-	var AppDispatcher = __webpack_require__(236);
-	var CityConstants = __webpack_require__(248);
-	var HelperUtil = __webpack_require__(240);
+	var Store = __webpack_require__(219).Store;
+	var AppDispatcher = __webpack_require__(237);
+	var CityConstants = __webpack_require__(249);
+	var HelperUtil = __webpack_require__(241);
 	
 	var CityStore = new Store(AppDispatcher);
 	
@@ -36758,21 +36844,21 @@
 	module.exports = CityStore;
 
 /***/ },
-/* 298 */
+/* 299 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var PropTypes = React.PropTypes;
-	var CuisineStore = __webpack_require__(264);
-	var CityStore = __webpack_require__(297);
-	var ApiUtil = __webpack_require__(241);
-	var LinkedStateMixin = __webpack_require__(258);
-	var RestaurantEditStore = __webpack_require__(299);
-	var BasicsForm = __webpack_require__(300);
-	var DescriptionForm = __webpack_require__(301);
-	var Modal = __webpack_require__(268);
-	var SessionStore = __webpack_require__(249);
-	var NewRewardsForm = __webpack_require__(302);
+	var CuisineStore = __webpack_require__(265);
+	var CityStore = __webpack_require__(298);
+	var ApiUtil = __webpack_require__(242);
+	var LinkedStateMixin = __webpack_require__(259);
+	var RestaurantEditStore = __webpack_require__(300);
+	var BasicsForm = __webpack_require__(301);
+	var DescriptionForm = __webpack_require__(302);
+	var Modal = __webpack_require__(269);
+	var SessionStore = __webpack_require__(250);
+	var NewRewardsForm = __webpack_require__(303);
 	
 	$(function () {
 	  var appElement = $('#root')[0];
@@ -36986,13 +37072,13 @@
 	module.exports = EditRestaurant;
 
 /***/ },
-/* 299 */
+/* 300 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Store = __webpack_require__(218).Store;
-	var AppDispatcher = __webpack_require__(236);
-	var RestaurantConstants = __webpack_require__(239);
-	var HelperUtil = __webpack_require__(240);
+	var Store = __webpack_require__(219).Store;
+	var AppDispatcher = __webpack_require__(237);
+	var RestaurantConstants = __webpack_require__(240);
+	var HelperUtil = __webpack_require__(241);
 	
 	var _restaurant = {};
 	
@@ -37014,15 +37100,15 @@
 	module.exports = RestaurantCreateStore;
 
 /***/ },
-/* 300 */
+/* 301 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var PropTypes = React.PropTypes;
-	var CuisineStore = __webpack_require__(264);
-	var CityStore = __webpack_require__(297);
-	var ApiUtil = __webpack_require__(241);
-	var LinkedStateMixin = __webpack_require__(258);
+	var CuisineStore = __webpack_require__(265);
+	var CityStore = __webpack_require__(298);
+	var ApiUtil = __webpack_require__(242);
+	var LinkedStateMixin = __webpack_require__(259);
 	
 	var BasicForm = React.createClass({
 	  displayName: 'BasicForm',
@@ -37142,7 +37228,7 @@
 	        'label',
 	        null,
 	        'End Date',
-	        React.createElement('input', { type: 'date', onInput: this._setChanged, valueLink: this.linkState('expiration') })
+	        React.createElement('input', { type: 'date', placeholder: 'mm/dd/yyyy', onInput: this._setChanged, valueLink: this.linkState('expiration') })
 	      ),
 	      React.createElement(
 	        'label',
@@ -37160,15 +37246,15 @@
 	module.exports = BasicForm;
 
 /***/ },
-/* 301 */
+/* 302 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var PropTypes = React.PropTypes;
-	var CuisineStore = __webpack_require__(264);
-	var CityStore = __webpack_require__(297);
-	var ApiUtil = __webpack_require__(241);
-	var LinkedStateMixin = __webpack_require__(258);
+	var CuisineStore = __webpack_require__(265);
+	var CityStore = __webpack_require__(298);
+	var ApiUtil = __webpack_require__(242);
+	var LinkedStateMixin = __webpack_require__(259);
 	
 	var DescriptionForm = React.createClass({
 	  displayName: 'DescriptionForm',
@@ -37237,15 +37323,15 @@
 	module.exports = DescriptionForm;
 
 /***/ },
-/* 302 */
+/* 303 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var PropTypes = React.PropTypes;
-	var RewardsIndex = __webpack_require__(289);
-	var LinkedStateMixin = __webpack_require__(258);
-	var ApiUtil = __webpack_require__(241);
-	var Helper = __webpack_require__(240);
+	var RewardsIndex = __webpack_require__(290);
+	var LinkedStateMixin = __webpack_require__(259);
+	var ApiUtil = __webpack_require__(242);
+	var Helper = __webpack_require__(241);
 	
 	var NewRewardForm = React.createClass({
 	  displayName: 'NewRewardForm',
@@ -37324,16 +37410,16 @@
 	module.exports = NewRewardForm;
 
 /***/ },
-/* 303 */
+/* 304 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var RestaurantStore = __webpack_require__(266);
-	var RestaurantIndexStore = __webpack_require__(217);
-	var CuisineStore = __webpack_require__(264);
-	var ApiUtil = __webpack_require__(241);
-	var CityStore = __webpack_require__(297);
-	var IndexItem = __webpack_require__(291);
+	var RestaurantStore = __webpack_require__(267);
+	var RestaurantIndexStore = __webpack_require__(218);
+	var CuisineStore = __webpack_require__(265);
+	var ApiUtil = __webpack_require__(242);
+	var CityStore = __webpack_require__(298);
+	var IndexItem = __webpack_require__(292);
 	
 	var Home = React.createClass({
 	  displayName: 'Home',
@@ -37483,86 +37569,6 @@
 	});
 	
 	module.exports = Home;
-
-/***/ },
-/* 304 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var PropTypes = React.PropTypes;
-	
-	var About = React.createClass({
-	  displayName: "About",
-	
-	
-	  render: function () {
-	    return React.createElement(
-	      "div",
-	      { className: "about-page" },
-	      React.createElement(
-	        "div",
-	        { className: "about-page-content" },
-	        React.createElement(
-	          "h1",
-	          null,
-	          "What is KitchenStarter?"
-	        ),
-	        React.createElement(
-	          "p",
-	          null,
-	          "KitchenStarter is a KickStarter clone built using a Rails backend and a React.js frontend. ",
-	          React.createElement("br", null)
-	        ),
-	        React.createElement(
-	          "p",
-	          null,
-	          "Kitchen starter allows users to create projects in order to request funding for new restaurant ideas.",
-	          React.createElement("br", null),
-	          "Users can search for, view, and contribute to other users projects."
-	        ),
-	        React.createElement(
-	          "h3",
-	          null,
-	          "Contact Me"
-	        ),
-	        React.createElement(
-	          "ul",
-	          null,
-	          React.createElement(
-	            "li",
-	            null,
-	            React.createElement(
-	              "a",
-	              { href: "mailto:aaron.r.grau@gmail.com" },
-	              "Aaron.r.grau@gmail.com"
-	            )
-	          ),
-	          React.createElement(
-	            "li",
-	            null,
-	            React.createElement(
-	              "a",
-	              { href: "https://www.linkedin.com/in/aaronrgrau" },
-	              "LinkedIn"
-	            )
-	          ),
-	          React.createElement(
-	            "li",
-	            null,
-	            React.createElement(
-	              "a",
-	              { href: "https://github.com/Aarong93/KitchenStarter-A-Kick-Starter-Clone" },
-	              "Project Github"
-	            )
-	          )
-	        )
-	      )
-	    );
-	  }
-	
-	});
-	
-	module.exports = About;
 
 /***/ }
 /******/ ]);
