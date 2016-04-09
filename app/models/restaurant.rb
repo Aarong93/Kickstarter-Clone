@@ -19,7 +19,9 @@ class Restaurant < ActiveRecord::Base
       rewards: { name: 'D' }
     }
 
-	has_attached_file :image, default_url: :set_default_url_on_cuisine
+	has_attached_file :image, default_url: :set_default_url_on_cuisine,
+		:styles => {:thumb => "100x100#", small: "250x150", large: "1800x1200"},
+		:convert_options => { :thumb => "-quality 75 -strip" }
 	validates_attachment_content_type :image, content_type: /\Aimage\/.*\Z/
 
 	validates :user_id, :cuisine_id, :title, :city_id, presence: true

@@ -4,4 +4,4 @@ json.extract! @restaurant, :id, :cuisine, :user, :title, :city, :blurb, :descrip
 
 json.rewards @restaurant.rewards.order(min_dollar_amount: :asc)
 
-json.image_url asset_path(@restaurant.image.url(:original))
+json.image_url asset_path(@restaurant.image.url(:large))
