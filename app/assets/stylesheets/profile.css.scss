@@ -97,12 +97,16 @@
   height: 100%;
   overflow: hidden;
   float: left;
+
 }
 
-.profile-index-item-image-wrapper > img {
+#profile-index-item-img  {
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
   height: 100%;
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .edit-profile-index-item:hover {

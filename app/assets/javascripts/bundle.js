@@ -32346,6 +32346,7 @@
 	  render: function () {
 	    var editText = "Continue Editing";
 	    var show = React.createElement('div', null);
+	    var style = { backgroundImage: 'url(' + this.props.restaurant.image_url + ')' };
 	
 	    if (this.props.restaurant.published) {
 	      show = React.createElement(
@@ -32369,13 +32370,13 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'profile-index-item' },
+	      React.createElement('img', { id: 'img-timer', onLoad: this._imageReady, src: this.props.restaurant.image_url }),
 	      React.createElement(
 	        'div',
 	        { className: 'profile-index-item-image-wrapper' },
-	        React.createElement('img', {
+	        React.createElement('div', {
 	          id: 'profile-index-item-img',
-	          src: this.props.restaurant.image_url,
-	          onLoad: this._imageReady,
+	          style: style,
 	          className: this.state.imageClass
 	        })
 	      ),

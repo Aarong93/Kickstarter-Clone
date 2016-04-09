@@ -25,6 +25,7 @@ var ProfileIndexItem = React.createClass({
 	render: function() {
     var editText = "Continue Editing";
     var show = <div />;
+		var style = {backgroundImage: 'url(' + this.props.restaurant.image_url + ')'};
 
     if (this.props.restaurant.published) {
       show =
@@ -45,11 +46,11 @@ var ProfileIndexItem = React.createClass({
 
 		return (
 			<div className="profile-index-item">
+				<img id="img-timer" onLoad={this._imageReady} src={this.props.restaurant.image_url}/>
         <div className="profile-index-item-image-wrapper">
-  				<img
+  				<div
   					id="profile-index-item-img"
-  					src={this.props.restaurant.image_url}
-  					onLoad={this._imageReady}
+						style={style}
   					className={this.state.imageClass}
   					/>
         </div>
