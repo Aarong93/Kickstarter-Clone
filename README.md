@@ -10,9 +10,22 @@ Explore at [kitchenstarter.net][live]
 
 
 
-##Todo
+
+## Features
+
+-Sign in with facebook or email
+-View featured restaurants on home page
+-Search for restaurants on index page by cuisine
+-Search for and view restaurants in search bar
+-View detailed show page for published projects
+-Contribute to projects and pick rewards
+-Create and edit your own projects
+-View created and backed projects on profile page
+
+
+##To-do
 
 - [ ] Save searches and rerun them if user presses back after searching
-- [ ] Show rewards earned on my backed page
+- [ ] Show rewards earned on backed projects page
 - [ ] Add comment section for projects
 - [ ] Add stripe API and allow users to use fake credit card and process payments
