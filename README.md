@@ -13,14 +13,14 @@ Explore at [kitchenstarter.net][live]
 
 ## Features
 
--Sign in with facebook or email
--View featured restaurants on home page
--Search for restaurants on index page by cuisine
--Search for and view restaurants in search bar
--View detailed show page for published projects
--Contribute to projects and pick rewards
--Create and edit your own projects
--View created and backed projects on profile page
+-- Sign in with facebook or email
+-- View featured restaurants on home page
+-- Search for restaurants on index page by cuisine
+-- Search for and view restaurants in search bar
+-- View detailed show page for published projects
+-- Contribute to projects and pick rewards
+-- Create and edit your own projects
+-- View created and backed projects on profile page
 
 
 ##To-do
