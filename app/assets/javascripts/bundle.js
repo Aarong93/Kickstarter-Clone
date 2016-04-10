@@ -36387,16 +36387,6 @@
 	    };
 	  },
 	
-	  componentDidMount: function () {
-	    this.token = SessionStore.addListener(this._signedIn);
-	  },
-	
-	  componentWillUnmount: function () {
-	    this.token.remove();
-	  },
-	
-	  _signedIn: function () {},
-	
 	  _error: function () {
 	    if (!this.state.showError) {
 	      return React.createElement('div', null);
@@ -36475,10 +36465,10 @@
 	  },
 	
 	  handleSubmit: function (e) {
-	
 	    if (e) {
 	      e.preventDefault();
 	    }
+	
 	    this.setState({ showError: false });
 	    var nextRoute = this.props.location.query.nextRoute;
 	    if (nextRoute) {
@@ -36486,7 +36476,8 @@
 	    } else {
 	      var goBack = "/";
 	      histArr = this.context.browserHistoryArray;
-	      if (histArr.length > 0) {
+	
+	      if (histArr.length > 0 && histArr[histArr.length - 1] !== "/session/new") {
 	        goBack = histArr[histArr.length - 1];
 	      }
 	      ApiUtil.login(this.state, this.context.router.push.bind(this, goBack), this._showError);
@@ -36565,7 +36556,7 @@
 	  _loginGuest: function (e) {
 	    e.preventDefault();
 	    var goBack = this.context.router.goBack.bind(this);
-	    if (this.context.browserHistoryArray.length === 0) {
+	    if (this.context.browserHistoryArray.length === 0 || histArr[histArr.length - 1] === "/users/new") {
 	      goBack = this.context.router.push.bind(this, '/');
 	    }
 	    ApiUtil.login({ email: "guest@gmail.com", password: "password" }, goBack);
