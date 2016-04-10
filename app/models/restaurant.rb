@@ -16,7 +16,8 @@ class Restaurant < ActiveRecord::Base
     associated_against: {
       user: { name: 'B' },
       cuisine: { food: 'B'},
-      rewards: { name: 'D' }
+      rewards: { name: 'D' },
+			city: { name: 'C' }
     }
 
 	has_attached_file :image, default_url: :set_default_url_on_cuisine,
