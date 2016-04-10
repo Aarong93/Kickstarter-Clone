@@ -15,6 +15,7 @@ Explore at [kitchenstarter.net][live]
 - View detailed show page for published projects
 - Contribute to projects and pick rewards
 - Create and edit your own projects
+- Upload images for your own projects
 - View created and backed projects on profile page
 
 
