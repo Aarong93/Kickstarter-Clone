@@ -7,7 +7,7 @@ var ApiUtil = require('../../util/api_util');
 var CuisineSelector = React.createClass({
 
 	getInitialState: function () {
-		return {cuisines: [], selected: 0};
+		return {cuisines: [], selected: 0, lastQuery: 0};
 	},
 
 	handleChange: function () {
@@ -23,11 +23,18 @@ var CuisineSelector = React.createClass({
 	},
 
 	componentWillReceiveProps: function (newProps) {
-		selected = newProps.selected;
+		if (newProps.selected.id) {
+			if (!this.state.selected || !this.state.lastQuery ||
+				this.state.lastQuery !== parseInt(newProps.selected.id))
+			{
+				this.setState({lastQuery: parseInt(newProps.selected.id)});
+				this.select(newProps.selected);
+			}
+		}
 	},
 
 	select: function(cuisine) {
-		this.state.selected = cuisine;
+		this.setState({selected: cuisine});
 		ApiUtil.fetchRestaurantsByCuisine(cuisine.id);
 	},
 
@@ -57,7 +64,7 @@ var CuisineSelector = React.createClass({
 	 for (var i = 0; i < this.state.cuisines.length; i++) {
 		 var item = this.state.cuisines[i];
      var selected = "";
-     if (item.id === this.state.selected.id) {
+     if (item.id === parseInt(this.state.selected.id)) {
        selected = "selected";
      }
 		 items.push(<div key={item.id} className={"cuisine-selection-item " + selected} onClick={this.select.bind(this, item)}>

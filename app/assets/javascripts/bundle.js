@@ -36297,7 +36297,7 @@
 	
 	
 		getInitialState: function () {
-			return { cuisines: [], selected: 0 };
+			return { cuisines: [], selected: 0, lastQuery: 0 };
 		},
 	
 		handleChange: function () {
@@ -36311,8 +36311,17 @@
 			this.setState({ cuisines: CuisineStore.all() }, this.select(selected));
 		},
 	
+		componentWillReceiveProps: function (newProps) {
+			if (newProps.selected.id) {
+				if (!this.state.selected || !this.state.lastQuery || this.state.lastQuery !== parseInt(newProps.selected.id)) {
+					this.setState({ lastQuery: parseInt(newProps.selected.id) });
+					this.select(newProps.selected);
+				}
+			}
+		},
+	
 		select: function (cuisine) {
-			this.state.selected = cuisine;
+			this.setState({ selected: cuisine });
 			ApiUtil.fetchRestaurantsByCuisine(cuisine.id);
 		},
 	
@@ -36342,7 +36351,7 @@
 			for (var i = 0; i < this.state.cuisines.length; i++) {
 				var item = this.state.cuisines[i];
 				var selected = "";
-				if (item.id === this.state.selected.id) {
+				if (item.id === parseInt(this.state.selected.id)) {
 					selected = "selected";
 				}
 				items.push(React.createElement(
