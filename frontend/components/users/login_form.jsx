@@ -1,9 +1,11 @@
 var React = require('react');
 var ApiUtil = require('../../util/api_util');
+var SessionStore = require('../../stores/session_store');
 
 var LoginForm = React.createClass({
   contextTypes: {
-    router: React.PropTypes.object.isRequired
+    router: React.PropTypes.object.isRequired,
+    browserHistoryArray: React.PropTypes.array
   },
 
   getInitialState: function () {
@@ -12,6 +14,18 @@ var LoginForm = React.createClass({
       password: "",
 			showError: false
     };
+  },
+
+  componentDidMount: function () {
+    this.token = SessionStore.addListener(this._signedIn);
+  },
+
+  componentWillUnmount: function () {
+    this.token.remove();
+  },
+
+  _signedIn: function () {
+
   },
 
 	_error: function () {
@@ -71,6 +85,7 @@ var LoginForm = React.createClass({
   },
 
   handleSubmit: function(e) {
+
     if (e) {
       e.preventDefault();
     }
@@ -80,7 +95,12 @@ var LoginForm = React.createClass({
       ApiUtil.login(this.state, this.context.router.push.bind(this, nextRoute), this._showError);
     }
     else {
-      ApiUtil.login(this.state, this.context.router.goBack.bind(this), this._showError);
+      var goBack = "/";
+      histArr = this.context.browserHistoryArray
+      if (histArr.length > 0) {
+        goBack = histArr[histArr.length - 1];
+      }
+      ApiUtil.login(this.state, this.context.router.push.bind(this, goBack), this._showError);
     }
   },
 

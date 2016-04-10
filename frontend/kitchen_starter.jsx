@@ -15,6 +15,7 @@ var Route = ReactRouter.Route;
 var IndexRoute = ReactRouter.IndexRoute;
 var browserHistory = ReactRouter.browserHistory;
 
+
 var About = require('./components/about/about');
 var BackedProjects = require('./components/profiles/backed_projects');
 var CreatedProjects = require('./components/profiles/created_projects');
@@ -35,6 +36,23 @@ var RestaurantActions = require('./actions/restaurant_actions.js');
 
 
 var App = React.createClass({
+
+  getInitialState: function () {
+    return {history: []};
+  },
+
+  childContextTypes: {
+    browserHistoryArray: React.PropTypes.array
+  },
+  getChildContext: function() {
+    return {browserHistoryArray: this.state.history};
+  },
+
+  componentWillReceiveProps: function (newProps) {
+    var newHistory = this.state.history;
+    newHistory.push(this.props.location.pathname);
+    this.setState({history: newHistory});
+  },
 
   render: function () {
     return (

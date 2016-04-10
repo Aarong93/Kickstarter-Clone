@@ -1,9 +1,11 @@
 var React = require('react');
 var ApiUtil = require('../../util/api_util');
+var SessionStore = require('../../stores/session_store');
 
 var SignUpForm = React.createClass({
   contextTypes: {
-    router: React.PropTypes.object.isRequired
+    router: React.PropTypes.object.isRequired,
+    browserHistoryArray: React.PropTypes.array
   },
 
   getInitialState: function() {
@@ -41,9 +43,13 @@ var SignUpForm = React.createClass({
 
   _loginGuest: function (e) {
     e.preventDefault();
+    var goBack = this.context.router.goBack.bind(this)
+    if (this.context.browserHistoryArray.length === 0) {
+      goBack = this.context.router.push.bind(this, '/');
+    }
     ApiUtil.login(
       {email: "guest@gmail.com", password: "password"},
-      this.context.router.goBack.bind(this)
+      goBack
     );
   },
 
@@ -91,7 +97,11 @@ var SignUpForm = React.createClass({
   handleSubmit: function(e) {
     e.preventDefault();
 		this.setState({showError: false});
-    ApiUtil.createUser(this.state, this.context.router.goBack.bind(this), this._showError);
+    var goBack = this.context.router.goBack.bind(this)
+    if (this.context.browserHistoryArray.length === 0) {
+      goBack = this.context.router.push.bind(this, '/');
+    }
+    ApiUtil.createUser(this.state, goBack, this._showError);
   },
 
   updateEmail: function(e) {

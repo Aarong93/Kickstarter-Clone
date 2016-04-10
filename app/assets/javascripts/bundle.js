@@ -84,6 +84,23 @@
 	  displayName: 'App',
 	
 	
+	  getInitialState: function () {
+	    return { history: [] };
+	  },
+	
+	  childContextTypes: {
+	    browserHistoryArray: React.PropTypes.array
+	  },
+	  getChildContext: function () {
+	    return { browserHistoryArray: this.state.history };
+	  },
+	
+	  componentWillReceiveProps: function (newProps) {
+	    var newHistory = this.state.history;
+	    newHistory.push(this.props.location.pathname);
+	    this.setState({ history: newHistory });
+	  },
+	
 	  render: function () {
 	    return React.createElement(
 	      'div',
@@ -36352,12 +36369,14 @@
 
 	var React = __webpack_require__(1);
 	var ApiUtil = __webpack_require__(242);
+	var SessionStore = __webpack_require__(250);
 	
 	var LoginForm = React.createClass({
 	  displayName: 'LoginForm',
 	
 	  contextTypes: {
-	    router: React.PropTypes.object.isRequired
+	    router: React.PropTypes.object.isRequired,
+	    browserHistoryArray: React.PropTypes.array
 	  },
 	
 	  getInitialState: function () {
@@ -36367,6 +36386,16 @@
 	      showError: false
 	    };
 	  },
+	
+	  componentDidMount: function () {
+	    this.token = SessionStore.addListener(this._signedIn);
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.token.remove();
+	  },
+	
+	  _signedIn: function () {},
 	
 	  _error: function () {
 	    if (!this.state.showError) {
@@ -36446,6 +36475,7 @@
 	  },
 	
 	  handleSubmit: function (e) {
+	
 	    if (e) {
 	      e.preventDefault();
 	    }
@@ -36454,7 +36484,12 @@
 	    if (nextRoute) {
 	      ApiUtil.login(this.state, this.context.router.push.bind(this, nextRoute), this._showError);
 	    } else {
-	      ApiUtil.login(this.state, this.context.router.goBack.bind(this), this._showError);
+	      var goBack = "/";
+	      histArr = this.context.browserHistoryArray;
+	      if (histArr.length > 0) {
+	        goBack = histArr[histArr.length - 1];
+	      }
+	      ApiUtil.login(this.state, this.context.router.push.bind(this, goBack), this._showError);
 	    }
 	  },
 	
@@ -36476,12 +36511,14 @@
 
 	var React = __webpack_require__(1);
 	var ApiUtil = __webpack_require__(242);
+	var SessionStore = __webpack_require__(250);
 	
 	var SignUpForm = React.createClass({
 	  displayName: 'SignUpForm',
 	
 	  contextTypes: {
-	    router: React.PropTypes.object.isRequired
+	    router: React.PropTypes.object.isRequired,
+	    browserHistoryArray: React.PropTypes.array
 	  },
 	
 	  getInitialState: function () {
@@ -36527,7 +36564,11 @@
 	
 	  _loginGuest: function (e) {
 	    e.preventDefault();
-	    ApiUtil.login({ email: "guest@gmail.com", password: "password" }, this.context.router.goBack.bind(this));
+	    var goBack = this.context.router.goBack.bind(this);
+	    if (this.context.browserHistoryArray.length === 0) {
+	      goBack = this.context.router.push.bind(this, '/');
+	    }
+	    ApiUtil.login({ email: "guest@gmail.com", password: "password" }, goBack);
 	  },
 	
 	  render: function () {
@@ -36593,7 +36634,11 @@
 	  handleSubmit: function (e) {
 	    e.preventDefault();
 	    this.setState({ showError: false });
-	    ApiUtil.createUser(this.state, this.context.router.goBack.bind(this), this._showError);
+	    var goBack = this.context.router.goBack.bind(this);
+	    if (this.context.browserHistoryArray.length === 0) {
+	      goBack = this.context.router.push.bind(this, '/');
+	    }
+	    ApiUtil.createUser(this.state, goBack, this._showError);
 	  },
 	
 	  updateEmail: function (e) {
