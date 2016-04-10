@@ -23,7 +23,6 @@ var CuisineSelector = React.createClass({
 	},
 
 	componentWillReceiveProps: function (newProps) {
-		debugger
 		selected = newProps.selected;
 	},
 
