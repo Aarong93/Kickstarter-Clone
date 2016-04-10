@@ -4,7 +4,7 @@ KitchenStarter is a web application inspired by KickStarter built using Ruby on 
 
 Explore at [kitchenstarter.net][live]
 
-[live]: kitchenstarter.net
+[live]: http://www.kitchenstarter.net
 
 ## Technical Details
 
