@@ -43,8 +43,9 @@ var SignUpForm = React.createClass({
 
   _loginGuest: function (e) {
     e.preventDefault();
-    var goBack = this.context.router.goBack.bind(this)
-    if (this.context.browserHistoryArray.length === 0 || histArr[histArr.length - 1] === "/users/new") {
+    var thisRoute = "/users/new";
+    var goBack = this.context.router.goBack.bind(this);
+    if (this.context.browserHistoryArray.length === 0 || histArr[histArr.length - 1] === thisRoute) {
       goBack = this.context.router.push.bind(this, '/');
     }
     ApiUtil.login(

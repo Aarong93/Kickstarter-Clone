@@ -85,8 +85,12 @@ var LoginForm = React.createClass({
     else {
       var goBack = "/";
       histArr = this.context.browserHistoryArray
+      var thisRoute = "/session/new";
 
-      if (histArr.length > 0 && histArr[histArr.length - 1] !== "/session/new") {
+      if (histArr.length > 0 &&
+         histArr[histArr.length - 1] !== thisRoute &&
+         histArr[histArr.length - 1] !== thisRoute + "/")
+      {
         goBack = histArr[histArr.length - 1];
       }
       ApiUtil.login(this.state, this.context.router.push.bind(this, goBack), this._showError);

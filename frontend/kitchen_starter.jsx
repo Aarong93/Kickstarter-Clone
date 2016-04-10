@@ -124,9 +124,8 @@ function _redirectIfLoggedIn(replace, callback) {
 
 
 function _redirectIfNotLoggedIn(replace, callback, requestRoute) {
-  var query = $.param({nextRoute: requestRoute});
+  var query = $.param({nextRoute: "/restaurants/new"});
   var path = "/session/new/?" + query;
-
   if (!SessionStore.isLoggedIn()) {
     replace(path);
   }

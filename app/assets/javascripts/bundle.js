@@ -171,9 +171,8 @@
 	}
 	
 	function _redirectIfNotLoggedIn(replace, callback, requestRoute) {
-	  var query = $.param({ nextRoute: requestRoute });
+	  var query = $.param({ nextRoute: "/restaurants/new" });
 	  var path = "/session/new/?" + query;
-	
 	  if (!SessionStore.isLoggedIn()) {
 	    replace(path);
 	  }
@@ -36476,8 +36475,9 @@
 	    } else {
 	      var goBack = "/";
 	      histArr = this.context.browserHistoryArray;
+	      var thisRoute = "/session/new";
 	
-	      if (histArr.length > 0 && histArr[histArr.length - 1] !== "/session/new") {
+	      if (histArr.length > 0 && histArr[histArr.length - 1] !== thisRoute && histArr[histArr.length - 1] !== thisRoute + "/") {
 	        goBack = histArr[histArr.length - 1];
 	      }
 	      ApiUtil.login(this.state, this.context.router.push.bind(this, goBack), this._showError);
@@ -36555,8 +36555,9 @@
 	
 	  _loginGuest: function (e) {
 	    e.preventDefault();
+	    var thisRoute = "/users/new";
 	    var goBack = this.context.router.goBack.bind(this);
-	    if (this.context.browserHistoryArray.length === 0 || histArr[histArr.length - 1] === "/users/new") {
+	    if (this.context.browserHistoryArray.length === 0 || histArr[histArr.length - 1] === thisRoute) {
 	      goBack = this.context.router.push.bind(this, '/');
 	    }
 	    ApiUtil.login({ email: "guest@gmail.com", password: "password" }, goBack);
