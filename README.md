@@ -6,11 +6,6 @@ Explore at [kitchenstarter.net][live]
 
 [live]: http://www.kitchenstarter.net
 
-## Technical Details
-
-
-
-
 ## Features
 
 - Sign in with facebook or email
