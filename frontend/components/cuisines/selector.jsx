@@ -22,6 +22,11 @@ var CuisineSelector = React.createClass({
 		this.setState({cuisines: CuisineStore.all()}, this.select(selected));
 	},
 
+	componentWillReceiveProps: function (newProps) {
+		debugger
+		selected = newProps.selected;
+	},
+
 	select: function(cuisine) {
 		this.state.selected = cuisine;
 		ApiUtil.fetchRestaurantsByCuisine(cuisine.id);
