@@ -13,7 +13,7 @@
  *= require_self
  *= require_tree .
  */
- @import "font-awesome-sprockets";
+@import "font-awesome-sprockets";
 @import "font-awesome";
 
 /*--------------Resets-------------*/
@@ -87,8 +87,36 @@ p {
 
 /*--------------------Body--------------------*/
 
+@font-face {
+  font-family: 'Aller';
+  src:font-url('Aller_Bd.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Aller';
+  src:font-url('Aller_Rg.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+@font-face {
+  font-family: 'Aller';
+  src:font-url('Aller_BdIt.ttf') format('truetype');
+  font-weight: bold;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Aller';
+  src:font-url('Aller_It.ttf') format('truetype');
+  font-weight: normal;
+  font-style: italic;
+}
+
 body {
-	font-family: sans-serif;
+  font-family: sans-serif;
 }
 
 /*-------------------General------------------*/
