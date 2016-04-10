@@ -2,7 +2,7 @@
 
 KitchenStarter is a web application inspired by KickStarter built using Ruby on Rails and React.js. Users can get seed money for new restaurant ideas.
 
-Explore at [Heroku link][live]
+Explore at [kitchenstarter.net][live]
 
 [live]: kitchenstarter.net
 
