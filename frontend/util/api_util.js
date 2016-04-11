@@ -234,7 +234,19 @@ var ApiUtil = {
         ApiUtil.fetchCreatedRestaurant(reward.restaurant_id);
       }
     });
-  }
+  },
+
+	destroyRestaurant: function(id, callback) {
+		$.ajax({
+			type: "DELETE",
+			url: "/api/restaurants/" + id,
+			dataType: "json",
+			success: function () {
+				callback && callback()
+			}
+
+		})
+	}
 
 };
 

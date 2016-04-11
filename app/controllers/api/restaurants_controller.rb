@@ -10,6 +10,16 @@ class Api::RestaurantsController < ApplicationController
 		end
 	end
 
+	def destroy
+		@restaurant = Restaurant.find(params[:id])
+		if logged_in_as?(@restaurant.user_id)
+			@restaurant.destroy
+			render json: @restaurant
+		else
+			render text: "You must be logged in as owner to delete", status: 401
+		end
+	end
+
 	def update
 		@restaurant = Restaurant.find(params[:id])
 		if logged_in_as?(@restaurant.user_id)

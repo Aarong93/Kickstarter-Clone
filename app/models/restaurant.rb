@@ -2,8 +2,8 @@ class Restaurant < ActiveRecord::Base
 	belongs_to :user
 	belongs_to :cuisine
 	belongs_to :city
-	has_many :contributions
-	has_many :rewards
+	has_many :contributions, dependent: :destroy
+	has_many :rewards, dependent: :destroy
 
   include PgSearch
 

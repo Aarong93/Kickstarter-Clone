@@ -32294,6 +32294,18 @@
 					ApiUtil.fetchCreatedRestaurant(reward.restaurant_id);
 				}
 			});
+		},
+	
+		destroyRestaurant: function (id, callback) {
+			$.ajax({
+				type: "DELETE",
+				url: "/api/restaurants/" + id,
+				dataType: "json",
+				success: function () {
+					callback && callback();
+				}
+	
+			});
 		}
 	
 	};
@@ -32537,76 +32549,99 @@
 
 	var React = __webpack_require__(1);
 	var SessionStore = __webpack_require__(252);
+	var ApiUtil = __webpack_require__(244);
 	
 	var ProfileIndexItem = React.createClass({
-	  displayName: 'ProfileIndexItem',
+		displayName: 'ProfileIndexItem',
 	
-	  contextTypes: {
-	    router: React.PropTypes.object.isRequired
-	  },
+		contextTypes: {
+			router: React.PropTypes.object.isRequired
+		},
 	
-	  getInitialState: function () {
-	    return { imageClass: "hide-image" };
-	  },
+		getInitialState: function () {
+			return { imageClass: "hide-image" };
+		},
 	
-	  _imageReady: function () {
-	    this.setState({ imageClass: "show-image" });
-	  },
+		_imageReady: function () {
+			this.setState({ imageClass: "show-image" });
+		},
 	
-	  handleEditClick: function () {
-	    this.context.router.push("/restaurants/edit/" + this.props.restaurant.id);
-	  },
+		handleEditClick: function () {
+			this.context.router.push("/restaurants/edit/" + this.props.restaurant.id);
+		},
 	
-	  handleShowClick: function () {
-	    this.context.router.push("/restaurants/" + this.props.restaurant.id);
-	  },
+		handleShowClick: function () {
+			this.context.router.push("/restaurants/" + this.props.restaurant.id);
+		},
 	
-	  render: function () {
-	    var editText = "Continue Editing";
-	    var show = React.createElement('div', null);
-	    var style = { backgroundImage: 'url(' + this.props.restaurant.image_url + ')' };
+		_delete: function () {
+			var self = this;
+			var message = "Are you sure you want to delete " + self.props.restaurant.title;
+			var result = window.confirm(message);
 	
-	    if (this.props.restaurant.published) {
-	      show = React.createElement(
-	        'div',
-	        { id: 'show-index-item', className: 'edit-profile-index-item', onClick: this.handleShowClick },
-	        'Show'
-	      );
-	      editText = "Edit";
-	    }
+			if (result) {
+				ApiUtil.destroyRestaurant(self.props.restaurant.id, function () {
+					ApiUtil.fetchRestaurantByParamsIndexStore({
+						user_id: self.props.restaurant.user.id
+					});
+				});
+			}
+		},
 	
-	    var edit = React.createElement(
-	      'div',
-	      { className: 'edit-profile-index-item', onClick: this.handleEditClick },
-	      editText
-	    );
+		render: function () {
+			var editText = "Continue Editing";
+			var show = React.createElement('div', null);
+			var style = { backgroundImage: 'url(' + this.props.restaurant.image_url + ')' };
+			var remove = React.createElement('div', { className: 'hide' });
 	
-	    if (this.props.restaurant.user.id !== SessionStore.currentUser().id) {
-	      edit = React.createElement('div', { className: 'hide' });
-	    }
+			if (this.props.restaurant.published) {
+				show = React.createElement(
+					'div',
+					{ id: 'show-index-item', className: 'edit-profile-index-item', onClick: this.handleShowClick },
+					'Show'
+				);
+				editText = "Edit";
+			}
 	
-	    return React.createElement(
-	      'div',
-	      { className: 'profile-index-item' },
-	      React.createElement('img', { id: 'img-timer', onLoad: this._imageReady, src: this.props.restaurant.image_url }),
-	      React.createElement(
-	        'div',
-	        { className: 'profile-index-item-image-wrapper' },
-	        React.createElement('div', {
-	          id: 'profile-index-item-img',
-	          style: style,
-	          className: this.state.imageClass
-	        })
-	      ),
-	      React.createElement(
-	        'h3',
-	        null,
-	        this.props.restaurant.title
-	      ),
-	      edit,
-	      show
-	    );
-	  }
+			var edit = React.createElement(
+				'div',
+				{ className: 'edit-profile-index-item', onClick: this.handleEditClick },
+				editText
+			);
+	
+			if (this.props.restaurant.user.id !== SessionStore.currentUser().id) {
+				edit = React.createElement('div', { className: 'hide' });
+			} else if (!this.props.restaurant.published) {
+				remove = React.createElement(
+					'div',
+					{ onClick: this._delete, className: 'remove-project edit-profile-index-item' },
+					'Delete'
+				);
+			}
+	
+			return React.createElement(
+				'div',
+				{ className: 'profile-index-item' },
+				React.createElement('img', { id: 'img-timer', onLoad: this._imageReady, src: this.props.restaurant.image_url }),
+				React.createElement(
+					'div',
+					{ className: 'profile-index-item-image-wrapper' },
+					React.createElement('div', {
+						id: 'profile-index-item-img',
+						style: style,
+						className: this.state.imageClass
+					})
+				),
+				React.createElement(
+					'h3',
+					null,
+					this.props.restaurant.title
+				),
+				edit,
+				remove,
+				show
+			);
+		}
 	
 	});
 	
@@ -36037,7 +36072,7 @@
 	      React.createElement(
 	        'form',
 	        { onSubmit: this._handleSubmit },
-	        React.createElement('input', { type: 'text', valueLink: this.linkState('amount'), placeholder: '$0...' }),
+	        React.createElement('input', { type: 'text', valueLink: this.linkState('amount'), placeholder: '0...' }),
 	        React.createElement(
 	          'label',
 	          null,
@@ -37489,7 +37524,7 @@
 	        'label',
 	        null,
 	        'Funding Goal',
-	        React.createElement('input', { placeholder: '$0...', type: 'text', onInput: this._setChanged, valueLink: this.linkState('target') })
+	        React.createElement('input', { placeholder: '0...', type: 'text', onInput: this._setChanged, valueLink: this.linkState('target') })
 	      ),
 	      saveButton,
 	      discardChanges

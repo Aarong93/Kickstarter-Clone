@@ -1,5 +1,6 @@
 var React = require('react');
 var SessionStore = require('../../stores/session_store');
+var ApiUtil = require('../../util/api_util');
 
 var ProfileIndexItem = React.createClass({
 	contextTypes: {
@@ -22,10 +23,29 @@ var ProfileIndexItem = React.createClass({
     this.context.router.push("/restaurants/" + this.props.restaurant.id);
   },
 
+	_delete: function () {
+		var self = this;
+		var message = "Are you sure you want to delete " + self.props.restaurant.title
+		var result = window.confirm(message);
+
+		if (result) {
+			ApiUtil.destroyRestaurant(
+				self.props.restaurant.id,
+				function () {
+					ApiUtil.fetchRestaurantByParamsIndexStore({
+						user_id: self.props.restaurant.user.id
+					})
+				}
+			);
+		}
+
+	},
+
 	render: function() {
     var editText = "Continue Editing";
     var show = <div />;
 		var style = {backgroundImage: 'url(' + this.props.restaurant.image_url + ')'};
+		var remove = <div className="hide"/>;
 
     if (this.props.restaurant.published) {
       show =
@@ -42,7 +62,12 @@ var ProfileIndexItem = React.createClass({
 
     if (this.props.restaurant.user.id !== SessionStore.currentUser().id) {
       edit = <div className="hide"/>;
-    }
+    } else if (!this.props.restaurant.published) {
+			remove =
+				<div onClick={this._delete} className="remove-project edit-profile-index-item" >
+					Delete
+				</div>
+		}
 
 		return (
 			<div className="profile-index-item">
@@ -56,6 +81,7 @@ var ProfileIndexItem = React.createClass({
         </div>
 				<h3>{this.props.restaurant.title}</h3>
         {edit}
+				{remove}
         {show}
 			</div>
 		);
