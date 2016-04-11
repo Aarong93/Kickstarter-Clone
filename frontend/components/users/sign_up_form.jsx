@@ -79,7 +79,7 @@ var SignUpForm = React.createClass({
             <div className="grey-line" />
             <div className="login-or">or</div>
             <div id="log-in-button-guest" className="submit-new-restaurant" onClick={this._loginGuest}>
-              Sign in as guest!
+              Log in as guest!
             </div>
             <div className="already-signed-up">
               {"Have an account? "}

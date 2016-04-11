@@ -36613,7 +36613,7 @@
 	          React.createElement(
 	            'div',
 	            { id: 'log-in-button-guest', className: 'submit-new-restaurant', onClick: this._loginGuest },
-	            'Sign in as guest!'
+	            'Log in as guest!'
 	          ),
 	          React.createElement(
 	            'div',
