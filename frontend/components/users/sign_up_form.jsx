@@ -73,14 +73,14 @@ var SignUpForm = React.createClass({
 	          <button id="log-in-button" className="submit-new-restaurant">
 							Sign me up!
 						</button>
-            <div id="log-in-button-guest" className="submit-new-restaurant" onClick={this._loginGuest}>
-              Sign in as guest!
-            </div>
-            <div className="grey-line" />
-            <div className="login-or">or</div>
             <a className="facebook-login" href="/auth/facebook">
               Log in with Facebook
             </a>
+            <div className="grey-line" />
+            <div className="login-or">or</div>
+            <div id="log-in-button-guest" className="submit-new-restaurant" onClick={this._loginGuest}>
+              Sign in as guest!
+            </div>
             <div className="already-signed-up">
               {"Have an account? "}
               <span

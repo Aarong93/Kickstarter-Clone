@@ -50,14 +50,14 @@ var LoginForm = React.createClass({
 	          <button id="log-in-button" className="submit-new-restaurant">
 							Log me in!
 						</button>
-						<div id="log-in-button-guest" className="submit-new-restaurant" onClick={this._loginGuest}>
-							Log in as guest!
-						</div>
-            <div className="grey-line" />
-            <div className="login-or">or</div>
             <a className="facebook-login" href="/auth/facebook">
               Log in with Facebook
             </a>
+            <div className="grey-line" />
+            <div className="login-or">or</div>
+            <div id="log-in-button-guest" className="submit-new-restaurant" onClick={this._loginGuest}>
+              Log in as guest!
+            </div>
             <div className="already-signed-up">
               {"New to KitchenStarter? "}
               <span

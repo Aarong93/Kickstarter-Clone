@@ -36440,9 +36440,9 @@
 	            'Log me in!'
 	          ),
 	          React.createElement(
-	            'div',
-	            { id: 'log-in-button-guest', className: 'submit-new-restaurant', onClick: this._loginGuest },
-	            'Log in as guest!'
+	            'a',
+	            { className: 'facebook-login', href: '/auth/facebook' },
+	            'Log in with Facebook'
 	          ),
 	          React.createElement('div', { className: 'grey-line' }),
 	          React.createElement(
@@ -36451,9 +36451,9 @@
 	            'or'
 	          ),
 	          React.createElement(
-	            'a',
-	            { className: 'facebook-login', href: '/auth/facebook' },
-	            'Log in with Facebook'
+	            'div',
+	            { id: 'log-in-button-guest', className: 'submit-new-restaurant', onClick: this._loginGuest },
+	            'Log in as guest!'
 	          ),
 	          React.createElement(
 	            'div',
@@ -36600,9 +36600,9 @@
 	            'Sign me up!'
 	          ),
 	          React.createElement(
-	            'div',
-	            { id: 'log-in-button-guest', className: 'submit-new-restaurant', onClick: this._loginGuest },
-	            'Sign in as guest!'
+	            'a',
+	            { className: 'facebook-login', href: '/auth/facebook' },
+	            'Log in with Facebook'
 	          ),
 	          React.createElement('div', { className: 'grey-line' }),
 	          React.createElement(
@@ -36611,9 +36611,9 @@
 	            'or'
 	          ),
 	          React.createElement(
-	            'a',
-	            { className: 'facebook-login', href: '/auth/facebook' },
-	            'Log in with Facebook'
+	            'div',
+	            { id: 'log-in-button-guest', className: 'submit-new-restaurant', onClick: this._loginGuest },
+	            'Sign in as guest!'
 	          ),
 	          React.createElement(
 	            'div',
