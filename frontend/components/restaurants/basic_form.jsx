@@ -49,7 +49,6 @@ var BasicForm = React.createClass({
   },
 
 	handleFileChange: function (e) {
-    debugger
 		var file = e.currentTarget.files[0];
 		var reader = new FileReader();
 
