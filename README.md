@@ -6,7 +6,14 @@ Explore at [kitchenstarter.net][live]
 
 [live]: http://www.kitchenstarter.net
 
-## Features
+
+## Welcome View:
+
+[home-page]
+
+[home-page]: home-page.png
+
+## Features:
 
 - Sign in with facebook or email
 - View featured restaurants on home page
@@ -15,11 +22,11 @@ Explore at [kitchenstarter.net][live]
 - View detailed show page for published projects
 - Contribute to projects and pick rewards
 - Create and edit your own projects
-- Upload images for your own projects
+- Upload images for your own projectsf
 - View created and backed projects on profile page
 
 
-##To-do
+##To-do:
 
 - [ ] Save searches and rerun them if user presses back after searching
 - [ ] Show rewards earned on backed projects page
