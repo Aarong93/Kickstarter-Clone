@@ -35972,7 +35972,6 @@
 	  displayName: 'SearchIndex',
 	
 	
-	  //change to restaurants and create index item
 	  getInitialState: function () {
 	    return { restaurant: {}, reverse: false };
 	  },
@@ -36564,6 +36563,7 @@
 	
 	  _loginGuest: function (e) {
 	    e.preventDefault();
+	    var histArr = this.context.browserHistoryArray;
 	    var thisRoute = "/users/new";
 	    var goBack = this.context.router.goBack.bind(this);
 	    if (this.context.browserHistoryArray.length === 0 || histArr[histArr.length - 1] === thisRoute) {

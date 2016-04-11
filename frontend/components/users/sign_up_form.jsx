@@ -43,6 +43,7 @@ var SignUpForm = React.createClass({
 
   _loginGuest: function (e) {
     e.preventDefault();
+    var histArr =  this.context.browserHistoryArray;
     var thisRoute = "/users/new";
     var goBack = this.context.router.goBack.bind(this);
     if (this.context.browserHistoryArray.length === 0 || histArr[histArr.length - 1] === thisRoute) {

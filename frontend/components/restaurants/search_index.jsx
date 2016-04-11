@@ -7,7 +7,6 @@ var ApiUtil = require('../../util/api_util');
 
 var SearchIndex = React.createClass({
 
-  //change to restaurants and create index item
   getInitialState: function () {
     return {restaurant: {}, reverse: false};
   },
