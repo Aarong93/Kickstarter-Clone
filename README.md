@@ -11,7 +11,7 @@ Explore at [kitchenstarter.net][live]
 
 [home-page]
 
-[home-page]: home-page.png
+[home-page]: images/home-page.png
 
 ## Features:
 
