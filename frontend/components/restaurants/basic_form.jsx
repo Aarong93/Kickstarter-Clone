@@ -49,6 +49,7 @@ var BasicForm = React.createClass({
   },
 
 	handleFileChange: function (e) {
+    debugger
 		var file = e.currentTarget.files[0];
 		var reader = new FileReader();
 
@@ -67,7 +68,7 @@ var BasicForm = React.createClass({
       saveButton = <div  className="save-button" onClick={this.props.save}>Save Changes</div>;
       discardChanges = <div className="discard-button" onClick={this._discardChanges}>Discard Changes</div>;
     }
-    var style = {backgroundImage: 'url(' + this.props.restaurant.image_url + ')'};
+    var style = {backgroundImage: 'url(' + this.state.imageUrl + ')'};
     return (
       <div className="edit-form group">
         <label>Title

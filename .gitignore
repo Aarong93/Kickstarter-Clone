@@ -14,6 +14,8 @@
 node_modules
 /app/assets/javascripts/bundle.js
 bundle.js
+.DS_store
+DS_store
 
 *.swp
 

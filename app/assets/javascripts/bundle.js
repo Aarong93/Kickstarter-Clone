@@ -37217,6 +37217,7 @@
 	  },
 	
 	  handleFileChange: function (e) {
+	    debugger;
 	    var file = e.currentTarget.files[0];
 	    var reader = new FileReader();
 	
@@ -37251,7 +37252,7 @@
 	        'Discard Changes'
 	      );
 	    }
-	    var style = { backgroundImage: 'url(' + this.props.restaurant.image_url + ')' };
+	    var style = { backgroundImage: 'url(' + this.state.imageUrl + ')' };
 	    return React.createElement(
 	      'div',
 	      { className: 'edit-form group' },
