@@ -13,6 +13,12 @@ Explore at [kitchenstarter.net][live]
 
 [home-page]: docs/images/home-page.png
 
+## Project Page:
+
+![project-page]
+
+[project-page]: docs/images/project-page.png
+
 ## Features:
 
 - Sign in with facebook or email
