@@ -94,7 +94,7 @@ var BasicForm = React.createClass({
           <input type="date" placeholder="mm/dd/yyyy" onInput={this._setChanged} valueLink={this.linkState('expiration')} />
         </label>
         <label>Funding Goal
-          <input placeholder="$0..." type="text" onInput={this._setChanged} valueLink={this.linkState('target')} />
+          <input placeholder="0..." type="text" onInput={this._setChanged} valueLink={this.linkState('target')} />
         </label>
         {saveButton}
         {discardChanges}

@@ -55,7 +55,7 @@ var NewContribution = React.createClass({
     return (
       <div className="new-contribution-form">
         <form onSubmit={this._handleSubmit}>
-          <input type="text" valueLink={this.linkState('amount')} placeholder="$0..." />
+          <input type="text" valueLink={this.linkState('amount')} placeholder="0..." />
           <label>Reward:</label>
           <select id="reward-selector" valueLink={this.linkState('selectedReward')}>
             <option value={0}>None</option>
