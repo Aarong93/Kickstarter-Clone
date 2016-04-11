@@ -32155,7 +32155,9 @@
 				dataType: "json",
 				data: params,
 				success: function (restaurants) {
-					if (restaurants[0]) {
+					if (restaurants.search_results) {
+						restaurants = { meta: {}, search_results: restaurants.search_results };
+					} else {
 						restaurants = { meta: {}, search_results: restaurants };
 					}
 					RestaurantActions.receiveIndexRestaurants(restaurants);
