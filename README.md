@@ -36,9 +36,6 @@ def self.with_total()
   restaurants
 end
 
-
-
-
 ```
 
 ## Features:
