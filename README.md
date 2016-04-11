@@ -9,9 +9,9 @@ Explore at [kitchenstarter.net][live]
 
 ## Welcome View:
 
-[home-page]
+![home-page]
 
-![home-page]: docs/images/home-page.png
+[home-page]: docs/images/home-page.png
 
 ## Features:
 
