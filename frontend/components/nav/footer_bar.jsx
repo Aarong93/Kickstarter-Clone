@@ -53,7 +53,7 @@ var FooterBar = React.createClass({
           </div>
           <div id="footer-col-2">
 					<h3 className="footer-discover">Discover</h3>
-            <ul className="footer-discover-list">
+            <ul className="footer-discover-list group">
               {cuisines}
             </ul>
           </div>

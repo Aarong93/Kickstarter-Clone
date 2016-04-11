@@ -33650,7 +33650,7 @@
 	          ),
 	          React.createElement(
 	            'ul',
-	            { className: 'footer-discover-list' },
+	            { className: 'footer-discover-list group' },
 	            cuisines
 	          )
 	        ),

@@ -425,12 +425,12 @@ footer li:hover {
 
 #footer-col-2 {
   float: left;
-  margin-left: 150px;
+  margin-left: 120px;
 }
 
 #footer-col-3 {
   float: left;
-  margin-left: 150px;
+  margin-left: 100px;
 }
 
 .footer-about-us, .footer-discover, .footer-contact {
@@ -441,7 +441,7 @@ footer li:hover {
 }
 
 .footer-about-us {
-	padding-left: 60px;
+	padding-left: 30px;
 }
 
 .footer-about-us-list {
@@ -451,7 +451,7 @@ footer li:hover {
 .footer-about-us-list > li {
 	display: block;
 	float: left;
-	padding-left: 60px;
+	padding-left: 30px;
 	margin-top: 10px;
 }
 
@@ -460,10 +460,16 @@ footer li:hover {
 	padding: 5px;
   float: left;
   margin-top: 5px;
+  -moz-column-count: 2;
+  -moz-column-gap: 1.5em;
+  -webkit-column-count: 2;
+  -webkit-column-gap: 1.5em;
+  column-count: 2;
+  column-gap: 1.5em;
 }
 
 .footer-discover-list > li {
-  margin-bottom: 4px;
+  padding-bottom: 4px;
 }
 
 .footer-contact {
