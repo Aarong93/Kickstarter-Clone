@@ -19,6 +19,27 @@ Explore at [kitchenstarter.net][live]
 
 [project-page]: docs/images/project-page.png
 
+## Techincal Details:
+
+- KitchenStarter displays the total value of the contributions of any given project.
+  This occurs on several pages, such as the project show page as well as in index display on index items. In order to avoid duplication of data KitchenStarter only saves the values of the contribution in one place, the contribution table (each contribution belongs to a project). Because of this each time a project is displayed it needs to calculate its total amount raised by summing up the value of all of its contributions. In order to make this process efficient (especially a concern on index pages) I implemented a custom SQL query which calculates the total value of contributions and returns it as an aliased value as part of the select. Rails allows the aliased value to be later accessed like any other value the project has.
+
+```
+def self.with_total()
+  restaurants = Restaurant.joins(
+    "LEFT OUTER JOIN contributions ON
+     contributions.restaurant_id = restaurants.id")
+     .group(:id).select("restaurants.*, SUM(contributions.value) as total,
+     COUNT(contributions.user_id) as number_contributions")
+
+  restaurants
+end
+
+
+
+
+```
+
 ## Features:
 
 - Sign in with facebook or email
