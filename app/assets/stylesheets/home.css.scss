@@ -62,9 +62,6 @@
 
 .cuisine-selector-area > ul > li {
   padding: 15px;
-  margin: 15px;
-  margin-bottom: 13px;
-  padding-bottom: 2px; 
 	display: inline-block;
 }
 
@@ -75,12 +72,11 @@
 }
 
 #selected-cuisine-home {
-    text-decoration: underline;
-    color: #27D417;
+  color: #27D417;
 }
 
 #selected-cuisine-home:hover {
-    color: #27D417;
+  color: #27D417;
 }
 
 
