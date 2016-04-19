@@ -9,13 +9,13 @@ Explore at [kitchenstarter.net][live]
 
 ## Welcome View:
 
-![home-page]
+[![home-page](./docs/images/home-page.png)](http://www.kitchenstarter.net)
 
 [home-page]: docs/images/home-page.png
 
 ## Project Page:
 
-![project-page]
+[![project-page](docs/images/project-page.png)](http://www.kitchenstarter.net/restaurants/2029)
 
 [project-page]: docs/images/project-page.png
 
