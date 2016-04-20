@@ -56,4 +56,4 @@ end
 - [ ] Save searches and rerun them if user presses back after searching
 - [ ] Show rewards earned on backed projects page
 - [ ] Add comment section for projects
-- [ ] Add stripe API and allow users to use fake credit card and process payments
+- [ ] Add stripe API and allow users to use credit card and process payments
