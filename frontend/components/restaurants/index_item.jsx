@@ -36,6 +36,12 @@ var IndexItem = React.createClass({
 		if (percentDone > 100) {
 			progressWidth = {width: ("100%")};
 		}
+		var total = this.propsrestaurant.total
+
+		if total > 100000 {
+			total = total/1000 + "K"
+		}
+
 		return (
 			<div className="index-item group" onClick={this.handleClick}>
 				<div
@@ -60,7 +66,7 @@ var IndexItem = React.createClass({
 				<ul className="index-item-stats group">
 					<li>{(percentDone).toFixed(2) + "%"}<br /><span className="index-item-stats-label">funded</span></li>
 					<li>
-							{"$" + this.props.restaurant.total}<br /><span className="index-item-stats-label">pledged</span>
+							{"$" + total}<br /><span className="index-item-stats-label">pledged</span>
 					</li>
 					<li>{daysLeft}<br /><span className="index-item-stats-label">days to go</span></li>
 				</ul>
