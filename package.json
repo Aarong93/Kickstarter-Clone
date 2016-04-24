@@ -1,7 +1,7 @@
 {
-  "name": "bench_bnb",
+  "name": "KitchenStarter",
   "version": "1.0.0",
-  "description": "Benches!",
+  "description": "KitchenStarter",
   "main": "index.js",
   "directories": {
     "test": "test"
