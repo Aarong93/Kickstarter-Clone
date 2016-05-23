@@ -26,14 +26,12 @@ Explore at [kitchenstarter.net][live]
 
 ```
 def self.with_total()
-  restaurants = Restaurant.joins(
+  Restaurant.joins(
     "LEFT OUTER JOIN contributions ON
      contributions.restaurant_id = restaurants.id")
      .group(:id).select("restaurants.*, SUM(contributions.value) as total,
      COUNT(contributions.user_id) as number_contributions"
   )
-
-  restaurants
 end
 
 ```
