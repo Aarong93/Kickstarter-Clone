@@ -4,9 +4,9 @@ class Api::RestaurantsController < ApplicationController
 
 	def show
 		@restaurant = Restaurant.with_total.includes(:city, :rewards, :user).find(params[:id])
-		if !@restaurant.published && !params[:edit]
+		if !restaurant.published && !params[:edit]
 			render text: "This restaurant is not public yet", status: 400
-		elsif params[:edit] && current_user.id != @restaurant.user_id
+		elsif params[:edit] && current_user.id != restaurant.user_id
 			render text: "This restaurant is not your restaurant", status: 401
 		end
 	end
@@ -14,8 +14,8 @@ class Api::RestaurantsController < ApplicationController
 	def destroy
 		@restaurant = Restaurant.find(params[:id])
 		if logged_in_as?(@restaurant.user_id)
-			@restaurant.destroy
-			render json: @restaurant
+			restaurant.destroy
+			render json: restaurant
 		else
 			render text: "You must be logged in as owner to delete", status: 401
 		end
@@ -38,65 +38,23 @@ class Api::RestaurantsController < ApplicationController
 		restaurant.city_id = restaurant.city_id.to_i
     restaurant.user_id = current_user.id
 
-    unless @restaurant.save
-      render text: @restaurant.errors.full_messages, status: 400
+    unless restaurant.save
+      render text: restaurant.errors.full_messages, status: 400
     end
   end
 
 	def index
-		@restaurants = SearchProjects.new(params)
-		if
-		if params[:cuisine_id] && params[:featured]
-			@restaurants = Restaurant.includes(:city, :user).where(featured: true).where(published: true).where(cuisine_id: params[:cuisine_id]).order(id: :asc).page(1).per(params[:per])
-			if @restaurants
-				render :search_result
-			else
-				render text: "nothing here"
-			end
-		elsif params[:str]
-			str = params[:str]
-      valid_ids = Restaurant.select("restaurants.id AS id").restaurant_search(str).pluck(:id)
-      @restaurants = Restaurant.includes(:city, :user)
-        .where(id: valid_ids).where(published: true).order(id: :asc).page(params[:page]).per(3)
-      if @restaurants
-        render :search_result
-      else
-        render text: "nothing here"
-      end
-		elsif params[:cuisine_id]
-			per = params[:per] || 9
-			@restaurants = Restaurant.includes(:city, :user)
-        .where(cuisine_id: params[:cuisine_id]).where(published: true)
-        .where("expiration > NOW()").order(id: :asc).page(1).per(per)
-
+		search = SearchProjects.new(params, current_user)
+		@restaurants = search.search!
+		if restaurants && params[:reward_user_id]
+			render :backed_index
+		elsif restaurants.respond_to?(:total_pages)
 			render :search_result
-		elsif params[:featured]
-			@restaurants = Restaurant.includes(:city, :user).with_total.where(featured: true)
-        .where(published: true).where("expiration > NOW()").order(id: :asc)
-			@restaurant = @restaurants.shuffle.first;
+		elsif restaurants
+			@restaurant = restaurants
 			render :show
-    elsif params[:user_id]
-      @restaurants = Restaurant.includes(:city, :user).where(user_id: current_user.id).page(1).per(100)
-      if @restaurants
-        render :search_result
-      else
-        render text: "nothing here"
-      end
-    elsif params[:reward_user_id]
-      @restaurants =
-        Restaurant.includes(:city, :user)
-        .joins(:contributions)
-        .where(contributions: { user_id: params[:reward_user_id]})
-        .uniq
-      if @restaurants
-        render :backed_index
-      else
-        render text: "nothing here"
-      end
 		else
-			@restaurants = Restaurant.includes(:city, :user).with_total.where(published: true).order(id: :asc)
-			@restaurant = @restaurants.shuffle.first;
-			render :show
+			render text: "nothing here"
 		end
 	end
 
