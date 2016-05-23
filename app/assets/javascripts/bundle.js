@@ -36339,10 +36339,10 @@
 			if (percentDone > 100) {
 				progressWidth = { width: "100%" };
 			}
-			var total = this.propsrestaurant.total;
+			var total = this.props.restaurant.total;
 	
 			if (total > 100000) {
-				total = total / 1000 + "K";
+				total = Math.floor(total / 1000) + "K";
 			}
 	
 			return React.createElement(

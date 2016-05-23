@@ -1,5 +1,6 @@
 class Api::RestaurantsController < ApplicationController
 	before_action :ensure_logged_in, only: :create
+	attr_accessor :restaurant, :restaurants
 
 	def show
 		@restaurant = Restaurant.with_total.includes(:city, :rewards, :user).find(params[:id])
@@ -21,9 +22,9 @@ class Api::RestaurantsController < ApplicationController
 	end
 
 	def update
-		@restaurant = Restaurant.find(params[:id])
-		if logged_in_as?(@restaurant.user_id)
-			@restaurant.update(restaurant_params)
+		restaurant = Restaurant.find(params[:id])
+		if logged_in_as?(restaurant.user_id)
+			restaurant.update(restaurant_params)
 			render :create
 		else
 			render text: "You must be logged in as owner to edit", status: 401
@@ -32,10 +33,10 @@ class Api::RestaurantsController < ApplicationController
 
   def create
     @restaurant = Restaurant.new(restaurant_params)
-    @restaurant.featured = false
-    @restaurant.published = false
-		@restaurant.city_id = @restaurant.city_id.to_i
-    @restaurant.user_id = current_user.id
+    restaurant.featured = false
+    restaurant.published = false
+		restaurant.city_id = restaurant.city_id.to_i
+    restaurant.user_id = current_user.id
 
     unless @restaurant.save
       render text: @restaurant.errors.full_messages, status: 400
@@ -43,6 +44,8 @@ class Api::RestaurantsController < ApplicationController
   end
 
 	def index
+		@restaurants = SearchProjects.new(params)
+		if
 		if params[:cuisine_id] && params[:featured]
 			@restaurants = Restaurant.includes(:city, :user).where(featured: true).where(published: true).where(cuisine_id: params[:cuisine_id]).order(id: :asc).page(1).per(params[:per])
 			if @restaurants

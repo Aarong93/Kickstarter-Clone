@@ -19,6 +19,9 @@ module AaronGrauKickstarterProposal
 		    :s3_region => ENV["s3_region"]
 	  	}
 		}
+
+    config.autoload_paths << Rails.root.join("app", "services")
+
     config.active_record.raise_in_transactional_callbacks = true
   end
 end
