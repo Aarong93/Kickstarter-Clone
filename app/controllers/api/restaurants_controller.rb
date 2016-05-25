@@ -22,7 +22,7 @@ class Api::RestaurantsController < ApplicationController
 	end
 
 	def update
-		restaurant = Restaurant.find(params[:id])
+		@restaurant = Restaurant.find(params[:id])
 		if logged_in_as?(restaurant.user_id)
 			restaurant.update(restaurant_params)
 			render :create
