@@ -45,7 +45,7 @@ class Api::RestaurantsController < ApplicationController
 
 	def index
 		search = SearchProjects.new(params, current_user)
-		@restaurants = search.search!
+		@restaurants = search.search
 		if restaurants && params[:reward_user_id]
 			render :backed_index
 		elsif restaurants.respond_to?(:total_pages)
@@ -54,7 +54,7 @@ class Api::RestaurantsController < ApplicationController
 			@restaurant = restaurants
 			render :show
 		else
-			render text: "nothing here"
+			render json: []
 		end
 	end
 

@@ -100,6 +100,7 @@ var ApiUtil = {
 				} else {
 					restaurants = {meta: {}, search_results: restaurants}
 				}
+				var foo = "stop"
 				RestaurantActions.receiveIndexRestaurants(restaurants);
 			}
 		});

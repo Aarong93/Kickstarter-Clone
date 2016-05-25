@@ -32160,6 +32160,7 @@
 					} else {
 						restaurants = { meta: {}, search_results: restaurants };
 					}
+					var foo = "stop";
 					RestaurantActions.receiveIndexRestaurants(restaurants);
 				}
 			});
@@ -33532,7 +33533,7 @@
 	var RestaurantIndexStore = new Store(AppDispatcher);
 	
 	var _newRestaurants = function (restaurants) {
-	  if (restaurants.length === 0) {
+	  if (typeof restaurants === "undefined" || restaurants.length === 0) {
 	    _restaurants = ["none"];
 	  } else {
 	    _restaurants = restaurants;

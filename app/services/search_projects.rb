@@ -6,60 +6,79 @@ class SearchProjects
     @current_user = current_user
   end
 
-  def search!
+  def search
     if params[:cuisine_id] && params[:featured]
-      restaurants = Restaurant.includes(:city, :user).where(featured: true).
-        where(published: true).where(cuisine_id: params[:cuisine_id]).order(id: :asc).
-        page(1).per(params[:per])
-      if restaurants
-        return restaurants
-      else
-        return nil
-      end
+      return featured_from_cuisine
     elsif params[:str]
-      str = params[:str]
-      valid_ids = Restaurant.select("restaurants.id AS id").restaurant_search(str).pluck(:id)
-      restaurants = Restaurant.includes(:city, :user)
-        .where(id: valid_ids).where(published: true).order(id: :asc).page(params[:page]).per(3)
-      if restaurants
-        return restaurants
-      else
-        return nil
-      end
+      return text_search
     elsif params[:cuisine_id]
-      per = params[:per] || 9
-      restaurants = Restaurant.includes(:city, :user)
-        .where(cuisine_id: params[:cuisine_id]).where(published: true)
-        .where("expiration > NOW()").order(id: :asc).page(1).per(per)
-
-      return restaurants
+      return cuisine_search
     elsif params[:featured]
-      restaurants = Restaurant.includes(:city, :user).with_total.where(featured: true)
-        .where(published: true).where("expiration > NOW()").order(id: :asc)
-      restaurant = restaurants.shuffle.first;
-      return restaurant
+      return main_featured
     elsif params[:user_id]
-      restaurants = Restaurant.includes(:city, :user).where(user_id: current_user.id).page(1).per(100)
-      if restaurants
-        return restaurants
-      else
-        return nil
-      end
+      return users_restaurants
     elsif params[:reward_user_id]
-      restaurants =
-        Restaurant.includes(:city, :user)
-        .joins(:contributions)
-        .where(contributions: { user_id: params[:reward_user_id] })
-        .uniq.page(1).per(100)
-      if restaurants
-        return restaurants
-      else
-        return nil
-      end
+      return contributed_to_restuarants
     else
       restaurants = Restaurant.includes(:city, :user).with_total.where(published: true).order(id: :asc)
       return restaurant
     end
+  end
+
+  private
+
+  def featured_from_cuisine
+    restaurants = Restaurant.includes(:city, :user).where(featured: true).
+      where(published: true).where(cuisine_id: params[:cuisine_id]).order(id: :asc).
+    page(1).per(params[:per])
+    return restaurants unless restaurants.empty?
+
+    nil
+  end
+
+  def text_search
+    str = params[:str]
+    valid_ids = Restaurant.select("restaurants.id AS id").restaurant_search(str).pluck(:id)
+    restaurants = Restaurant.includes(:city, :user)
+      .where(id: valid_ids).where(published: true).order(id: :asc).page(params[:page]).per(3)
+    return restaurants unless restaurants.empty?
+
+    nil
+  end
+
+  def cuisine_search
+    per = params[:per] || 9
+    restaurants = Restaurant.includes(:city, :user)
+      .where(cuisine_id: params[:cuisine_id]).where(published: true)
+      .where("expiration > NOW()").order(id: :asc).page(1).per(per)
+
+    restaurants
+  end
+
+  def main_featured
+    restaurants = Restaurant.includes(:city, :user).with_total.where(featured: true)
+      .where(published: true).where("expiration > NOW()").order(id: :asc)
+    restaurant = restaurants.shuffle.first;
+
+    restaurant
+  end
+
+  def users_restaurants
+    restaurants = Restaurant.includes(:city, :user).where(user_id: current_user.id).page(1).per(100)
+    return restaurants unless restaurants.empty?
+
+    nil
+  end
+
+  def contributed_to_restuarants
+    restaurants =
+      Restaurant.includes(:city, :user)
+      .joins(:contributions)
+      .where(contributions: { user_id: params[:reward_user_id] })
+      .uniq.page(1).per(100)
+    return restaurants unless restaurants.empty?
+
+    nil
   end
 
 end
